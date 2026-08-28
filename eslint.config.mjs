@@ -12,9 +12,8 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-    // Vendored agent tooling, not project source.
-    '.claude/**',
-    '.superpowers/**',
+    // Vendored skill packages, not project source and not ours to fix.
+    '.claude/skills/**',
   ]),
 ]);
 
