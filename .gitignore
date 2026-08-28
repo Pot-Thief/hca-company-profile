@@ -1,0 +1,15 @@
+.superpowers/
+node_modules/
+.next/
+out/
+build/
+.DS_Store
+*.pem
+.env*
+!.env.example
+/coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/.lighthouse/
+next-env.d.ts
