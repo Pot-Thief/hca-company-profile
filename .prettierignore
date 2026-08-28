@@ -3,3 +3,5 @@ pnpm-lock.yaml
 coverage/
 .claude/
 .superpowers/
+test-results/
+playwright-report/
