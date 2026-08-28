@@ -15,7 +15,7 @@ pada Fase 2.
 |---|---|---|
 | Sumber konten | JSON di `public/data/`, di-fetch runtime dari Server Component | Editor mengubah teks tanpa menyentuh kode |
 | Base URL konten | `process.env.CONTENT_BASE_URL`, default ke origin sendiri | `fetch` di server menolak URL relatif, jadi penyusun base URL wajib ada. Override-nya satu baris tambahan, dan membuka jalan memindahkan JSON ke luar artifact tanpa mengubah loader |
-| Cache | `next: { revalidate: 60 }` | Edit terlihat dalam 60 detik, halaman tetap disajikan dari cache sehingga target Lighthouse Performance 90 tercapai |
+| Cache | `next: { revalidate: 60 }`, bisa di-override lewat `CONTENT_REVALIDATE` | Edit terlihat dalam 60 detik, halaman tetap disajikan dari cache sehingga target Lighthouse Performance 90 tercapai. Override-nya ada supaya test E2E bisa membuktikan konten berubah tanpa rebuild tanpa harus menunggu 60 detik |
 | Bahasa label UI | English | Keputusan user di Fase 1 |
 | Bahasa dokumentasi | `EDITING-CONTENT.md` Indonesia, `README.md` English | Pembaca berbeda |
 | Nav mobile | Panel full-screen (shadcn Sheet) | Focus trap dan Esc ditangani Radix |
@@ -286,10 +286,14 @@ baris JS pun harus jalan lebih dulu.
 
 ### 4.2 Offset anchor
 
-Tinggi navbar disimpan di CSS variable `--nav-h`. Setiap section memakai
-`scroll-margin-top: var(--nav-h)`. Navbar mengecil saat scroll, dan nilai yang
-dipakai adalah tinggi versi mengecil, karena kondisi itulah yang berlaku saat
-anchor diklik dari posisi mana pun selain paling atas.
+Tinggi navbar disimpan di CSS variable `--nav-h` dan tidak pernah berubah. Setiap
+section memakai `scroll-margin-top: var(--nav-h)`.
+
+Draf sebelumnya menyebut navbar mengecil saat scroll. Itu dibatalkan: tinggi adalah
+properti layout, menganimasikannya menggeser seluruh isi di bawahnya dan melanggar
+aturan di bagian 6 dokumen ini. Yang berubah saat scroll adalah latar navbar dan
+garis bawahnya, keduanya murni perubahan warna pada elemen yang posisinya sudah
+tetap.
 
 ---
 
@@ -320,7 +324,7 @@ Tujuh animasi, semuanya hanya menyentuh `transform` dan `opacity`.
 
 | Animasi | Fungsi |
 |---|---|
-| Navbar mengecil saat scroll | Mengurangi tinggi navbar supaya area baca bertambah setelah pembaca meninggalkan hero |
+| Latar navbar muncul saat scroll | Memisahkan navbar dari konten yang lewat di bawahnya, supaya link tetap terbaca setelah pembaca meninggalkan hero |
 | Active section indicator | Memberi tahu pembaca posisinya di dalam halaman |
 | Reveal per section | Menandai batas section saat masuk layar |
 | Hover baris portfolio | Menunjukkan baris mana yang akan terbuka kalau diklik |
