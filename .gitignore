@@ -13,3 +13,4 @@ build/
 /blob-report/
 /.lighthouse/
 next-env.d.ts
+*.tsbuildinfo

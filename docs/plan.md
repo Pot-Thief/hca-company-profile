@@ -63,9 +63,11 @@ Files that change together live together: everything that knows the shape of the
 ## Task 1: Scaffold the app
 
 **Files:**
+
 - Create: `package.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`, `eslint.config.mjs`, `.prettierrc`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`, `.gitignore`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces: a repository where `pnpm lint`, `pnpm typecheck`, and `pnpm build` all exit 0
 
@@ -152,10 +154,12 @@ git commit -m "scaffold next.js app with strict typescript and tailwind"
 ## Task 2: Vitest and React Testing Library setup
 
 **Files:**
+
 - Create: `vitest.config.mts`, `vitest.setup.ts`, `src/lib/smoke.test.ts`
 - Modify: `package.json`, `.gitignore`
 
 **Interfaces:**
+
 - Consumes: Task 1 scaffold
 - Produces: `pnpm test` runs Vitest once and exits; `pnpm test:coverage` reports v8 coverage
 
@@ -250,10 +254,12 @@ git commit -m "add vitest and testing library setup"
 ## Task 3: Playwright and axe setup
 
 **Files:**
+
 - Create: `playwright.config.ts`, `e2e/smoke.spec.ts`
 - Modify: `package.json`, `.gitignore`
 
 **Interfaces:**
+
 - Consumes: Task 1 scaffold
 - Produces: `pnpm test:e2e` boots the built app and runs specs across three viewport projects named `mobile`, `tablet`, `desktop`
 
@@ -280,9 +286,18 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
-    { name: 'mobile', use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },
-    { name: 'tablet', use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 } } },
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
+    {
+      name: 'mobile',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } },
+    },
+    {
+      name: 'tablet',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 } },
+    },
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+    },
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined
@@ -343,9 +358,11 @@ git commit -m "add playwright setup with three viewport projects"
 ## Task 4: CI pipeline
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 **Interfaces:**
+
 - Consumes: scripts from Tasks 1 to 3
 - Produces: a workflow that fails the build if any gate fails
 
@@ -393,10 +410,12 @@ git commit -m "add ci workflow running lint typecheck test build and e2e"
 ## Task 5: Warning helper and Zod helpers
 
 **Files:**
+
 - Create: `src/lib/content/warn.ts`, `src/lib/content/zod-helpers.ts`
 - Test: `src/lib/content/zod-helpers.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces:
   - `warnContent(path: string, message: string): void`
@@ -515,7 +534,10 @@ export function arrayOf<S extends z.ZodType>(item: S, path: string) {
         else dropped.push(index);
       });
       if (dropped.length > 0) {
-        warnContent(path, `dropped ${dropped.length} invalid item(s) at index ${dropped.join(', ')}`);
+        warnContent(
+          path,
+          `dropped ${dropped.length} invalid item(s) at index ${dropped.join(', ')}`,
+        );
       }
       return kept;
     });
@@ -542,14 +564,17 @@ git commit -m "add content warning helper and zod field and array helpers"
 ## Task 6: Section schemas and types
 
 **Files:**
+
 - Create: `src/lib/content/schema.ts`, `src/lib/content/types.ts`
 - Test: `src/lib/content/schema.test.ts`
 
 **Interfaces:**
+
 - Consumes: `field`, `arrayOf` from Task 5
 - Produces, all exported from `schema.ts`: `siteSchema`, `heroSchema`, `aboutSchema`, `purposeSchema`, `servicesSchema`, `portfolioSchema`, `teamSchema`, `contactSchema`, and `sectionSchemas` mapping each file base name to its schema. From `types.ts`: `Site`, `Hero`, `About`, `Purpose`, `Services`, `Portfolio`, `Team`, `Contact`, `ContactChannel`, `ChannelType`, `UiLabels`, `ImageRef`.
 
 `site.ui` holds the six control labels that live on buttons rather than in content: `menu`, `closeMenu`, `copy`, `copied`, `expandBio`, `collapseBio`. They sit in JSON because the brief puts labels under the same no-hardcoded-text rule as copy. Unlike every other field they default to real English words instead of an empty string, because an empty accessible name is an accessibility failure, and a typo in `site.json` must not produce an unnamed button.
+
 - Every schema satisfies `schema.parse({})`. That is the fallback used by the loader in Task 7, so no separate fallback constants exist anywhere.
 
 - [ ] **Step 1: Write the failing test**
@@ -648,7 +673,9 @@ describe('contact schema', () => {
 
   test('keeps an explicit href when present', () => {
     const parsed = contactSchema.parse({
-      channels: [{ type: 'address', label: 'Office', value: 'Street 1', href: 'https://maps.example/x' }],
+      channels: [
+        { type: 'address', label: 'Office', value: 'Street 1', href: 'https://maps.example/x' },
+      ],
     });
     expect(parsed.channels[0]?.href).toBe('https://maps.example/x');
   });
@@ -672,11 +699,7 @@ import { arrayOf, field } from './zod-helpers';
 const str = (path: string, fallback = '') => field(z.string(), fallback, path);
 
 const image = (path: string) =>
-  field(
-    z.object({ src: str(`${path}.src`), alt: str(`${path}.alt`) }),
-    { src: '', alt: '' },
-    path,
-  );
+  field(z.object({ src: str(`${path}.src`), alt: str(`${path}.alt`) }), { src: '', alt: '' }, path);
 
 export const siteSchema = z.object({
   meta: field(
@@ -688,11 +711,7 @@ export const siteSchema = z.object({
     { title: '', description: '', ogImage: { src: '', alt: '' } },
     'site.meta',
   ),
-  logo: field(
-    z.object({ wordmark: str('site.logo.wordmark') }),
-    { wordmark: '' },
-    'site.logo',
-  ),
+  logo: field(z.object({ wordmark: str('site.logo.wordmark') }), { wordmark: '' }, 'site.logo'),
   nav: arrayOf(z.object({ label: z.string(), href: z.string() }), 'site.nav'),
   cta: field(
     z.object({ label: str('site.cta.label'), href: str('site.cta.href') }),
@@ -880,10 +899,12 @@ git commit -m "add zod schemas and inferred types for all eight content files"
 ## Task 7: Content loader
 
 **Files:**
+
 - Create: `src/lib/content/loader.ts`
 - Test: `src/lib/content/loader.test.ts`
 
 **Interfaces:**
+
 - Consumes: `sectionSchemas` from Task 6, `warnContent` from Task 5
 - Produces:
   - `contentBase(): string`
@@ -945,21 +966,28 @@ describe('loadSection', () => {
     const fetchMock = vi.fn(async () => okResponse({ items: [] }));
     vi.stubGlobal('fetch', fetchMock);
     await loadSection('services', servicesSchema);
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/services.json'),
-      { next: { revalidate: 60 } },
-    );
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/services.json'), {
+      next: { revalidate: 60 },
+    });
   });
 
   test('falls back and warns on a non-2xx response', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 404 }) as Response));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: false, status: 404 }) as Response),
+    );
     const data = await loadSection('services', servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalled();
   });
 
   test('falls back and warns when fetch rejects', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('offline'); }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new Error('offline');
+      }),
+    );
     const data = await loadSection('services', servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalled();
@@ -968,11 +996,16 @@ describe('loadSection', () => {
   test('falls back and warns on malformed JSON', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => ({
-        ok: true,
-        status: 200,
-        json: async () => { throw new SyntaxError('Unexpected token'); },
-      }) as unknown as Response),
+      vi.fn(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            json: async () => {
+              throw new SyntaxError('Unexpected token');
+            },
+          }) as unknown as Response,
+      ),
     );
     const data = await loadSection('services', servicesSchema);
     expect(data.items).toEqual([]);
@@ -980,7 +1013,10 @@ describe('loadSection', () => {
   });
 
   test('falls back and warns when the root is not an object', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => okResponse('a string')));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => okResponse('a string')),
+    );
     const data = await loadSection('services', servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalled();
@@ -1075,10 +1111,12 @@ git commit -m "add runtime json loader with fallback on every failure path"
 ## Task 8: Contact channel href helper
 
 **Files:**
+
 - Create: `src/lib/content/channel-href.ts`
 - Test: `src/lib/content/channel-href.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ChannelType` from Task 6
 - Produces: `channelHref(type: ChannelType, value: string, href?: string): string | undefined`. `undefined` means the component renders a `<span>` rather than an `<a>`.
 
@@ -1140,11 +1178,7 @@ Expected: FAIL, cannot resolve `./channel-href`.
 ```ts
 import type { ChannelType } from './types';
 
-export function channelHref(
-  type: ChannelType,
-  value: string,
-  href?: string,
-): string | undefined {
+export function channelHref(type: ChannelType, value: string, href?: string): string | undefined {
   if (href) return href;
   switch (type) {
     case 'email':
@@ -1182,10 +1216,12 @@ git commit -m "add contact channel href helper"
 ## Task 9: Icon registry
 
 **Files:**
+
 - Create: `src/lib/icons.ts`
 - Test: `src/lib/icons.test.ts`
 
 **Interfaces:**
+
 - Consumes: `warnContent` from Task 5
 - Produces: `getIcon(name: string): LucideIcon` and `ICON_NAMES: readonly string[]`. `ICON_NAMES` is the exact list published in `docs/EDITING-CONTENT.md` by Task 31.
 
@@ -1309,12 +1345,14 @@ git commit -m "add curated lucide icon registry with fallback"
 ## Task 10: Placeholder content and generated images
 
 **Files:**
+
 - Create: `public/data/site.json`, `hero.json`, `about.json`, `purpose.json`, `services.json`, `portfolio.json`, `team.json`, `contact.json`
 - Create: `scripts/generate-placeholders.mjs`
 - Create: `public/assets/images/hero-bg.jpg`, `portfolio-01.png` through `portfolio-06.png`, `team-01.jpg`, `team-02.jpg`
 - Test: `src/lib/content/data.test.ts`
 
 **Interfaces:**
+
 - Consumes: `sectionSchemas` from Task 6
 - Produces: the eight real content files that every later task and every E2E spec reads
 
@@ -1392,11 +1430,15 @@ const tile = (w, h, shade) =>
 await tile(1920, 1080, 32).jpeg({ quality: 82 }).toFile(`${OUT}/hero-bg.jpg`);
 
 for (let i = 1; i <= 6; i += 1) {
-  await tile(600, 200, 210 - i * 8).png().toFile(`${OUT}/portfolio-0${i}.png`);
+  await tile(600, 200, 210 - i * 8)
+    .png()
+    .toFile(`${OUT}/portfolio-0${i}.png`);
 }
 
 for (let i = 1; i <= 2; i += 1) {
-  await tile(800, 800, 120 + i * 30).jpeg({ quality: 82 }).toFile(`${OUT}/team-0${i}.jpg`);
+  await tile(800, 800, 120 + i * 30)
+    .jpeg({ quality: 82 })
+    .toFile(`${OUT}/team-0${i}.jpg`);
 }
 
 console.log('placeholders written to', OUT);
@@ -1493,10 +1535,22 @@ Expected: nine files.
   "label": "Purpose",
   "headline": "Lorem ipsum dolor sit amet",
   "items": [
-    { "title": "Lorem Ipsum Placeholder One", "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore." },
-    { "title": "Lorem Ipsum Placeholder Two", "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo." },
-    { "title": "Lorem Ipsum Placeholder Three", "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
-    { "title": "Lorem Ipsum Placeholder Four", "body": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim." }
+    {
+      "title": "Lorem Ipsum Placeholder One",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Two",
+      "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Three",
+      "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Four",
+      "body": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim."
+    }
   ]
 }
 ```
@@ -1508,18 +1562,66 @@ Expected: nine files.
   "label": "Services",
   "headline": "Lorem ipsum dolor sit amet consectetur",
   "items": [
-    { "icon": "code", "name": "Service Name Placeholder 01", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "smartphone", "name": "Service Name Placeholder 02", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "cloud", "name": "Service Name Placeholder 03", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "server", "name": "Service Name Placeholder 04", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "database", "name": "Service Name Placeholder 05", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "shield", "name": "Service Name Placeholder 06", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "network", "name": "Service Name Placeholder 07", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "workflow", "name": "Service Name Placeholder 08", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "line-chart", "name": "Service Name Placeholder 09", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "monitor", "name": "Service Name Placeholder 10", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "headphones", "name": "Service Name Placeholder 11", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." },
-    { "icon": "wrench", "name": "Service Name Placeholder 12", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." }
+    {
+      "icon": "code",
+      "name": "Service Name Placeholder 01",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "smartphone",
+      "name": "Service Name Placeholder 02",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "cloud",
+      "name": "Service Name Placeholder 03",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "server",
+      "name": "Service Name Placeholder 04",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "database",
+      "name": "Service Name Placeholder 05",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "shield",
+      "name": "Service Name Placeholder 06",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "network",
+      "name": "Service Name Placeholder 07",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "workflow",
+      "name": "Service Name Placeholder 08",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "line-chart",
+      "name": "Service Name Placeholder 09",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "monitor",
+      "name": "Service Name Placeholder 10",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "headphones",
+      "name": "Service Name Placeholder 11",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    },
+    {
+      "icon": "wrench",
+      "name": "Service Name Placeholder 12",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
+    }
   ]
 }
 ```
@@ -1531,12 +1633,40 @@ Expected: nine files.
   "label": "Portfolio",
   "headline": "Lorem ipsum dolor sit amet",
   "items": [
-    { "logo": { "src": "/assets/images/portfolio-01.png", "alt": "Placeholder client logo 01" }, "title": "Client Placeholder 01", "category": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
-    { "logo": { "src": "/assets/images/portfolio-02.png", "alt": "Placeholder client logo 02" }, "title": "Client Placeholder 02", "category": "Dolor sit", "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-    { "logo": { "src": "/assets/images/portfolio-03.png", "alt": "Placeholder client logo 03" }, "title": "Client Placeholder 03", "category": "Amet consectetur", "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
-    { "logo": { "src": "/assets/images/portfolio-04.png", "alt": "Placeholder client logo 04" }, "title": "Client Placeholder 04", "category": "Adipiscing elit", "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
-    { "logo": { "src": "/assets/images/portfolio-05.png", "alt": "Placeholder client logo 05" }, "title": "Client Placeholder 05", "category": "Sed do eiusmod" },
-    { "logo": { "src": "/assets/images/portfolio-06.png", "alt": "Placeholder client logo 06" }, "title": "Client Placeholder 06", "category": "Tempor incididunt" }
+    {
+      "logo": { "src": "/assets/images/portfolio-01.png", "alt": "Placeholder client logo 01" },
+      "title": "Client Placeholder 01",
+      "category": "Lorem ipsum",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-02.png", "alt": "Placeholder client logo 02" },
+      "title": "Client Placeholder 02",
+      "category": "Dolor sit",
+      "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-03.png", "alt": "Placeholder client logo 03" },
+      "title": "Client Placeholder 03",
+      "category": "Amet consectetur",
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-04.png", "alt": "Placeholder client logo 04" },
+      "title": "Client Placeholder 04",
+      "category": "Adipiscing elit",
+      "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-05.png", "alt": "Placeholder client logo 05" },
+      "title": "Client Placeholder 05",
+      "category": "Sed do eiusmod"
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-06.png", "alt": "Placeholder client logo 06" },
+      "title": "Client Placeholder 06",
+      "category": "Tempor incididunt"
+    }
   ]
 }
 ```
@@ -1549,13 +1679,19 @@ Expected: nine files.
   "headline": "Lorem ipsum dolor sit amet",
   "members": [
     {
-      "photo": { "src": "/assets/images/team-01.jpg", "alt": "Placeholder portrait of the first team member" },
+      "photo": {
+        "src": "/assets/images/team-01.jpg",
+        "alt": "Placeholder portrait of the first team member"
+      },
       "name": "Team Member Placeholder 01",
       "role": "Role Placeholder",
       "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
     },
     {
-      "photo": { "src": "/assets/images/team-02.jpg", "alt": "Placeholder portrait of the second team member" },
+      "photo": {
+        "src": "/assets/images/team-02.jpg",
+        "alt": "Placeholder portrait of the second team member"
+      },
       "name": "Team Member Placeholder 02",
       "role": "Role Placeholder",
       "bio": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit."
@@ -1571,7 +1707,11 @@ Expected: nine files.
   "label": "Contact",
   "headline": "Lorem ipsum dolor sit amet",
   "channels": [
-    { "type": "address", "label": "Office", "value": "Placeholder Street 1, Placeholder City 00000" },
+    {
+      "type": "address",
+      "label": "Office",
+      "value": "Placeholder Street 1, Placeholder City 00000"
+    },
     { "type": "email", "label": "Email", "value": "hello@placeholder.test" },
     { "type": "phone", "label": "Phone", "value": "+62 21 555 0100" },
     { "type": "whatsapp", "label": "WhatsApp", "value": "+62 812 0000 0000" },
@@ -1602,10 +1742,12 @@ git commit -m "add placeholder content files and generated image placeholders"
 ## Task 11: Design tokens and fonts
 
 **Files:**
+
 - Modify: `src/app/globals.css`, `src/app/layout.tsx`
 - Test: `src/app/tokens.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces: the token names every later task uses. Colors `paper mist ash graphite ink void`. Fonts `--font-display --font-body --font-mono`. Motion `--duration-fast --duration-base --duration-slow --ease-out --ease-in-out`. Layout `--nav-h --space-section --space-gutter`. Radius `--radius-none`.
 
@@ -1852,10 +1994,12 @@ git commit -m "add monochrome design tokens motion tokens and three typefaces"
 ## Task 12: Styleguide page, development only
 
 **Files:**
+
 - Create: `src/app/styleguide/page.tsx`
 - Test: `src/app/styleguide/page.test.tsx`
 
 **Interfaces:**
+
 - Consumes: tokens from Task 11
 - Produces: a page at `/styleguide` that renders the palette, type scale, motion tokens, and every interactive state, and that returns 404 in production
 
@@ -1921,7 +2065,10 @@ export default function StyleguidePage() {
         Styleguide
       </h1>
       <section aria-labelledby="palette">
-        <h2 id="palette" className="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-[0.12em]">
+        <h2
+          id="palette"
+          className="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-[0.12em]"
+        >
           Palette
         </h2>
         <ul>
@@ -1967,10 +2114,12 @@ Compare each token decision against the generic version written in `docs/spec.md
 ## Task 13: Shared section heading
 
 **Files:**
+
 - Create: `src/components/sections/SectionHeading.tsx`
 - Test: `src/components/sections/SectionHeading.test.tsx`
 
 **Interfaces:**
+
 - Consumes: nothing
 - Produces: `<SectionHeading id={string} label={string} headline={string} />`, used by About, Purpose, Services, Portfolio, Team, and Contact. It renders the mono label in the left margin and an `h2`. The `h2` text is `headline`, falling back to `label`, falling back to `id`.
 
@@ -2056,11 +2205,13 @@ git commit -m "add shared section heading component"
 ## Task 14: Navbar and mobile panel
 
 **Files:**
+
 - Create: `src/components/sections/Navbar.tsx`, `src/components/interactive/MobileNav.tsx`
 - Create: `src/components/ui/button.tsx`, `src/components/ui/sheet.tsx` via shadcn
 - Test: `src/components/sections/Navbar.test.tsx`, `src/components/interactive/MobileNav.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Site` and `UiLabels` from Task 6
 - Produces: `<Navbar logo={Site['logo']} nav={Site['nav']} cta={Site['cta']} ui={UiLabels} />` and `<MobileNav nav={Site['nav']} cta={Site['cta']} ui={UiLabels} />`. `NavLinks` is added in Task 26; until then Navbar renders plain anchors.
 - No control label is written in the component. `Menu` and `Close menu` arrive through `ui`.
@@ -2208,10 +2359,12 @@ git commit -m "add navbar with mobile panel"
 ## Task 15: Hero
 
 **Files:**
+
 - Create: `src/components/sections/Hero.tsx`
 - Test: `src/components/sections/Hero.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Hero` type from Task 6
 - Produces: `<Hero {...hero} />` rendering the only `h1` on the page
 
@@ -2289,10 +2442,12 @@ git commit -m "add hero section"
 ## Task 16: About
 
 **Files:**
+
 - Create: `src/components/sections/About.tsx`
 - Test: `src/components/sections/About.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `About` type from Task 6, `SectionHeading` from Task 13
 - Produces: `<About {...about} />` inside `<section id="about">`
 
@@ -2371,10 +2526,12 @@ git commit -m "add about section"
 ## Task 17: Purpose
 
 **Files:**
+
 - Create: `src/components/sections/Purpose.tsx`
 - Test: `src/components/sections/Purpose.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Purpose` type from Task 6, `SectionHeading` from Task 13
 - Produces: `<Purpose {...purpose} />` inside `<section id="purpose">`
 
@@ -2404,7 +2561,9 @@ describe('Purpose', () => {
 
   test('renders an empty state when items is empty', () => {
     render(<Purpose {...props} items={[]} />);
-    expect(screen.getByText('No purpose statements yet. Add items to purpose.json.')).toBeInTheDocument();
+    expect(
+      screen.getByText('No purpose statements yet. Add items to purpose.json.'),
+    ).toBeInTheDocument();
   });
 });
 ```
@@ -2429,10 +2588,12 @@ git commit -m "add purpose section"
 ## Task 18: Services
 
 **Files:**
+
 - Create: `src/components/sections/Services.tsx`
 - Test: `src/components/sections/Services.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Services` type from Task 6, `getIcon` from Task 9, `SectionHeading` from Task 13
 - Produces: `<Services {...services} />` inside `<section id="services">`
 
@@ -2510,11 +2671,13 @@ git commit -m "add services section"
 ## Task 19: Portfolio and row disclosure
 
 **Files:**
+
 - Create: `src/components/sections/Portfolio.tsx`, `src/components/interactive/PortfolioRow.tsx`
 - Create: `src/components/ui/collapsible.tsx` via shadcn
 - Test: `src/components/sections/Portfolio.test.tsx`, `src/components/interactive/PortfolioRow.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Portfolio` type from Task 6, `SectionHeading` from Task 13
 - Produces: `<Portfolio {...portfolio} />` inside `<section id="portfolio">`, and `<PortfolioRow item={Portfolio['items'][number]} />`
 
@@ -2634,10 +2797,12 @@ git commit -m "add portfolio section with row disclosure"
 ## Task 20: Team
 
 **Files:**
+
 - Create: `src/components/sections/Team.tsx`, `src/components/interactive/TeamMember.tsx`
 - Test: `src/components/sections/Team.test.tsx`, `src/components/interactive/TeamMember.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Team` and `UiLabels` from Task 6, `SectionHeading` from Task 13, `collapsible` from Task 19
 - Produces: `<Team {...team} ui={UiLabels} />` inside `<section id="team">`, and `<TeamMember member={Team['members'][number]} ui={UiLabels} />`
 - The disclosure trigger is named `${ui.expandBio} ${member.name}` when collapsed and `${ui.collapseBio} ${member.name}` when open. The member name is part of the name so that two triggers on the page are distinguishable to a screen reader.
@@ -2757,10 +2922,12 @@ git commit -m "add team section with expandable bio"
 ## Task 21: Contact and copy button
 
 **Files:**
+
 - Create: `src/components/sections/Contact.tsx`, `src/components/interactive/CopyButton.tsx`
 - Test: `src/components/sections/Contact.test.tsx`, `src/components/interactive/CopyButton.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Contact`, `ContactChannel`, and `UiLabels` from Task 6, `channelHref` from Task 8, `SectionHeading` from Task 13
 - Produces: `<Contact {...contact} ui={UiLabels} />` inside `<section id="contact">`, and `<CopyButton value={string} label={string} copyLabel={string} copiedLabel={string} />`
 - The copy trigger is named `${copyLabel} ${label}`, and the confirmation text is `copiedLabel`. Neither string is written in the component.
@@ -2807,7 +2974,10 @@ describe('Contact', () => {
 
   test('renders tel and wa.me links with separators removed', () => {
     render(<Contact {...props} />);
-    expect(screen.getByRole('link', { name: /555 0100/ })).toHaveAttribute('href', 'tel:+62215550100');
+    expect(screen.getByRole('link', { name: /555 0100/ })).toHaveAttribute(
+      'href',
+      'tel:+62215550100',
+    );
     expect(screen.getByRole('link', { name: /812 0000 0000/ })).toHaveAttribute(
       'href',
       'https://wa.me/6281200000000',
@@ -2824,7 +2994,12 @@ describe('Contact', () => {
 
   test('renders an address link when an explicit href is given', () => {
     const channels = [
-      { type: 'address' as const, label: 'A_X', value: 'ADDRESS_VALUE_X', href: 'https://maps.example/x' },
+      {
+        type: 'address' as const,
+        label: 'A_X',
+        value: 'ADDRESS_VALUE_X',
+        href: 'https://maps.example/x',
+      },
     ];
     render(<Contact {...props} channels={channels} />);
     expect(screen.getByRole('link', { name: /ADDRESS_VALUE_X/ })).toHaveAttribute(
@@ -2846,7 +3021,9 @@ describe('Contact', () => {
 
   test('renders an empty state when channels is empty', () => {
     render(<Contact {...props} channels={[]} />);
-    expect(screen.getByText('No contact channels yet. Add channels to contact.json.')).toBeInTheDocument();
+    expect(
+      screen.getByText('No contact channels yet. Add channels to contact.json.'),
+    ).toBeInTheDocument();
   });
 });
 ```
@@ -2912,10 +3089,12 @@ git commit -m "add contact section with copyable channels"
 ## Task 22: Footer
 
 **Files:**
+
 - Create: `src/components/sections/Footer.tsx`
 - Test: `src/components/sections/Footer.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Site` and `ContactChannel` from Task 6, `channelHref` from Task 8
 - Produces: `<Footer logo={Site['logo']} nav={Site['footer']['nav']} copyright={string} social={ContactChannel[]} />`. The `social` array is filtered by `page.tsx` in Task 24, so Footer itself does no filtering and stays a pure renderer.
 
@@ -2989,9 +3168,11 @@ git commit -m "add footer section"
 ## Task 23: Hardcoded text scanner
 
 **Files:**
+
 - Create: `src/components/sections/no-hardcoded-text.test.ts`
 
 **Interfaces:**
+
 - Consumes: every file under `src/components/sections/` and `src/components/interactive/`
 - Produces: a failing test the moment somebody types display copy into JSX
 
@@ -3069,11 +3250,13 @@ git commit -m "add scanner test rejecting display copy in section components"
 **Execute this after Tasks 25 and 26.** The page below imports `Reveal` and `ScrollState`, which Task 25 creates. It is numbered 24 because it is the clearest place to see the whole page, not because it comes first.
 
 **Files:**
+
 - Create: `src/app/page.tsx`
 - Modify: `src/app/layout.tsx`
 - Test: covered by E2E in Task 27, because `page.tsx` is an async Server Component and Vitest cannot render those
 
 **Interfaces:**
+
 - Consumes: `loadSection` from Task 7, `sectionSchemas` from Task 6, all nine section components
 - Produces: the rendered page, and `generateMetadata` sourcing title, description, and OG image from `site.json`
 
@@ -3114,12 +3297,24 @@ export default async function Page() {
       <Navbar logo={site.logo} nav={site.nav} cta={site.cta} ui={site.ui} />
       <main>
         <Hero {...hero} />
-        <Reveal><About {...about} /></Reveal>
-        <Reveal><Purpose {...purpose} /></Reveal>
-        <Reveal><Services {...services} /></Reveal>
-        <Reveal><Portfolio {...portfolio} /></Reveal>
-        <Reveal><Team {...team} ui={site.ui} /></Reveal>
-        <Reveal><Contact {...contact} ui={site.ui} /></Reveal>
+        <Reveal>
+          <About {...about} />
+        </Reveal>
+        <Reveal>
+          <Purpose {...purpose} />
+        </Reveal>
+        <Reveal>
+          <Services {...services} />
+        </Reveal>
+        <Reveal>
+          <Portfolio {...portfolio} />
+        </Reveal>
+        <Reveal>
+          <Team {...team} ui={site.ui} />
+        </Reveal>
+        <Reveal>
+          <Contact {...contact} ui={site.ui} />
+        </Reveal>
       </main>
       <Footer
         logo={site.logo}
@@ -3145,7 +3340,9 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: site.meta.title,
       description: site.meta.description,
-      images: site.meta.ogImage.src ? [{ url: site.meta.ogImage.src, alt: site.meta.ogImage.alt }] : [],
+      images: site.meta.ogImage.src
+        ? [{ url: site.meta.ogImage.src, alt: site.meta.ogImage.alt }]
+        : [],
     },
   };
 }
@@ -3173,10 +3370,12 @@ git commit -m "assemble the page and source metadata from site.json"
 ## Task 25: Reveal and scroll state
 
 **Files:**
+
 - Create: `src/components/interactive/Reveal.tsx`, `src/components/interactive/ScrollState.tsx`
 - Test: `src/components/interactive/Reveal.test.tsx`
 
 **Interfaces:**
+
 - Consumes: the CSS baseline from Task 11
 - Produces: `<Reveal>{children}</Reveal>` and `<ScrollState />`
 
@@ -3196,12 +3395,20 @@ afterEach(() => {
 
 describe('Reveal', () => {
   test('renders its children', () => {
-    render(<Reveal><p>CHILD_X</p></Reveal>);
+    render(
+      <Reveal>
+        <p>CHILD_X</p>
+      </Reveal>,
+    );
     expect(screen.getByText('CHILD_X')).toBeInTheDocument();
   });
 
   test('starts in the pending state and carries the data-reveal attribute', () => {
-    const { container } = render(<Reveal><p>CHILD_X</p></Reveal>);
+    const { container } = render(
+      <Reveal>
+        <p>CHILD_X</p>
+      </Reveal>,
+    );
     expect(container.firstElementChild).toHaveAttribute('data-reveal', 'pending');
   });
 
@@ -3217,14 +3424,22 @@ describe('Reveal', () => {
         disconnect() {}
       },
     );
-    const { container } = render(<Reveal><p>CHILD_X</p></Reveal>);
+    const { container } = render(
+      <Reveal>
+        <p>CHILD_X</p>
+      </Reveal>,
+    );
     trigger?.([{ isIntersecting: true }]);
     expect(container.firstElementChild).toHaveAttribute('data-reveal', 'shown');
   });
 
   test('shows immediately when IntersectionObserver is unavailable', () => {
     vi.stubGlobal('IntersectionObserver', undefined);
-    const { container } = render(<Reveal><p>CHILD_X</p></Reveal>);
+    const { container } = render(
+      <Reveal>
+        <p>CHILD_X</p>
+      </Reveal>,
+    );
     expect(container.firstElementChild).toHaveAttribute('data-reveal', 'shown');
   });
 });
@@ -3325,11 +3540,13 @@ git commit -m "add reveal wrapper and scroll state"
 ## Task 26: Active section indicator
 
 **Files:**
+
 - Create: `src/components/interactive/NavLinks.tsx`
 - Modify: `src/components/sections/Navbar.tsx`
 - Test: `src/components/interactive/NavLinks.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Site['nav']` from Task 6
 - Produces: `<NavLinks nav={Site['nav']} />`. The link whose section is in view carries `aria-current="location"`.
 
@@ -3463,10 +3680,12 @@ git commit -m "add active section indicator to the navbar"
 ## Task 27: End to end structure and responsiveness
 
 **Files:**
+
 - Create: `e2e/structure.spec.ts`
 - Modify: `e2e/smoke.spec.ts` is replaced by this file, delete it
 
 **Interfaces:**
+
 - Consumes: the built app
 - Produces: coverage of the nine sections, anchor navigation, and the three viewports
 
@@ -3493,9 +3712,9 @@ test('renders the banner, main, contentinfo, and all six anchored sections', asy
 
 test('has exactly one h1 and no skipped heading levels', async ({ page }) => {
   await expect(page.locator('h1')).toHaveCount(1);
-  const levels = await page.locator('h1, h2, h3').evaluateAll((nodes) =>
-    nodes.map((node) => Number(node.tagName.slice(1))),
-  );
+  const levels = await page
+    .locator('h1, h2, h3')
+    .evaluateAll((nodes) => nodes.map((node) => Number(node.tagName.slice(1))));
   levels.reduce((previous, current) => {
     expect(current - previous).toBeLessThanOrEqual(1);
     return current;
@@ -3570,9 +3789,11 @@ git commit -m "add end to end structure and responsive specs"
 ## Task 28: Accessibility, keyboard, and motion
 
 **Files:**
+
 - Create: `e2e/a11y.spec.ts`, `e2e/motion.spec.ts`
 
 **Interfaces:**
+
 - Consumes: the built app, `@axe-core/playwright`
 - Produces: proof of zero serious or critical axe violations, a keyboard journey, distinct focus and hover states, and reduced motion behaviour
 
@@ -3703,10 +3924,12 @@ git commit -m "add accessibility keyboard and reduced motion specs"
 ## Task 29: Content resilience end to end
 
 **Files:**
+
 - Create: `e2e/fixture-server.mjs`, `e2e/fixtures/broken/*.json`, `e2e/fixtures/live/*.json`, `playwright.resilience.config.ts`, `e2e/resilience.spec.ts`
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Consumes: `CONTENT_BASE_URL` and `CONTENT_REVALIDATE` from Task 7
 - Produces: proof that broken JSON does not blank the page, and that content served over HTTP changes what renders without a rebuild
 
@@ -3855,12 +4078,14 @@ git commit -m "add resilience specs for broken json and http-sourced content"
 ## Task 30: Visual regression and performance budget
 
 **Files:**
+
 - Create: `e2e/visual.spec.ts`, `.lighthouserc.json`
 - Modify: `package.json`
 
 `playwright.config.ts` needs no change. `e2e/visual.spec.ts` sits in the existing `testDir`, and the `test.skip(!process.env.VISUAL)` guard is what keeps it out of ordinary and CI runs.
 
 **Interfaces:**
+
 - Consumes: the built app
 - Produces: per-section screenshot baselines at three viewports, and a Lighthouse run asserting the four budgets
 
@@ -3956,9 +4181,11 @@ git commit -m "add visual regression baselines and lighthouse budget"
 ## Task 31: Optimisation pass
 
 **Files:**
+
 - Modify: image usages across section components, `next.config.ts`, `package.json`
 
 **Interfaces:**
+
 - Consumes: the Lighthouse report from Task 30
 - Produces: the same behaviour at a lower cost, with every test still green
 
@@ -4018,10 +4245,12 @@ git commit -m "optimise images fonts and dependencies"
 ## Task 32: Documentation
 
 **Files:**
+
 - Create: `docs/EDITING-CONTENT.md`
 - Modify: `README.md`
 
 **Interfaces:**
+
 - Consumes: `ICON_NAMES` from Task 9, the ratios from Task 10
 - Produces: instructions a non-technical editor can follow without opening a code file
 
@@ -4066,9 +4295,11 @@ git commit -m "add editing guide and readme"
 ## Task 33: Review gates
 
 **Files:**
+
 - Modify: whatever the reviews turn up
 
 **Interfaces:**
+
 - Consumes: the finished UI
 - Produces: audit findings and the fixes for them
 
@@ -4097,9 +4328,11 @@ Coverage must show `src/lib/content/` at 100% branch and `src/components/` at 90
 ## Task 34: Deploy and verify
 
 **Files:**
+
 - Create: `vercel.json` only if a setting genuinely needs it
 
 **Interfaces:**
+
 - Consumes: the verified build
 - Produces: a live URL with the same specs passing against it
 
@@ -4139,4 +4372,3 @@ Use `superpowers:finishing-a-development-branch`.
 - Tasks 15 to 22 touch disjoint files and can be worked in parallel. Task 14 and Task 19 each add a shadcn component and both edit `globals.css`, so run those two one after the other rather than at the same time.
 - Tasks 24 to 26 depend on every section existing. Inside that group the order is 25, then 26, then 24, because the page assembled in Task 24 imports the two client components built in Task 25.
 - If a test fails for a reason the plan did not predict, use `superpowers:systematic-debugging` rather than adjusting the test until it passes.
-
