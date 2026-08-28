@@ -543,7 +543,9 @@ git commit -m "add content warning helper and zod field and array helpers"
 
 **Interfaces:**
 - Consumes: `field`, `arrayOf` from Task 5
-- Produces, all exported from `schema.ts`: `siteSchema`, `heroSchema`, `aboutSchema`, `purposeSchema`, `servicesSchema`, `portfolioSchema`, `teamSchema`, `contactSchema`, and `sectionSchemas` mapping each file base name to its schema. From `types.ts`: `Site`, `Hero`, `About`, `Purpose`, `Services`, `Portfolio`, `Team`, `Contact`, `ContactChannel`, `ChannelType`, `ImageRef`.
+- Produces, all exported from `schema.ts`: `siteSchema`, `heroSchema`, `aboutSchema`, `purposeSchema`, `servicesSchema`, `portfolioSchema`, `teamSchema`, `contactSchema`, and `sectionSchemas` mapping each file base name to its schema. From `types.ts`: `Site`, `Hero`, `About`, `Purpose`, `Services`, `Portfolio`, `Team`, `Contact`, `ContactChannel`, `ChannelType`, `UiLabels`, `ImageRef`.
+
+`site.ui` holds the six control labels that live on buttons rather than in content: `menu`, `closeMenu`, `copy`, `copied`, `expandBio`, `collapseBio`. They sit in JSON because the brief puts labels under the same no-hardcoded-text rule as copy. Unlike every other field they default to real English words instead of an empty string, because an empty accessible name is an accessibility failure, and a typo in `site.json` must not produce an unnamed button.
 - Every schema satisfies `schema.parse({})`. That is the fallback used by the loader in Task 7, so no separate fallback constants exist anywhere.
 
 - [ ] **Step 1: Write the failing test**
@@ -589,6 +591,21 @@ describe('services schema', () => {
     expect(servicesSchema.parse({ headline: 42 }).headline).toBe('');
     expect(warn).toHaveBeenCalled();
     warn.mockRestore();
+  });
+});
+
+describe('site schema', () => {
+  test('ui labels fall back to real words rather than empty strings', () => {
+    const ui = sectionSchemas.site.parse({}).ui;
+    expect(ui.menu).toBe('Menu');
+    expect(ui.copy).toBe('Copy');
+    expect(ui.expandBio).toBe('Read bio');
+  });
+
+  test('ui labels from json win over the defaults', () => {
+    const ui = sectionSchemas.site.parse({ ui: { menu: 'MENU_X' } }).ui;
+    expect(ui.menu).toBe('MENU_X');
+    expect(ui.copy).toBe('Copy');
   });
 });
 
@@ -685,6 +702,25 @@ export const siteSchema = z.object({
     }),
     { nav: [], copyright: '' },
     'site.footer',
+  ),
+  ui: field(
+    z.object({
+      menu: str('site.ui.menu', 'Menu'),
+      closeMenu: str('site.ui.closeMenu', 'Close menu'),
+      copy: str('site.ui.copy', 'Copy'),
+      copied: str('site.ui.copied', 'Copied'),
+      expandBio: str('site.ui.expandBio', 'Read bio'),
+      collapseBio: str('site.ui.collapseBio', 'Hide bio'),
+    }),
+    {
+      menu: 'Menu',
+      closeMenu: 'Close menu',
+      copy: 'Copy',
+      copied: 'Copied',
+      expandBio: 'Read bio',
+      collapseBio: 'Hide bio',
+    },
+    'site.ui',
   ),
 });
 
@@ -815,6 +851,7 @@ export type Portfolio = z.output<typeof portfolioSchema>;
 export type Team = z.output<typeof teamSchema>;
 export type Contact = z.output<typeof contactSchema>;
 export type ContactChannel = Contact['channels'][number];
+export type UiLabels = Site['ui'];
 export type ChannelType = z.output<typeof channelTypeSchema>;
 export type ImageRef = { src: string; alt: string };
 ```
@@ -1399,6 +1436,14 @@ Expected: nine files.
       { "label": "Contact", "href": "#contact" }
     ],
     "copyright": "2026 Company Placeholder. All rights reserved."
+  },
+  "ui": {
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "copy": "Copy",
+    "copied": "Copied",
+    "expandBio": "Read bio",
+    "collapseBio": "Hide bio"
   }
 }
 ```
@@ -2012,8 +2057,9 @@ git commit -m "add shared section heading component"
 - Test: `src/components/sections/Navbar.test.tsx`, `src/components/interactive/MobileNav.test.tsx`
 
 **Interfaces:**
-- Consumes: `Site` from Task 6
-- Produces: `<Navbar logo={Site['logo']} nav={Site['nav']} cta={Site['cta']} />`. `NavLinks` is added in Task 26; until then Navbar renders plain anchors.
+- Consumes: `Site` and `UiLabels` from Task 6
+- Produces: `<Navbar logo={Site['logo']} nav={Site['nav']} cta={Site['cta']} ui={UiLabels} />` and `<MobileNav nav={Site['nav']} cta={Site['cta']} ui={UiLabels} />`. `NavLinks` is added in Task 26; until then Navbar renders plain anchors.
+- No control label is written in the component. `Menu` and `Close menu` arrive through `ui`.
 
 - [ ] **Step 1: Install the two shadcn components**
 
@@ -2024,7 +2070,11 @@ pnpm dlx shadcn@latest add button sheet
 
 - [ ] **Step 2: Strip the generated palette**
 
-`shadcn init` writes its own colour variables into `globals.css`. Delete every colour variable it added and repoint `button.tsx` and `sheet.tsx` at the tokens from Task 11. Re-run `pnpm test src/app/tokens.test.ts`; the monochrome guard fails if any generated hue survived.
+`shadcn init` writes its own colour variables into `globals.css`. Delete every colour variable it added and repoint `button.tsx` and `sheet.tsx` at the tokens from Task 11. Re-run `pnpm test src/app/tokens.test.ts`; that test fails both if a generated hue survived and if `init` clobbered any token from Task 11.
+
+Also delete every `outline-none` and `focus-visible:ring-*` class the generated components carry. They suppress the global `:focus-visible` outline defined in Task 11, and the keyboard journey in Task 28 asserts a non-zero `outlineWidth` on every focusable element. Ring utilities are not a substitute there, because `getComputedStyle` reports `outlineWidth: 0px` for a ring.
+
+Then re-run `pnpm test src/app/tokens.test.ts && pnpm typecheck` before continuing.
 
 - [ ] **Step 3: Write the failing tests**
 
@@ -2034,6 +2084,15 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Navbar } from './Navbar';
 
+const ui = {
+  menu: 'MENU_X',
+  closeMenu: 'CLOSE_MENU_X',
+  copy: 'COPY_X',
+  copied: 'COPIED_X',
+  expandBio: 'EXPAND_BIO_X',
+  collapseBio: 'COLLAPSE_BIO_X',
+};
+
 const props = {
   logo: { wordmark: 'WORDMARK_X' },
   nav: [
@@ -2041,6 +2100,7 @@ const props = {
     { label: 'NAV_TWO_X', href: '#services' },
   ],
   cta: { label: 'CTA_X', href: '#contact' },
+  ui,
 };
 
 describe('Navbar', () => {
@@ -2083,26 +2143,41 @@ import { MobileNav } from './MobileNav';
 const props = {
   nav: [{ label: 'NAV_ONE_X', href: '#about' }],
   cta: { label: 'CTA_X', href: '#contact' },
+  ui: {
+    menu: 'MENU_X',
+    closeMenu: 'CLOSE_MENU_X',
+    copy: 'COPY_X',
+    copied: 'COPIED_X',
+    expandBio: 'EXPAND_BIO_X',
+    collapseBio: 'COLLAPSE_BIO_X',
+  },
 };
 
 describe('MobileNav', () => {
-  test('the trigger has an accessible name', () => {
+  test('the trigger is named from the ui labels, not from the component', () => {
     render(<MobileNav {...props} />);
-    expect(screen.getByRole('button', { name: /menu/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'MENU_X' })).toBeInTheDocument();
   });
 
   test('opening the panel reveals every nav link and the cta', async () => {
     const user = userEvent.setup();
     render(<MobileNav {...props} />);
-    await user.click(screen.getByRole('button', { name: /menu/i }));
+    await user.click(screen.getByRole('button', { name: 'MENU_X' }));
     expect(await screen.findByRole('link', { name: 'NAV_ONE_X' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'CTA_X' })).toBeInTheDocument();
+  });
+
+  test('the close control is named from the ui labels', async () => {
+    const user = userEvent.setup();
+    render(<MobileNav {...props} />);
+    await user.click(screen.getByRole('button', { name: 'MENU_X' }));
+    expect(await screen.findByRole('button', { name: 'CLOSE_MENU_X' })).toBeInTheDocument();
   });
 
   test('escape closes the panel', async () => {
     const user = userEvent.setup();
     render(<MobileNav {...props} />);
-    await user.click(screen.getByRole('button', { name: /menu/i }));
+    await user.click(screen.getByRole('button', { name: 'MENU_X' }));
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('link', { name: 'NAV_ONE_X' })).not.toBeInTheDocument();
   });
@@ -2559,8 +2634,9 @@ git commit -m "add portfolio section with row disclosure"
 - Test: `src/components/sections/Team.test.tsx`, `src/components/interactive/TeamMember.test.tsx`
 
 **Interfaces:**
-- Consumes: `Team` type from Task 6, `SectionHeading` from Task 13, `collapsible` from Task 19
-- Produces: `<Team {...team} />` inside `<section id="team">`, and `<TeamMember member={Team['members'][number]} />`
+- Consumes: `Team` and `UiLabels` from Task 6, `SectionHeading` from Task 13, `collapsible` from Task 19
+- Produces: `<Team {...team} ui={UiLabels} />` inside `<section id="team">`, and `<TeamMember member={Team['members'][number]} ui={UiLabels} />`
+- The disclosure trigger is named `${ui.expandBio} ${member.name}` when collapsed and `${ui.collapseBio} ${member.name}` when open. The member name is part of the name so that two triggers on the page are distinguishable to a screen reader.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2576,7 +2652,15 @@ const members = [1, 2].map((n) => ({
   role: `ROLE_${n}_X`,
   bio: `BIO_${n}_X`,
 }));
-const props = { label: 'LABEL_X', headline: 'HEADLINE_X', members };
+const ui = {
+  menu: 'MENU_X',
+  closeMenu: 'CLOSE_MENU_X',
+  copy: 'COPY_X',
+  copied: 'COPIED_X',
+  expandBio: 'EXPAND_BIO_X',
+  collapseBio: 'COLLAPSE_BIO_X',
+};
+const props = { label: 'LABEL_X', headline: 'HEADLINE_X', members, ui };
 
 describe('Team', () => {
   test('renders both members as h3 with role and photo alt', () => {
@@ -2613,24 +2697,34 @@ const member = {
   bio: 'BIO_X',
 };
 
+const ui = {
+  menu: 'MENU_X',
+  closeMenu: 'CLOSE_MENU_X',
+  copy: 'COPY_X',
+  copied: 'COPIED_X',
+  expandBio: 'EXPAND_BIO_X',
+  collapseBio: 'COLLAPSE_BIO_X',
+};
+
 describe('TeamMember', () => {
-  test('the bio is collapsed and the trigger names the member', () => {
-    render(<TeamMember member={member} />);
+  test('the bio is collapsed and the trigger is named from ui plus the member name', () => {
+    render(<TeamMember member={member} ui={ui} />);
     const trigger = screen.getByRole('button');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    expect(trigger).toHaveAccessibleName(/NAME_X/);
+    expect(trigger).toHaveAccessibleName('EXPAND_BIO_X NAME_X');
   });
 
-  test('activating the trigger reveals the bio', async () => {
+  test('activating the trigger reveals the bio and renames the trigger', async () => {
     const user = userEvent.setup();
-    render(<TeamMember member={member} />);
+    render(<TeamMember member={member} ui={ui} />);
     await user.click(screen.getByRole('button'));
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button')).toHaveAccessibleName('COLLAPSE_BIO_X NAME_X');
     expect(screen.getByText('BIO_X')).toBeVisible();
   });
 
   test('name and role are visible without expanding', () => {
-    render(<TeamMember member={member} />);
+    render(<TeamMember member={member} ui={ui} />);
     expect(screen.getByRole('heading', { level: 3, name: 'NAME_X' })).toBeInTheDocument();
     expect(screen.getByText('ROLE_X')).toBeInTheDocument();
   });
@@ -2663,8 +2757,9 @@ git commit -m "add team section with expandable bio"
 - Test: `src/components/sections/Contact.test.tsx`, `src/components/interactive/CopyButton.test.tsx`
 
 **Interfaces:**
-- Consumes: `Contact` and `ContactChannel` from Task 6, `channelHref` from Task 8, `SectionHeading` from Task 13
-- Produces: `<Contact {...contact} />` inside `<section id="contact">`, and `<CopyButton value={string} label={string} />`
+- Consumes: `Contact`, `ContactChannel`, and `UiLabels` from Task 6, `channelHref` from Task 8, `SectionHeading` from Task 13
+- Produces: `<Contact {...contact} ui={UiLabels} />` inside `<section id="contact">`, and `<CopyButton value={string} label={string} copyLabel={string} copiedLabel={string} />`
+- The copy trigger is named `${copyLabel} ${label}`, and the confirmation text is `copiedLabel`. Neither string is written in the component.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2674,9 +2769,19 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Contact } from './Contact';
 
+const ui = {
+  menu: 'MENU_X',
+  closeMenu: 'CLOSE_MENU_X',
+  copy: 'COPY_X',
+  copied: 'COPIED_X',
+  expandBio: 'EXPAND_BIO_X',
+  collapseBio: 'COLLAPSE_BIO_X',
+};
+
 const props = {
   label: 'LABEL_X',
   headline: 'HEADLINE_X',
+  ui,
   channels: [
     { type: 'email' as const, label: 'EMAIL_LABEL_X', value: 'a@placeholder.test' },
     { type: 'phone' as const, label: 'PHONE_LABEL_X', value: '+62 21 555 0100' },
@@ -2726,7 +2831,7 @@ describe('Contact', () => {
 
   test('renders a copy button only for email, phone, and whatsapp', () => {
     render(<Contact {...props} />);
-    expect(screen.getAllByRole('button', { name: /copy/i })).toHaveLength(3);
+    expect(screen.getAllByRole('button', { name: /^COPY_X / })).toHaveLength(3);
   });
 
   test('contains no form and no input', () => {
@@ -2754,27 +2859,29 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+const labels = { copyLabel: 'COPY_X', copiedLabel: 'COPIED_X' };
+
 describe('CopyButton', () => {
-  test('names the value it copies', () => {
-    render(<CopyButton value="VALUE_X" label="LABEL_X" />);
-    expect(screen.getByRole('button', { name: /copy LABEL_X/i })).toBeInTheDocument();
+  test('is named from the labels it is given, not from the component', () => {
+    render(<CopyButton value="VALUE_X" label="LABEL_X" {...labels} />);
+    expect(screen.getByRole('button', { name: 'COPY_X LABEL_X' })).toBeInTheDocument();
   });
 
   test('writes the value to the clipboard and confirms', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
     const user = userEvent.setup();
-    render(<CopyButton value="VALUE_X" label="LABEL_X" />);
+    render(<CopyButton value="VALUE_X" label="LABEL_X" {...labels} />);
     await user.click(screen.getByRole('button'));
     expect(writeText).toHaveBeenCalledWith('VALUE_X');
-    expect(await screen.findByText(/copied/i)).toBeInTheDocument();
+    expect(await screen.findByText('COPIED_X')).toBeInTheDocument();
   });
 
   test('leaves the button usable when the clipboard rejects', async () => {
     const writeText = vi.fn().mockRejectedValue(new Error('denied'));
     vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
     const user = userEvent.setup();
-    render(<CopyButton value="VALUE_X" label="LABEL_X" />);
+    render(<CopyButton value="VALUE_X" label="LABEL_X" {...labels} />);
     await user.click(screen.getByRole('button'));
     expect(screen.getByRole('button')).toBeEnabled();
   });
@@ -2881,10 +2988,12 @@ git commit -m "add footer section"
 - Create: `src/components/sections/no-hardcoded-text.test.ts`
 
 **Interfaces:**
-- Consumes: every file under `src/components/sections/`
+- Consumes: every file under `src/components/sections/` and `src/components/interactive/`
 - Produces: a failing test the moment somebody types display copy into JSX
 
-This is one half of the zero-hardcoded-text proof. The other half is the sentinel fixtures already used in Tasks 14 through 22.
+This is one half of the zero-hardcoded-text proof. The other half is the sentinel fixtures already used in Tasks 14 through 22. The interactive directory is scanned too, because the control labels moved into `site.ui` precisely so those components would hold none.
+
+`src/components/ui/` is excluded: it is generated shadcn output, and its files carry no display copy of their own.
 
 - [ ] **Step 1: Write the test**
 
@@ -2894,7 +3003,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
-const DIR = join(process.cwd(), 'src/components/sections');
+const DIRS = ['src/components/sections', 'src/components/interactive'];
 
 const ALLOWED = new Set([
   'No purpose statements yet. Add items to purpose.json.',
@@ -2904,17 +3013,32 @@ const ALLOWED = new Set([
   'No contact channels yet. Add channels to contact.json.',
 ]);
 
-const files = readdirSync(DIR).filter((f) => f.endsWith('.tsx') && !f.includes('.test.'));
+const files = DIRS.flatMap((dir) =>
+  readdirSync(join(process.cwd(), dir))
+    .filter((name) => name.endsWith('.tsx') && !name.includes('.test.'))
+    .map((name) => join(dir, name)),
+);
 
-describe('section components carry no display copy', () => {
+describe('components carry no display copy', () => {
   test.each(files)('%s', (file) => {
-    const source = readFileSync(join(DIR, file), 'utf8');
+    const source = readFileSync(join(process.cwd(), file), 'utf8');
     // Text sitting directly between JSX tags, ignoring expressions and whitespace.
     const between = source.match(/>[^<>{}\n]*[A-Za-z]{2,}[^<>{}]*</g) ?? [];
     const offenders = between
       .map((match) => match.slice(1, -1).trim())
       .filter((text) => text.length > 0 && !ALLOWED.has(text));
     expect(offenders).toEqual([]);
+  });
+});
+```
+
+The regex catches text between tags. It does not catch a literal in a prop such as `aria-label="Menu"`, so add this second test in the same file:
+
+```ts
+describe('components carry no literal aria-label or title', () => {
+  test.each(files)('%s', (file) => {
+    const source = readFileSync(join(process.cwd(), file), 'utf8');
+    expect(source).not.toMatch(/(aria-label|title|alt)="[^"]*[A-Za-z]{2,}[^"]*"/);
   });
 });
 ```
@@ -2983,15 +3107,15 @@ export default async function Page() {
   return (
     <>
       <ScrollState />
-      <Navbar logo={site.logo} nav={site.nav} cta={site.cta} />
+      <Navbar logo={site.logo} nav={site.nav} cta={site.cta} ui={site.ui} />
       <main>
         <Hero {...hero} />
         <Reveal><About {...about} /></Reveal>
         <Reveal><Purpose {...purpose} /></Reveal>
         <Reveal><Services {...services} /></Reveal>
         <Reveal><Portfolio {...portfolio} /></Reveal>
-        <Reveal><Team {...team} /></Reveal>
-        <Reveal><Contact {...contact} /></Reveal>
+        <Reveal><Team {...team} ui={site.ui} /></Reveal>
+        <Reveal><Contact {...contact} ui={site.ui} /></Reveal>
       </main>
       <Footer
         logo={site.logo}
@@ -3728,7 +3852,9 @@ git commit -m "add resilience specs for broken json and http-sourced content"
 
 **Files:**
 - Create: `e2e/visual.spec.ts`, `.lighthouserc.json`
-- Modify: `package.json`, `playwright.config.ts`
+- Modify: `package.json`
+
+`playwright.config.ts` needs no change. `e2e/visual.spec.ts` sits in the existing `testDir`, and the `test.skip(!process.env.VISUAL)` guard is what keeps it out of ordinary and CI runs.
 
 **Interfaces:**
 - Consumes: the built app
