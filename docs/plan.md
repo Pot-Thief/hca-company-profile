@@ -477,16 +477,21 @@ describe('arrayOf', () => {
     warn.mockRestore();
   });
 
-  test('falls back to an empty array when the value is not an array', () => {
+  test('falls back to an empty array and warns when the value is not an array', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const schema = z.object({ items: arrayOf(item, 'x.items') });
     expect(schema.parse({ items: 'nope' })).toEqual({ items: [] });
+    expect(warn).toHaveBeenCalledOnce();
+    expect(String(warn.mock.calls[0]?.[0])).toContain('x.items');
     warn.mockRestore();
   });
 
-  test('defaults to an empty array when the key is missing', () => {
+  test('defaults to an empty array silently when the key is missing', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const schema = z.object({ items: arrayOf(item, 'x.items') });
     expect(schema.parse({})).toEqual({ items: [] });
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
   });
 });
 ```
@@ -523,8 +528,11 @@ export function field<S extends z.ZodType>(schema: S, fallback: z.output<S>, pat
 export function arrayOf<S extends z.ZodType>(item: S, path: string) {
   return z
     .array(z.unknown())
-    .catch([])
     .default([])
+    .catch(() => {
+      warnContent(path, 'expected an array, using an empty list');
+      return [];
+    })
     .transform((raw): z.output<S>[] => {
       const kept: z.output<S>[] = [];
       const dropped: number[] = [];
