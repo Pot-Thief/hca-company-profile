@@ -153,7 +153,7 @@ git commit -m "scaffold next.js app with strict typescript and tailwind"
 
 **Files:**
 - Create: `vitest.config.mts`, `vitest.setup.ts`, `src/lib/smoke.test.ts`
-- Modify: `package.json`
+- Modify: `package.json`, `.gitignore`
 
 **Interfaces:**
 - Consumes: Task 1 scaffold
@@ -166,8 +166,12 @@ Vitest cannot render async Server Components. Every section component in this pl
 ```bash
 pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react \
   @testing-library/dom @testing-library/jest-dom @testing-library/user-event \
-  vite-tsconfig-paths @vitest/coverage-v8
+  vite-tsconfig-paths @vitest/coverage-v8 prettier
 ```
+
+`prettier` belongs here rather than in Task 1: Task 1 adds the `format` script and `.prettierrc` but never installs the tool, so `pnpm format` fails until this line runs. Verify with `pnpm format --check .` before committing.
+
+Also append `*.tsbuildinfo` to `.gitignore`. `tsc --noEmit` writes that artifact on every typecheck run and it must not reach a commit.
 
 - [ ] **Step 2: Write `vitest.config.mts`**
 
