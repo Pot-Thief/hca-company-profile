@@ -83,4 +83,26 @@ describe('SectionShell', () => {
     );
     expect(container.querySelector('section')).toHaveAttribute('data-surface', 'ink');
   });
+
+  // Which sections carry a top hairline is a decision, not styling: a paper
+  // section needs one because the section above it may be paper too, an ink
+  // section announces itself by changing colour. Both branches are asserted so
+  // neither can flip silently.
+  test('a paper section carries a top hairline', () => {
+    const { container } = render(
+      <SectionShell id="services" label="LABEL_X" headline="HEADLINE_X">
+        CHILD_X
+      </SectionShell>,
+    );
+    expect(container.querySelector('section')).toHaveClass('border-t');
+  });
+
+  test('an ink section carries no top hairline', () => {
+    const { container } = render(
+      <SectionShell id="services" label="LABEL_X" headline="HEADLINE_X" surface="ink">
+        CHILD_X
+      </SectionShell>,
+    );
+    expect(container.querySelector('section')).not.toHaveClass('border-t');
+  });
 });

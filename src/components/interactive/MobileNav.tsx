@@ -16,14 +16,14 @@ export function MobileNav({ nav, cta, ui }: { nav: Site['nav']; cta: Site['cta']
             <a
               key={item.href}
               href={item.href}
-              className="font-[family-name:var(--font-body)] text-[length:var(--text-h3)] text-ink"
+              className="font-[family-name:var(--font-body)] text-[length:var(--text-h3)] text-on-surface"
             >
               {item.label}
             </a>
           ))}
           <a
             href={cta.href}
-            className="inline-block w-fit rounded-edge border border-ink px-4 py-2 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper"
+            className="inline-block w-fit rounded-edge border border-signal px-4 py-2 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-signal transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-signal hover:text-surface"
           >
             {cta.label}
           </a>
