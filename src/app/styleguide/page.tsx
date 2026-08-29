@@ -9,8 +9,7 @@ const COLORS = [
   { name: 'void', value: 'var(--color-void)', hex: '#000000', hairline: false },
 ] as const;
 
-const LABEL_CLASS =
-  'font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-label';
+const LABEL_CLASS = 'font-mono text-label uppercase tracking-label';
 
 function SectionHeading({ id, children }: { id: string; children: string }) {
   return (
@@ -69,13 +68,10 @@ export default function StyleguidePage() {
   return (
     <main className="mx-auto max-w-4xl px-[var(--space-gutter)] py-16">
       <header>
-        <h1
-          id="top"
-          className="font-[family-name:var(--font-display)] text-[length:var(--text-h2)]"
-        >
+        <h1 id="top" className="type-display text-h2 leading-heading">
           Styleguide
         </h1>
-        <p className="mt-4 max-w-measure font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-graphite">
+        <p className="mt-4 max-w-measure font-body text-body text-graphite">
           Design tokens for the company profile, rendered plainly for review before any section is
           built. Development only.
         </p>
@@ -91,9 +87,7 @@ export default function StyleguidePage() {
                 className={`block h-20 w-full ${hairline ? 'border border-ash' : ''}`}
                 style={{ background: value }}
               />
-              <span className="mt-3 block font-[family-name:var(--font-mono)] text-[length:var(--text-small)]">
-                {name}
-              </span>
+              <span className="mt-3 block font-mono text-small">{name}</span>
               <span className={`block ${LABEL_CLASS} text-graphite`}>{hex}</span>
             </li>
           ))}
@@ -106,37 +100,37 @@ export default function StyleguidePage() {
           <TypeSample
             token="display"
             family="display"
-            sampleClassName="font-[family-name:var(--font-display)] text-[length:var(--text-display)]"
+            sampleClassName="type-display text-display leading-display"
             text="Lorem ipsum dolor sit amet"
           />
           <TypeSample
             token="h2"
             family="display"
-            sampleClassName="font-[family-name:var(--font-display)] text-[length:var(--text-h2)]"
+            sampleClassName="type-display text-h2 leading-heading"
             text="Lorem ipsum dolor sit amet"
           />
           <TypeSample
             token="h3"
-            family="display"
-            sampleClassName="font-[family-name:var(--font-display)] text-[length:var(--text-h3)]"
+            family="body semibold"
+            sampleClassName="font-body font-semibold text-h3 leading-heading"
             text="Lorem ipsum dolor sit amet"
           />
           <TypeSample
             token="body"
             family="body"
-            sampleClassName="font-[family-name:var(--font-body)] text-[length:var(--text-body)]"
+            sampleClassName="font-body text-body"
             text="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
           />
           <TypeSample
             token="small"
             family="body"
-            sampleClassName="font-[family-name:var(--font-body)] text-[length:var(--text-small)]"
+            sampleClassName="font-body text-small"
             text="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
           />
           <TypeSample
             token="label"
             family="mono"
-            sampleClassName="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-label"
+            sampleClassName="font-mono text-label uppercase tracking-label"
             text="Lorem ipsum dolor sit amet"
           />
         </div>
@@ -145,20 +139,19 @@ export default function StyleguidePage() {
       <section aria-labelledby="pairing" className="border-t border-ash py-16">
         <SectionHeading id="pairing">Typeface pairing</SectionHeading>
         <div className="mt-8 flex flex-col gap-6">
-          <p className="font-[family-name:var(--font-display)] text-[length:var(--text-h2)]">
+          <p className="type-display text-h2 leading-heading">
             Lorem ipsum dolor sit amet consectetur
           </p>
-          <p className="font-[family-name:var(--font-body)] text-[length:var(--text-h3)]">
-            Lorem ipsum dolor sit amet consectetur
-          </p>
-          <p className="font-[family-name:var(--font-mono)] text-[length:var(--text-h3)]">
-            Lorem ipsum dolor sit amet consectetur
-          </p>
+          <p className="font-body text-h3">Lorem ipsum dolor sit amet consectetur</p>
+          <p className="font-mono text-h3">Lorem ipsum dolor sit amet consectetur</p>
         </div>
-        <p className={`mt-6 ${LABEL_CLASS} text-graphite`}>display &middot; body &middot; mono</p>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-graphite">
-          Stacked, not set on one line: the three sizes differ too much to share a line and still
-          read at a size that suits each.
+        <p className={`mt-6 ${LABEL_CLASS} text-graphite`}>
+          display setting &middot; body setting &middot; mono
+        </p>
+        <p className="mt-2 font-body text-small text-graphite">
+          Display and body are the same variable family, Archivo, at different weight and width.
+          Only mono is a second face. Stacked rather than set on one line because the sizes differ
+          too much to share a line and still read at a size that suits each.
         </p>
       </section>
 
@@ -193,7 +186,7 @@ export default function StyleguidePage() {
             </p>
           </div>
         </div>
-        <p className="mt-8 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-graphite">
+        <p className="mt-8 font-body text-small text-graphite">
           Hover a square to preview. All three are disabled under prefers-reduced-motion.
         </p>
       </section>
@@ -205,15 +198,15 @@ export default function StyleguidePage() {
         <div className="mt-4 flex flex-wrap gap-8">
           <StateExample
             state="rest"
-            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper"
+            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-body text-body text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper"
           />
           <StateExample
             state="hover (forced for preview)"
-            anchorClassName="inline-block rounded-edge border border-ink bg-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-paper"
+            anchorClassName="inline-block rounded-edge border border-ink bg-ink px-6 py-3 font-body text-body text-paper"
           />
           <StateExample
             state="focus (forced for preview)"
-            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink outline-2 outline-offset-2 outline-[var(--color-void)]"
+            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-body text-body text-ink outline-2 outline-offset-2 outline-[var(--color-void)]"
           />
         </div>
 
@@ -221,19 +214,19 @@ export default function StyleguidePage() {
         <div className="mt-4 flex flex-wrap gap-8">
           <GhostStateExample
             state="rest"
-            anchorClassName="inline-block px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink underline decoration-ash underline-offset-4 transition-[color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:text-graphite hover:decoration-graphite"
+            anchorClassName="inline-block px-6 py-3 font-body text-body text-ink underline decoration-ash underline-offset-4 transition-[color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:text-graphite hover:decoration-graphite"
           />
           <GhostStateExample
             state="hover (forced for preview)"
-            anchorClassName="inline-block px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-graphite underline decoration-graphite underline-offset-4"
+            anchorClassName="inline-block px-6 py-3 font-body text-body text-graphite underline decoration-graphite underline-offset-4"
           />
           <GhostStateExample
             state="focus (forced for preview)"
-            anchorClassName="inline-block px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink underline decoration-ash underline-offset-4 outline-2 outline-offset-2 outline-[var(--color-void)]"
+            anchorClassName="inline-block px-6 py-3 font-body text-body text-ink underline decoration-ash underline-offset-4 outline-2 outline-offset-2 outline-[var(--color-void)]"
           />
         </div>
 
-        <p className="mt-8 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-graphite">
+        <p className="mt-8 font-body text-small text-graphite">
           Tab to either rest example to see the real focus outline; move the mouse over it to see
           the real hover change. The primary action uses radius-edge, 3px, the only radius in the
           system besides zero. Structural edges such as section blocks and images stay square.

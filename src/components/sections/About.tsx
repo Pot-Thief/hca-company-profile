@@ -26,7 +26,7 @@ export function About({ label, headline, paragraphs, stats }: AboutContent) {
         >
           {stats.map((stat, index) => (
             <div key={index} className="py-[var(--space-block)] md:px-[var(--space-gutter)]">
-              <p className="font-display text-h2 leading-heading text-ink">{stat.value}</p>
+              <p className="type-display text-h2 leading-heading text-ink">{stat.value}</p>
               <p className="mt-3 font-mono text-label uppercase tracking-label text-graphite">
                 {stat.label}
               </p>

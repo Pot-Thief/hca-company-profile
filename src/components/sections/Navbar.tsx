@@ -18,9 +18,7 @@ export function Navbar({
       className="fixed inset-x-0 top-0 z-30 h-[var(--nav-h)] border-b border-ash bg-paper"
     >
       <div className="mx-auto flex h-full max-w-page items-center justify-between gap-[var(--space-gutter)] px-[var(--space-gutter)]">
-        <span className="font-[family-name:var(--font-display)] text-[length:var(--text-h3)] text-ink">
-          {logo.wordmark}
-        </span>
+        <span className="type-display text-h3 text-ink">{logo.wordmark}</span>
 
         <ul className="hidden items-center gap-[var(--space-gutter)] md:flex">
           {nav.map((item) => (

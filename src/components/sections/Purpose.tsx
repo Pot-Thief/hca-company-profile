@@ -30,7 +30,9 @@ export function Purpose({ label, headline, items }: PurposeContent) {
               key={index}
               className={`py-[var(--space-block)] md:px-[var(--space-gutter)] ${hairlines(index)}`}
             >
-              <h3 className="font-display text-h3 leading-heading text-ink">{item.title}</h3>
+              <h3 className="font-body font-semibold text-h3 leading-heading text-ink">
+                {item.title}
+              </h3>
               <p className="mt-3 max-w-measure text-body text-graphite">{item.body}</p>
             </div>
           ))}

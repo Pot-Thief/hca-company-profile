@@ -32,7 +32,7 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
             <p className="font-mono text-label uppercase tracking-label text-mist">{eyebrow}</p>
           ) : null}
 
-          <h1 className="mt-[var(--space-block)] max-w-[24ch] font-display text-display leading-display text-paper text-balance">
+          <h1 className="mt-[var(--space-block)] max-w-[24ch] type-display text-display leading-display text-paper text-balance">
             {headline}
           </h1>
 

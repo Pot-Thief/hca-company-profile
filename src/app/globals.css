@@ -24,7 +24,9 @@
   --color-ink: #1a1a1a;
   --color-void: #000000;
 
-  --font-display: var(--font-bodoni), Georgia, 'Times New Roman', serif;
+  /* Display and body are the same variable family. What separates them is
+     weight, width and tracking, not a second typeface. */
+  --font-display: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
   --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
 
@@ -37,6 +39,9 @@
   --text-small: 0.875rem;
   --text-label: 0.75rem;
   --tracking-label: 0.12em;
+  /* Negative tracking is what makes large grotesque type read as set rather
+     than as default. It only works at display sizes. */
+  --tracking-display: -0.02em;
 
   /* Two container jobs, two tokens: measure limits a line of text to a
      readable width, page limits the whole section to a shared outer edge. */
@@ -64,6 +69,16 @@
   --space-section: clamp(3.5rem, 5vw, 6rem);
   --space-gutter: clamp(1.25rem, 4vw, 4rem);
   --space-block: clamp(1.75rem, 3vw, 3rem);
+}
+
+/* The display setting is four properties that must agree wherever large type
+   appears. Naming it once stops nine sections each remembering all four, and
+   stops one of them drifting. */
+@utility type-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 125%;
+  letter-spacing: var(--tracking-display);
 }
 
 html {
