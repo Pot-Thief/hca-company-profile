@@ -20,13 +20,15 @@ describe('About', () => {
   });
 
   test('renders one paragraph per entry', () => {
-    render(<About {...props} />);
+    const { container } = render(<About {...props} />);
+    expect(container.querySelector('[data-block="paragraphs"]')).not.toBeNull();
     expect(screen.getByText('PARA_ONE_X')).toBeInTheDocument();
     expect(screen.getByText('PARA_TWO_X')).toBeInTheDocument();
   });
 
   test('renders every stat value and label', () => {
-    render(<About {...props} />);
+    const { container } = render(<About {...props} />);
+    expect(container.querySelector('[data-block="stats"]')).not.toBeNull();
     expect(screen.getByText('VALUE_TWO_X')).toBeInTheDocument();
     expect(screen.getByText('STAT_THREE_X')).toBeInTheDocument();
   });
@@ -37,13 +39,15 @@ describe('About', () => {
   });
 
   test('omits the stats block when stats is empty but keeps the section', () => {
-    render(<About {...props} stats={[]} />);
+    const { container } = render(<About {...props} stats={[]} />);
+    expect(container.querySelector('[data-block="stats"]')).toBeNull();
     expect(screen.queryByText('STAT_ONE_X')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
   });
 
   test('omits the paragraph block when paragraphs is empty', () => {
-    render(<About {...props} paragraphs={[]} />);
+    const { container } = render(<About {...props} paragraphs={[]} />);
+    expect(container.querySelector('[data-block="paragraphs"]')).toBeNull();
     expect(screen.queryByText('PARA_ONE_X')).not.toBeInTheDocument();
   });
 });

@@ -10,9 +10,9 @@ export function About({ label, headline, paragraphs, stats }: AboutContent) {
       <SectionHeading id="about" label={label} headline={headline} />
 
       {paragraphs.length > 0 ? (
-        <div className="max-w-measure space-y-[var(--space-block)]">
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-body text-graphite">
+        <div data-block="paragraphs" className="max-w-measure space-y-[var(--space-block)]">
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className="text-body text-graphite">
               {paragraph}
             </p>
           ))}
@@ -20,10 +20,13 @@ export function About({ label, headline, paragraphs, stats }: AboutContent) {
       ) : null}
 
       {stats.length > 0 ? (
-        <div className="mt-[var(--space-section)] grid grid-cols-1 divide-y divide-ash md:grid-cols-3 md:divide-x md:divide-y-0">
-          {stats.map((stat) => (
+        <div
+          data-block="stats"
+          className="mt-[var(--space-section)] grid grid-cols-1 divide-y divide-ash md:grid-cols-3 md:divide-x md:divide-y-0"
+        >
+          {stats.map((stat, index) => (
             <div
-              key={stat.label}
+              key={index}
               className="py-[var(--space-block)] md:px-[var(--space-gutter)] md:first:pl-0 md:last:pr-0"
             >
               <p className="font-display text-h2 leading-heading text-ink">{stat.value}</p>
