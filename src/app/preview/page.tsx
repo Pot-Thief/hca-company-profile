@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { About } from '@/components/sections/About';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/sections/Navbar';
+import { Purpose } from '@/components/sections/Purpose';
 import { loadSection } from '@/lib/content/loader';
 import { sectionSchemas } from '@/lib/content/schema';
 
@@ -13,10 +14,11 @@ import { sectionSchemas } from '@/lib/content/schema';
 export default async function PreviewPage() {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const [site, hero, about] = await Promise.all([
+  const [site, hero, about, purpose] = await Promise.all([
     loadSection('site', sectionSchemas.site),
     loadSection('hero', sectionSchemas.hero),
     loadSection('about', sectionSchemas.about),
+    loadSection('purpose', sectionSchemas.purpose),
   ]);
 
   return (
@@ -25,6 +27,7 @@ export default async function PreviewPage() {
       <main>
         <Hero {...hero} />
         <About {...about} />
+        <Purpose {...purpose} />
       </main>
     </>
   );
