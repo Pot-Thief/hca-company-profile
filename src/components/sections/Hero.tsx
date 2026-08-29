@@ -2,7 +2,9 @@ import Image from 'next/image';
 import type { Hero as HeroContent } from '@/lib/content/types';
 
 const actionClass = {
-  primary: 'bg-on-surface text-surface hover:bg-on-surface/90',
+  // The one accent on the page: signal, not on-surface, so this is the single
+  // register that means "press this".
+  primary: 'bg-signal text-surface hover:bg-signal/90',
   ghost: 'border border-on-surface text-on-surface hover:bg-on-surface/10',
 };
 

@@ -36,9 +36,9 @@ describe('Purpose', () => {
     expect(screen.queryByText('TITLE_1_X')).not.toBeInTheDocument();
   });
 
-  test('carries the ink surface', () => {
+  test('carries the paper surface', () => {
     const { container } = render(<Purpose {...props} />);
-    expect(container.querySelector('section#purpose')).toHaveAttribute('data-surface', 'ink');
+    expect(container.querySelector('section#purpose')).not.toHaveAttribute('data-surface');
   });
 
   test('keeps hairline borders sane with an odd, five-item count', () => {

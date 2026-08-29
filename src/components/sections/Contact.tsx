@@ -5,8 +5,8 @@ import type { Contact as ContactContent, UiLabels } from '@/lib/content/types';
 
 const copyableTypes = new Set(['email', 'phone', 'whatsapp']);
 
-// Continues the alternation: About paper, Purpose ink, Services paper,
-// Portfolio ink, Team paper, so Contact lands on ink.
+// Ink, the second deliberate emphasis after Hero: the closing call to
+// action, not a step in an alternating pattern.
 export function Contact({ label, headline, channels, ui }: ContactContent & { ui: UiLabels }) {
   return (
     <SectionShell id="contact" label={label} headline={headline} surface="ink">

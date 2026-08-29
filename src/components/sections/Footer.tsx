@@ -2,9 +2,10 @@ import { channelHref } from '@/lib/content/channel-href';
 import type { ContactChannel, Site } from '@/lib/content/types';
 
 // Contact lands on ink and the footer continues it rather than breaking back
-// to paper: this is the document's one full inversion, the bottom edge of the
-// page. The border-t on the footer itself is the boundary Contact needed, so
-// the two ink blocks read as section-then-close, not one undivided mass.
+// to paper: together they are the page's closing emphasis, echoing Hero's
+// opening one. The border-t on the footer itself is the boundary Contact
+// needed, so the two ink blocks read as section-then-close, not one
+// undivided mass.
 export function Footer({
   logo,
   nav,

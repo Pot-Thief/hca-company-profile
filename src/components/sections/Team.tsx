@@ -2,8 +2,8 @@ import { TeamMember } from '@/components/interactive/TeamMember';
 import { SectionShell } from './SectionShell';
 import type { Team as TeamContent, UiLabels } from '@/lib/content/types';
 
-// Continues the alternation: About paper, Purpose ink, Services paper,
-// Portfolio ink, so Team lands back on paper (the SectionShell default).
+// Paper, the shared body surface: only Hero and Contact/Footer carry ink, so
+// the sections between them read as one continuous surface, not a pattern.
 export function Team({ label, headline, members, ui }: TeamContent & { ui: UiLabels }) {
   return (
     <SectionShell id="team" label={label} headline={headline}>

@@ -35,7 +35,7 @@ export function Navbar({
 
         <a
           href={cta.href}
-          className="hidden rounded-edge border border-ink px-4 py-2 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper md:inline-block"
+          className="hidden rounded-edge border border-signal px-4 py-2 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-signal transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-signal hover:text-paper md:inline-block"
         >
           {cta.label}
         </a>

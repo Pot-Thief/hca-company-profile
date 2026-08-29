@@ -42,9 +42,10 @@ const REQUIRED = [
   '--color-on-surface',
   '--color-on-surface-muted',
   '--color-rule',
+  '--color-signal',
 ];
 
-// The four semantic colours are the layer every section reads. They once
+// The five semantic colours are the layer every section reads. They once
 // shipped with an alias in between, declared at :root, which froze the value at
 // the root and made the inverted sections render ink text on ink. The variables
 // read correctly while the rendered colour did not, and jsdom cannot resolve the
@@ -54,6 +55,7 @@ const SEMANTIC_COLOURS = [
   '--color-on-surface',
   '--color-on-surface-muted',
   '--color-rule',
+  '--color-signal',
 ];
 
 describe('design tokens', () => {

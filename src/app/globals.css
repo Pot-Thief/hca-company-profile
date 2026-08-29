@@ -85,14 +85,19 @@
 }
 
 /* A semantic layer over the palette above. Components reach for bg-surface,
-   text-on-surface, text-on-surface-muted and border-rule and never name
-   paper or ink directly; a section flips its whole colour set by carrying
-   data-surface="ink", nothing inside it changes. */
+   text-on-surface, text-on-surface-muted, border-rule and bg-signal /
+   text-signal, and never name paper or ink directly; a section flips its
+   whole colour set by carrying data-surface="ink", nothing inside it
+   changes. */
 @theme {
   --color-surface: var(--color-paper);
   --color-on-surface: var(--color-ink);
   --color-on-surface-muted: var(--color-graphite);
   --color-rule: var(--color-ash);
+  /* The one accent on the page: a value, not a hue. Void is pure black, so
+     bg-signal / text-signal marks exactly one register, the primary call to
+     action, and nothing else reaches for it. */
+  --color-signal: var(--color-void);
 }
 
 /* The override lands on the same custom properties the utilities read, with no
@@ -101,12 +106,15 @@
    and a section-level override never reaches it. That is a silent failure: the
    variable reads correctly while the rendered colour does not.
    Ash is nearly invisible against ink, which is why the rule colour flips too
-   rather than one fixed hairline colour being reused. */
+   rather than one fixed hairline colour being reused. Signal flips to paper
+   here for the same reason: the one accent stays the maximum-contrast value
+   against whichever surface it sits on. */
 [data-surface='ink'] {
   --color-surface: var(--color-ink);
   --color-on-surface: var(--color-paper);
   --color-on-surface-muted: var(--color-ash);
   --color-rule: var(--color-graphite);
+  --color-signal: var(--color-paper);
 }
 
 html {

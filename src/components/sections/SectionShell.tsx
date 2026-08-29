@@ -18,7 +18,7 @@ export function SectionShell({
     <section
       id={id}
       data-surface={surface === 'ink' ? 'ink' : undefined}
-      className="bg-surface text-on-surface"
+      className="border-t border-rule bg-surface text-on-surface"
     >
       <div className="mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
         <div className="mb-[var(--space-block)] md:mb-0 md:border-r md:border-rule">

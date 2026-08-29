@@ -7,7 +7,7 @@ import type { Portfolio as PortfolioContent } from '@/lib/content/types';
 // reasoning as Purpose and Services.
 export function Portfolio({ label, headline, items }: PortfolioContent) {
   return (
-    <SectionShell id="portfolio" label={label} headline={headline} surface="ink">
+    <SectionShell id="portfolio" label={label} headline={headline}>
       {items.length > 0 ? (
         <div data-block="items">
           {items.map((item, index) => (

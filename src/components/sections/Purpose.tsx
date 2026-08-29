@@ -14,7 +14,7 @@ function hairlines(index: number) {
 
 export function Purpose({ label, headline, items }: PurposeContent) {
   return (
-    <SectionShell id="purpose" label={label} headline={headline} surface="ink">
+    <SectionShell id="purpose" label={label} headline={headline}>
       {items.length > 0 ? (
         <div
           data-block="items"

@@ -97,4 +97,9 @@ describe('Contact', () => {
     const { container } = render(<Contact {...props} channels={[]} />);
     expect(container.querySelector('[data-block="channels"]')).not.toBeInTheDocument();
   });
+
+  test('carries the ink surface', () => {
+    const { container } = render(<Contact {...props} />);
+    expect(container.querySelector('section')).toHaveAttribute('data-surface', 'ink');
+  });
 });
