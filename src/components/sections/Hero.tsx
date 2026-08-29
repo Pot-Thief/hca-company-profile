@@ -13,7 +13,7 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
     // stretching the hero past what the copy needs.
     <section
       data-surface="ink"
-      className="relative flex min-h-[min(88svh,38rem)] items-end overflow-hidden"
+      className="relative flex min-h-[min(88svh,38rem)] items-end overflow-hidden text-on-surface"
     >
       <Image
         src={backgroundImage.src}

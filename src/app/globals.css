@@ -89,26 +89,24 @@
    paper or ink directly; a section flips its whole colour set by carrying
    data-surface="ink", nothing inside it changes. */
 @theme {
-  --color-surface: var(--surface);
-  --color-on-surface: var(--on-surface);
-  --color-on-surface-muted: var(--on-surface-muted);
-  --color-rule: var(--rule);
+  --color-surface: var(--color-paper);
+  --color-on-surface: var(--color-ink);
+  --color-on-surface-muted: var(--color-graphite);
+  --color-rule: var(--color-ash);
 }
 
-:root {
-  --surface: var(--color-paper);
-  --on-surface: var(--color-ink);
-  --on-surface-muted: var(--color-graphite);
-  --rule: var(--color-ash);
-}
-
-/* Ash reads as nearly invisible against ink, so the ink surface gets its own
-   rule colour rather than reusing the paper one. */
+/* The override lands on the same custom properties the utilities read, with no
+   intermediate layer. A custom property that indirects through another one is
+   substituted where it is DECLARED, so a `:root` alias freezes at the root value
+   and a section-level override never reaches it. That is a silent failure: the
+   variable reads correctly while the rendered colour does not.
+   Ash is nearly invisible against ink, which is why the rule colour flips too
+   rather than one fixed hairline colour being reused. */
 [data-surface='ink'] {
-  --surface: var(--color-ink);
-  --on-surface: var(--color-paper);
-  --on-surface-muted: var(--color-ash);
-  --rule: var(--color-graphite);
+  --color-surface: var(--color-ink);
+  --color-on-surface: var(--color-paper);
+  --color-on-surface-muted: var(--color-ash);
+  --color-rule: var(--color-graphite);
 }
 
 html {
@@ -116,8 +114,8 @@ html {
 }
 
 body {
-  background: var(--surface);
-  color: var(--on-surface);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
   font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -133,7 +131,7 @@ section[id] {
    outline colour follows on-surface rather than a fixed void, because void
    is near-black and disappears against an ink section. */
 :focus-visible {
-  outline: 2px solid var(--on-surface);
+  outline: 2px solid var(--color-on-surface);
   outline-offset: 2px;
 }
 
