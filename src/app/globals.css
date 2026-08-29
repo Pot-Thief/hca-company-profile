@@ -34,7 +34,7 @@
      middle shrank, so the distance between the largest and smallest type is
      what carries the confidence. Display stays capped because above 5rem the
      headline needs a line box wider than the page and starts stacking. */
-  --text-display: clamp(2.75rem, 6vw, 5rem);
+  --text-display: clamp(2rem, 6vw, 5rem);
   --text-h2: clamp(1.75rem, 3.2vw, 2.5rem);
   --text-h3: 1.125rem;
   --text-body: 1rem;

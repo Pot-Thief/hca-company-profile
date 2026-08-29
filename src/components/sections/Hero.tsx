@@ -30,8 +30,8 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
       <div className="relative mx-auto w-full max-w-page px-[var(--space-gutter)] pb-[var(--space-section)] pt-[calc(var(--nav-h)+var(--space-section))]">
         {/* The headline spans the page container. `max-w-measure` is 62ch at
             body size, a reading measure, and constraining display type to it
-            stacks a 53-character headline into six lines. Only the prose below
-            takes the measure. */}
+            stacks a long headline into six lines. Only the prose below takes
+            the measure. */}
         <div>
           {eyebrow ? (
             <p className="font-mono text-label uppercase tracking-label text-on-surface-muted">
@@ -39,7 +39,7 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
             </p>
           ) : null}
 
-          <h1 className="mt-[var(--space-block)] max-w-[24ch] type-display text-display leading-display text-on-surface text-balance">
+          <h1 className="mt-[var(--space-block)] type-display text-display leading-display text-on-surface text-balance">
             {headline}
           </h1>
 
