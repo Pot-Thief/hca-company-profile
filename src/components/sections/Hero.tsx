@@ -11,7 +11,7 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
     // svh rather than vh: on mobile browsers vh includes the collapsing
     // toolbar, which crops the content. The cap keeps a tall monitor from
     // stretching the hero past what the copy needs.
-    <section className="relative flex min-h-[min(100svh,44rem)] items-end overflow-hidden">
+    <section className="relative flex min-h-[min(88svh,38rem)] items-end overflow-hidden">
       <Image
         src={backgroundImage.src}
         alt={backgroundImage.alt}

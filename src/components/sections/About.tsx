@@ -22,13 +22,10 @@ export function About({ label, headline, paragraphs, stats }: AboutContent) {
       {stats.length > 0 ? (
         <div
           data-block="stats"
-          className="mt-[var(--space-section)] grid grid-cols-1 divide-y divide-ash md:grid-cols-3 md:divide-x md:divide-y-0"
+          className="mt-[var(--space-block)] grid grid-cols-1 divide-y divide-ash md:-mx-[var(--space-gutter)] md:grid-cols-3 md:divide-x md:divide-y-0"
         >
           {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="py-[var(--space-block)] md:px-[var(--space-gutter)] md:first:pl-0 md:last:pr-0"
-            >
+            <div key={index} className="py-[var(--space-block)] md:px-[var(--space-gutter)]">
               <p className="font-display text-h2 leading-heading text-ink">{stat.value}</p>
               <p className="mt-3 font-mono text-label uppercase tracking-label text-graphite">
                 {stat.label}
