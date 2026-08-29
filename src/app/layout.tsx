@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Archivo, IBM_Plex_Mono } from 'next/font/google';
+import { loadSection } from '@/lib/content/loader';
+import { sectionSchemas } from '@/lib/content/schema';
 import './globals.css';
 
 // One variable family carries both display and body. Loaded without a weight
@@ -20,7 +22,22 @@ const plexMono = IBM_Plex_Mono({
   variable: '--font-plex-mono',
 });
 
-export const metadata: Metadata = { title: 'Company Profile' };
+// The same fetch runs here and in Page, and Next memoizes identical GET requests
+// within one render pass, so site.json is read once.
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await loadSection('site', sectionSchemas.site);
+  return {
+    title: site.meta.title,
+    description: site.meta.description,
+    openGraph: {
+      title: site.meta.title,
+      description: site.meta.description,
+      images: site.meta.ogImage.src
+        ? [{ url: site.meta.ogImage.src, alt: site.meta.ogImage.alt }]
+        : [],
+    },
+  };
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
