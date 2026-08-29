@@ -28,7 +28,9 @@
   --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
 
-  --text-display: clamp(2.75rem, 7vw, 6.5rem);
+  /* Capped at 4.5rem: above that the headline needs a line box wider than the
+     page to avoid stacking into five or six lines. */
+  --text-display: clamp(2.5rem, 5.5vw, 4.5rem);
   --text-h2: clamp(1.875rem, 4vw, 3.25rem);
   --text-h3: 1.25rem;
   --text-body: 1.0625rem;

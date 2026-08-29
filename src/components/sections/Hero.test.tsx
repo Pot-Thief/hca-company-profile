@@ -45,13 +45,18 @@ describe('Hero', () => {
     expect(screen.getByRole('link', { name: 'GHOST_X' })).toHaveAttribute('href', '#contact');
   });
 
+  test('renders the actions wrapper when there are actions', () => {
+    const { container } = render(<Hero {...props} />);
+    expect(container.querySelector('[data-block="actions"]')).not.toBeNull();
+  });
+
   test('renders no links and no actions wrapper when actions is empty', () => {
     const { container } = render(<Hero {...props} actions={[]} />);
     expect(screen.queryAllByRole('link')).toHaveLength(0);
-    // eyebrow <p> + h1 + subheadline <p>, no fourth child for an actions
-    // wrapper: a div rendered around an empty map would still show up here
-    // with zero links, so the link-count check above cannot catch it alone.
-    expect(container.querySelector('.max-w-measure')?.children).toHaveLength(3);
+    // A wrapper rendered around an empty map would still report zero links, so
+    // the count above cannot catch it alone. The attribute survives restyling,
+    // which a class selector does not.
+    expect(container.querySelector('[data-block="actions"]')).toBeNull();
   });
 
   test('uses the alt text from props for the background image', () => {

@@ -23,21 +23,30 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
       <div className="absolute inset-0 bg-ink/60" />
 
       <div className="relative mx-auto w-full max-w-page px-[var(--space-gutter)] pb-[var(--space-section)] pt-[calc(var(--nav-h)+var(--space-section))]">
-        <div className="max-w-measure">
+        {/* The headline spans the page container. `max-w-measure` is 62ch at
+            body size, a reading measure, and constraining display type to it
+            stacks a 53-character headline into six lines. Only the prose below
+            takes the measure. */}
+        <div>
           {eyebrow ? (
             <p className="font-mono text-label uppercase tracking-label text-mist">{eyebrow}</p>
           ) : null}
 
-          <h1 className="mt-[var(--space-block)] font-display text-display leading-display text-paper text-balance">
+          <h1 className="mt-[var(--space-block)] max-w-[24ch] font-display text-display leading-display text-paper text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-[var(--space-block)] text-body text-mist">{subheadline}</p>
+            <p className="mt-[var(--space-block)] max-w-measure text-body text-mist">
+              {subheadline}
+            </p>
           ) : null}
 
           {actions.length > 0 ? (
-            <div className="mt-[var(--space-block)] flex flex-wrap items-center gap-[var(--space-gutter)]">
+            <div
+              data-block="actions"
+              className="mt-[var(--space-block)] flex flex-wrap items-center gap-[var(--space-gutter)]"
+            >
               {actions.map((action) => (
                 <a
                   key={action.href}
