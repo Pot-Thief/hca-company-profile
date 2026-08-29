@@ -47,7 +47,7 @@ const ICONS = {
   wrench: Wrench,
 } satisfies Record<string, LucideIcon>;
 
-export const ICON_NAMES = Object.keys(ICONS) as readonly string[];
+export const ICON_NAMES: readonly string[] = Object.keys(ICONS);
 
 export function getIcon(name: string): LucideIcon {
   const icon = ICONS[name as keyof typeof ICONS];
