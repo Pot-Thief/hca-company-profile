@@ -1,4 +1,5 @@
 import { MobileNav } from '@/components/interactive/MobileNav';
+import { NavLinks } from '@/components/interactive/NavLinks';
 import type { Site, UiLabels } from '@/lib/content/types';
 
 export function Navbar({
@@ -20,18 +21,7 @@ export function Navbar({
       <div className="mx-auto flex h-full max-w-page items-center justify-between gap-[var(--space-gutter)] px-[var(--space-gutter)]">
         <span className="type-display text-h3 text-on-surface">{logo.wordmark}</span>
 
-        <ul className="hidden items-center gap-[var(--space-gutter)] md:flex">
-          {nav.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                className="font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-on-surface underline decoration-rule underline-offset-4 transition-[color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:text-on-surface-muted hover:decoration-on-surface-muted"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <NavLinks nav={nav} />
 
         <a
           href={cta.href}
