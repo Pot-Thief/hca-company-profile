@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { About } from '@/components/sections/About';
+import { Contact } from '@/components/sections/Contact';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/sections/Navbar';
 import { Portfolio } from '@/components/sections/Portfolio';
@@ -17,7 +18,7 @@ import { sectionSchemas } from '@/lib/content/schema';
 export default async function PreviewPage() {
   if (process.env.NODE_ENV === 'production') notFound();
 
-  const [site, hero, about, purpose, services, portfolio, team] = await Promise.all([
+  const [site, hero, about, purpose, services, portfolio, team, contact] = await Promise.all([
     loadSection('site', sectionSchemas.site),
     loadSection('hero', sectionSchemas.hero),
     loadSection('about', sectionSchemas.about),
@@ -25,6 +26,7 @@ export default async function PreviewPage() {
     loadSection('services', sectionSchemas.services),
     loadSection('portfolio', sectionSchemas.portfolio),
     loadSection('team', sectionSchemas.team),
+    loadSection('contact', sectionSchemas.contact),
   ]);
 
   return (
@@ -37,6 +39,7 @@ export default async function PreviewPage() {
         <Services {...services} />
         <Portfolio {...portfolio} />
         <Team {...team} ui={site.ui} />
+        <Contact {...contact} ui={site.ui} />
       </main>
     </>
   );

@@ -42,6 +42,14 @@ describe('Team', () => {
     expect(container.querySelector('[data-block="members"]')).toBeNull();
   });
 
+  // Sections alternate paper and ink down the page. Nothing in a per-section
+  // test can see that pattern, so this pins only Team's own end of it; the
+  // sequence itself is asserted end to end in Task 27.
+  test('sits on the paper surface', () => {
+    const { container } = render(<Team {...props} />);
+    expect(container.querySelector('section')).not.toHaveAttribute('data-surface');
+  });
+
   test('renders an empty state when members is empty', () => {
     render(<Team {...props} members={[]} />);
     expect(screen.getByText('No team members yet. Add members to team.json.')).toBeInTheDocument();
