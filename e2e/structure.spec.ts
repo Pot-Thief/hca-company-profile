@@ -60,10 +60,12 @@ test('anchor navigation lands below the navbar', async ({ page }, testInfo) => {
   }
   await page.getByRole('link', { name: 'Services', exact: true }).first().click();
   await expect(page.locator('section#services')).toBeInViewport();
-  // The mobile sheet stays open after a nav link click (no auto-close
-  // handler) and Radix marks the rest of the page aria-hidden while it is
-  // open, so `getByRole('banner')` finds nothing here. The header element
-  // itself is untouched in the DOM, so select it by tag instead.
+  // Selected by tag rather than by role. This spec first ran when the mobile
+  // sheet stayed open after a link click, and Radix marks the rest of the page
+  // aria-hidden while it is open, so `getByRole('banner')` found nothing. That
+  // was a real defect and the sheet now closes on selection, but selecting the
+  // header by tag is what keeps this test measuring the navbar's height rather
+  // than the sheet's open state.
   const navHeight = await page
     .locator('header')
     .evaluate((node) => node.getBoundingClientRect().height);

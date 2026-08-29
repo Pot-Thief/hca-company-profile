@@ -45,9 +45,20 @@ describe('components carry no display copy', () => {
     // Text sitting directly between JSX tags. Newlines are deliberately allowed
     // inside the span: prettier puts a text child on its own line, so a pattern
     // anchored to a single line sees almost nothing. It scanned clean here while
-    // a literal "Get in touch" sat in the navbar. Braces and angle brackets stay
-    // excluded, which is what keeps expressions and nested tags from matching.
-    const between = source.match(/>[^<>{}]*[A-Za-z]{2,}[^<>{}]*</g) ?? [];
+    // a literal "Get in touch" sat in the navbar.
+    //
+    // The excluded characters are what separate prose from code, because `>` is
+    // not only a tag terminator: it also ends every arrow function, so
+    // `const close = () => setOpen(false);` followed by a JSX tag reads as a span
+    // of text between `>` and `<`. Braces and angle brackets keep out expressions
+    // and nested tags; semicolons, parentheses and equals keep out statements.
+    //
+    // This is a heuristic and it has a known blind spot: hardcoded copy that
+    // itself contains a parenthesis or a semicolon, `Read more (opens a panel)`,
+    // would slip past. The sentinel fixtures every section test renders are the
+    // other half of the proof and would still catch it, which is why the loss is
+    // acceptable and a narrower pattern that cannot see multi-line copy is not.
+    const between = source.match(/>[^<>{}();=]*[A-Za-z]{2,}[^<>{}();=]*</g) ?? [];
     const offenders = between
       .map((match) => match.slice(1, -1).trim())
       .filter((text) => text.length > 0 && !ALLOWED.has(text));
