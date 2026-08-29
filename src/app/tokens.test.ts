@@ -22,6 +22,9 @@ const REQUIRED = [
   '--nav-h',
   '--space-section',
   '--space-gutter',
+  '--tracking-label',
+  '--container-measure',
+  '--space-block',
 ];
 
 describe('design tokens', () => {

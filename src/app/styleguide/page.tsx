@@ -10,7 +10,7 @@ const COLORS = [
 ] as const;
 
 const LABEL_CLASS =
-  'font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-[0.12em]';
+  'font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-label';
 
 function SectionHeading({ id, children }: { id: string; children: string }) {
   return (
@@ -75,7 +75,7 @@ export default function StyleguidePage() {
         >
           Styleguide
         </h1>
-        <p className="mt-4 max-w-md font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-graphite">
+        <p className="mt-4 max-w-measure font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-graphite">
           Design tokens for the company profile, rendered plainly for review before any section is
           built. Development only.
         </p>
@@ -136,7 +136,7 @@ export default function StyleguidePage() {
           <TypeSample
             token="label"
             family="mono"
-            sampleClassName="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-[0.12em]"
+            sampleClassName="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-label"
             text="Lorem ipsum dolor sit amet"
           />
         </div>
@@ -156,6 +156,10 @@ export default function StyleguidePage() {
           </p>
         </div>
         <p className={`mt-6 ${LABEL_CLASS} text-graphite`}>display &middot; body &middot; mono</p>
+        <p className="mt-2 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-graphite">
+          Stacked, not set on one line: the three sizes differ too much to share a line and still
+          read at a size that suits each.
+        </p>
       </section>
 
       <section aria-labelledby="motion" className="border-t border-ash py-16">
