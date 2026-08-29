@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { About } from '@/components/sections/About';
 import { Contact } from '@/components/sections/Contact';
+import { Footer } from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/sections/Navbar';
 import { Portfolio } from '@/components/sections/Portfolio';
@@ -41,6 +42,12 @@ export default async function PreviewPage() {
         <Team {...team} ui={site.ui} />
         <Contact {...contact} ui={site.ui} />
       </main>
+      <Footer
+        logo={site.logo}
+        nav={site.footer.nav}
+        copyright={site.footer.copyright}
+        social={contact.channels.filter((channel) => channel.type === 'social')}
+      />
     </>
   );
 }

@@ -26,7 +26,12 @@ describe('Footer', () => {
   });
 
   test('renders one link per social channel', () => {
-    render(<Footer {...props} />);
+    const { container } = render(<Footer {...props} />);
+    expect(container.querySelector('[data-block="social"]')).not.toBeNull();
+    expect(screen.getByRole('link', { name: 'SOCIAL_ONE_X' })).toHaveAttribute(
+      'href',
+      'https://social.example/one',
+    );
     expect(screen.getByRole('link', { name: 'SOCIAL_TWO_X' })).toHaveAttribute(
       'href',
       'https://social.example/two',
