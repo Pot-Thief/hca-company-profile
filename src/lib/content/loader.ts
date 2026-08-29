@@ -21,7 +21,7 @@ export async function loadSection<S extends z.ZodType>(
 ): Promise<z.output<S>> {
   const file = `${name}.json`;
   const url = `${contentBase()}/${file}`;
-  const fallback = schema.parse({}) as z.output<S>;
+  const fallback = schema.parse({});
 
   let raw: unknown;
   try {
@@ -42,5 +42,5 @@ export async function loadSection<S extends z.ZodType>(
     warnContent(file, `does not match the expected shape: ${result.error.message}`);
     return fallback;
   }
-  return result.data as z.output<S>;
+  return result.data;
 }
