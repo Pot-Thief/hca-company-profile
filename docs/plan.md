@@ -1141,7 +1141,7 @@ describe('channelHref', () => {
   });
 
   test('builds a tel link with separators removed', () => {
-    expect(channelHref('phone', '+62 (21) 555-0100')).toBe('tel:+62215550100');
+    expect(channelHref('phone', '+62 (21) 0000-0000')).toBe('tel:+622100000000');
   });
 
   test('builds a wa.me link with digits only', () => {
@@ -1721,7 +1721,7 @@ Expected: nine files.
       "value": "Placeholder Street 1, Placeholder City 00000"
     },
     { "type": "email", "label": "Email", "value": "hello@placeholder.test" },
-    { "type": "phone", "label": "Phone", "value": "+62 21 555 0100" },
+    { "type": "phone", "label": "Phone", "value": "+62 21 0000 0000" },
     { "type": "whatsapp", "label": "WhatsApp", "value": "+62 812 0000 0000" },
     { "type": "hours", "label": "Hours", "value": "Monday to Friday, 09.00 to 17.00" },
     { "type": "social", "label": "Instagram", "value": "https://instagram.example/placeholder" },
@@ -2963,7 +2963,7 @@ const props = {
   ui,
   channels: [
     { type: 'email' as const, label: 'EMAIL_LABEL_X', value: 'a@placeholder.test' },
-    { type: 'phone' as const, label: 'PHONE_LABEL_X', value: '+62 21 555 0100' },
+    { type: 'phone' as const, label: 'PHONE_LABEL_X', value: '+62 21 0000 0000' },
     { type: 'whatsapp' as const, label: 'WA_LABEL_X', value: '+62 812 0000 0000' },
     { type: 'address' as const, label: 'ADDRESS_LABEL_X', value: 'ADDRESS_VALUE_X' },
     { type: 'hours' as const, label: 'HOURS_LABEL_X', value: 'HOURS_VALUE_X' },
@@ -2982,9 +2982,9 @@ describe('Contact', () => {
 
   test('renders tel and wa.me links with separators removed', () => {
     render(<Contact {...props} />);
-    expect(screen.getByRole('link', { name: /555 0100/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /0000 0000/ })).toHaveAttribute(
       'href',
-      'tel:+62215550100',
+      'tel:+622100000000',
     );
     expect(screen.getByRole('link', { name: /812 0000 0000/ })).toHaveAttribute(
       'href',
