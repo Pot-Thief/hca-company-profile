@@ -1,8 +1,16 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
 const css = readFileSync(join(process.cwd(), 'src/app/globals.css'), 'utf8');
+
+// The palette is written as hex on purpose, so any colour function here is
+// either a generated theme or a hue arriving by another notation. Checking
+// hex alone missed shadcn's oklch variables entirely in Task 14.
+const COLOUR_FUNCTIONS = /\b(oklch|oklab|lab|lch|hsla?|rgba?|color)\s*\(/;
+
+const UI_DIR = join(process.cwd(), 'src/components/ui');
+const uiFiles = readdirSync(UI_DIR).filter((name) => name.endsWith('.tsx'));
 
 const REQUIRED = [
   '--color-paper',
@@ -73,5 +81,31 @@ describe('design tokens', () => {
       const b = parseInt(hex.slice(5, 7), 16);
       expect(Math.max(r, g, b) - Math.min(r, g, b)).toBe(0);
     }
+  });
+
+  test('declares no colour in a notation that can carry hue', () => {
+    expect(css).not.toMatch(COLOUR_FUNCTIONS);
+  });
+});
+
+// Generated shadcn components are the one place a colour can arrive without
+// passing through globals.css, so they are held to the same rule.
+describe('generated ui components carry no colour of their own', () => {
+  test('the directory is not empty, so these assertions mean something', () => {
+    expect(uiFiles.length).toBeGreaterThan(0);
+  });
+
+  test.each(uiFiles)('%s uses no colour function', (file) => {
+    expect(readFileSync(join(UI_DIR, file), 'utf8')).not.toMatch(COLOUR_FUNCTIONS);
+  });
+
+  test.each(uiFiles)('%s uses no raw hex', (file) => {
+    expect(readFileSync(join(UI_DIR, file), 'utf8')).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+  });
+
+  test.each(uiFiles)('%s does not suppress the global focus outline', (file) => {
+    const source = readFileSync(join(UI_DIR, file), 'utf8');
+    expect(source).not.toContain('outline-none');
+    expect(source).not.toContain('focus-visible:ring');
   });
 });
