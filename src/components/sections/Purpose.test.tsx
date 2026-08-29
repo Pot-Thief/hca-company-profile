@@ -35,4 +35,25 @@ describe('Purpose', () => {
     expect(container.querySelector('[data-block="items"]')).toBeNull();
     expect(screen.queryByText('TITLE_1_X')).not.toBeInTheDocument();
   });
+
+  test('keeps hairline borders sane with an odd, five-item count', () => {
+    const fiveItems = [1, 2, 3, 4, 5].map((n) => ({ title: `TITLE_${n}_X`, body: `BODY_${n}_X` }));
+    const { container } = render(<Purpose {...props} items={fiveItems} />);
+    const cells = container.querySelectorAll('[data-block="items"] > div');
+    expect(cells).toHaveLength(5);
+
+    for (const cell of cells) {
+      const classes = cell.className.split(' ');
+      const sides = [
+        ['border-t', 'md:border-t'],
+        ['border-r', 'md:border-r'],
+        ['border-b', 'md:border-b'],
+        ['border-l', 'md:border-l'],
+      ];
+      const borderedSides = sides.filter(([base, md]) =>
+        classes.some((c) => c === base || c === md),
+      );
+      expect(borderedSides.length).toBeLessThan(4);
+    }
+  });
 });

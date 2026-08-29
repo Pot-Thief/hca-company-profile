@@ -21,7 +21,10 @@ export function Purpose({ label, headline, items }: PurposeContent) {
       <SectionHeading id="purpose" label={label} headline={headline} />
 
       {items.length > 0 ? (
-        <div data-block="items" className="grid grid-cols-1 md:grid-cols-2">
+        <div
+          data-block="items"
+          className="grid grid-cols-1 md:-mx-[var(--space-gutter)] md:grid-cols-2"
+        >
           {items.map((item, index) => (
             <div
               key={index}
