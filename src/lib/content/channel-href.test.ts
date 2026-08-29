@@ -7,7 +7,7 @@ describe('channelHref', () => {
   });
 
   test('builds a tel link with separators removed', () => {
-    expect(channelHref('phone', '+62 (21) 555-0100')).toBe('tel:+62215550100');
+    expect(channelHref('phone', '+62 (21) 0000-0000')).toBe('tel:+622100000000');
   });
 
   test('builds a wa.me link with digits only', () => {

@@ -31,8 +31,17 @@ describe('shipped content files', () => {
 
   test('every nav href points at a known section id', () => {
     const ids = ['#about', '#purpose', '#services', '#portfolio', '#team', '#contact'];
-    for (const item of sectionSchemas.site.parse(read('site')).nav) {
+    const nav = sectionSchemas.site.parse(read('site')).nav;
+    expect(nav).toHaveLength(6);
+    for (const item of nav) {
       expect(ids).toContain(item.href);
     }
+  });
+
+  test('the ui block is physically present in site.json with all six keys', () => {
+    const raw = read('site');
+    expect(Object.keys(raw.ui).sort()).toEqual(
+      ['closeMenu', 'collapseBio', 'copied', 'copy', 'expandBio', 'menu'].sort(),
+    );
   });
 });
