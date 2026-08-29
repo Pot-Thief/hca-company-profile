@@ -1,26 +1,98 @@
 @import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-paper: #faf9f7;
+  --color-mist: #eeedea;
+  --color-ash: #c9c8c3;
+  --color-graphite: #595853;
+  --color-ink: #1a1a18;
+  --color-void: #000000;
+
+  --font-display: var(--font-bodoni), Georgia, 'Times New Roman', serif;
+  --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
+
+  --text-display: clamp(2.75rem, 7vw, 6.5rem);
+  --text-h2: clamp(1.875rem, 4vw, 3.25rem);
+  --text-h3: 1.25rem;
+  --text-body: 1.0625rem;
+  --text-small: 0.875rem;
+  --text-label: 0.75rem;
+
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --nav-h: 4.5rem;
+  --space-section: clamp(5rem, 10vw, 9rem);
+  --space-gutter: clamp(1.25rem, 4vw, 4rem);
+
+  --radius-none: 0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+section[id] {
+  scroll-margin-top: var(--nav-h);
+}
+
+/* Focus never changes the background, hover never draws an outline.
+   Keeping the two channels separate is what makes them tell apart. */
+:focus-visible {
+  outline: 2px solid var(--color-void);
+  outline-offset: 2px;
+}
+
+/* Reveal baseline: content is visible with no JS. The hidden state only
+   exists where scripting can undo it. */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+
+  [data-reveal='shown'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  [data-reveal],
+  [data-reveal='shown'] {
+    opacity: 1;
+    transform: none;
+  }
 }
