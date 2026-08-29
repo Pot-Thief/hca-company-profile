@@ -56,7 +56,10 @@
   --nav-h: 4.5rem;
   /* Section-level intervals are tokenised; anything finer uses Tailwind's
      default scale on purpose, not because it was overlooked. */
-  --space-section: clamp(5rem, 10vw, 9rem);
+  /* Keyed to viewport width because it also governs horizontal rhythm, but
+     capped low enough that a short laptop is not given a tall monitor's
+     padding. Top and bottom together stay under 12rem. */
+  --space-section: clamp(3.5rem, 5vw, 6rem);
   --space-gutter: clamp(1.25rem, 4vw, 4rem);
   --space-block: clamp(1.75rem, 3vw, 3rem);
 }
