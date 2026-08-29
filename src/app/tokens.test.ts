@@ -37,6 +37,23 @@ const REQUIRED = [
   '--leading-display',
   '--leading-heading',
   '--leading-body',
+  '--tracking-display',
+  '--color-surface',
+  '--color-on-surface',
+  '--color-on-surface-muted',
+  '--color-rule',
+];
+
+// The four semantic colours are the layer every section reads. They once
+// shipped with an alias in between, declared at :root, which froze the value at
+// the root and made the inverted sections render ink text on ink. The variables
+// read correctly while the rendered colour did not, and jsdom cannot resolve the
+// cascade, so these are source-text assertions rather than render assertions.
+const SEMANTIC_COLOURS = [
+  '--color-surface',
+  '--color-on-surface',
+  '--color-on-surface-muted',
+  '--color-rule',
 ];
 
 describe('design tokens', () => {
@@ -89,6 +106,20 @@ describe('design tokens', () => {
 
   test('declares no colour in a notation that can carry hue', () => {
     expect(css).not.toMatch(COLOUR_FUNCTIONS);
+  });
+
+  test('the ink surface overrides every semantic colour, not a subset', () => {
+    const block = css.match(/\[data-surface='ink'\]\s*\{([^}]*)\}/);
+    expect(block).not.toBeNull();
+    for (const name of SEMANTIC_COLOURS) {
+      expect(block?.[1]).toContain(`${name}:`);
+    }
+  });
+
+  test('no alias layer stands between the tokens and their consumers', () => {
+    for (const alias of ['--surface:', '--on-surface:', '--on-surface-muted:', '--rule:']) {
+      expect(css).not.toContain(alias);
+    }
   });
 });
 

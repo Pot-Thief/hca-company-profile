@@ -163,31 +163,27 @@ export default function StyleguidePage() {
               aria-hidden
               className="h-16 w-16 bg-ink transition-[transform,opacity] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:-translate-y-1 hover:opacity-70"
             />
-            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>
-              duration-fast &mdash; 150ms, ease-out
-            </p>
+            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>duration-fast, ease-out</p>
           </div>
           <div>
             <div
               aria-hidden
               className="h-16 w-16 bg-ink transition-[transform,opacity] duration-[var(--duration-base)] ease-[var(--ease-out)] hover:-translate-y-1 hover:opacity-70"
             />
-            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>
-              duration-base &mdash; 250ms, ease-out
-            </p>
+            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>duration-base, ease-out</p>
           </div>
           <div>
             <div
               aria-hidden
               className="h-16 w-16 bg-ink transition-[transform,opacity] duration-[var(--duration-slow)] ease-[var(--ease-out)] hover:-translate-y-1 hover:opacity-70"
             />
-            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>
-              duration-slow &mdash; 400ms, ease-out
-            </p>
+            <p className={`mt-3 ${LABEL_CLASS} text-graphite`}>duration-slow, ease-out</p>
           </div>
         </div>
         <p className="mt-8 font-body text-small text-graphite">
-          Hover a square to preview. All three are disabled under prefers-reduced-motion.
+          Hover a square to preview. All three are disabled under prefers-reduced-motion. The
+          millisecond values are deliberately not printed here: hardcoded copy desynchronises the
+          moment a token changes, and it already did once. Read them from globals.css.
         </p>
       </section>
 

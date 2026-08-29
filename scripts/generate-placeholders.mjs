@@ -30,7 +30,9 @@ const heroBody = `
     <line x1="0" y1="640" x2="1920" y2="640"/>
   </g>`;
 
-await sharp(svg(1920, 1080, heroBody)).jpeg({ quality: 82 }).toFile(`${OUT}/hero-bg.jpg`);
+await sharp(svg(1920, 1080, heroBody))
+  .jpeg({ quality: 82 })
+  .toFile(`${OUT}/hero-bg.jpg`);
 
 // A bordered frame with a diagonal cross is the universal "image goes here"
 // idiom, and it makes an empty or mis-sized slot obvious at a glance.
