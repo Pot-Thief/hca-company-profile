@@ -1765,7 +1765,9 @@ Tailwind 4 has no `tailwind.config.js`. Tokens are declared in CSS inside `@them
 
 Three typefaces, each with a job. Bodoni Moda is a high contrast didone used only at display sizes, where its thin strokes are an asset rather than a legibility problem. Archivo is a neutral grotesque for body text. IBM Plex Mono carries labels, categories, and stat captions. None of them is Inter.
 
-Border radius is `0` everywhere. Editorial print has no rounded corners, and in a monochrome palette the separation work is done by hairlines and space. This is written down so nobody reaches for `rounded-lg` out of habit.
+The system holds exactly two radii and no scale between them: `0` for structural edges such as section blocks, images and hairline-separated cells, and one small value for interactive surfaces. Tailwind's default radius scale is cleared, so `rounded-lg` and `rounded-2xl` generate nothing at all and the card-grid look this direction rules out is unreachable rather than merely discouraged.
+
+The small radius exists because a button with a genuinely sharp corner reads as stiff on screen rather than precise. Editorial print has no rounded corners, but print has no buttons either.
 
 Hover and focus are kept visually distinct by rule: hover changes background or text colour and never draws an outline, focus draws a 2px outline and never changes the background. Task 28 asserts this.
 

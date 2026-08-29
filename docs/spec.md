@@ -326,7 +326,15 @@ Yang sudah dikunci sekarang:
 - Services dan Portfolio tidak dinomori.
 - Grid services: 1 kolom di bawah 768px, 2 kolom di 768px, 3 kolom di 1280px.
   Dua belas item terlalu panjang sebagai daftar satu kolom di layar lebar.
-- Border radius harus keputusan tertulis di token, bukan `rounded-lg` di mana-mana.
+- Palet monokrom murni: setiap nilai netral, R sama dengan G sama dengan B. Penjaga di
+  `tokens.test.ts` menolak hex apa pun dengan selisih channel di atas nol, jadi hue tidak
+  bisa masuk sama sekali, bukan sekadar dibatasi.
+- Tepat dua radius, tanpa skala di antaranya: `0` untuk tepi struktural seperti blok section,
+  gambar, dan sel berpembatas garis rambut, dan satu nilai kecil untuk permukaan interaktif.
+  Skala radius bawaan Tailwind dikosongkan, jadi `rounded-lg` tidak menghasilkan apa pun.
+  Nilai kecil itu ada karena tombol bersudut benar-benar lancip terbaca kaku di layar, bukan
+  presisi. Print editorial memang tidak punya sudut membulat, tapi print juga tidak punya
+  tombol.
 
 ---
 

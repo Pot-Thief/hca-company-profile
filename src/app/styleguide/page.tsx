@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
 
 const COLORS = [
-  { name: 'paper', value: 'var(--color-paper)', hex: '#faf9f7', hairline: true },
-  { name: 'mist', value: 'var(--color-mist)', hex: '#eeedea', hairline: true },
-  { name: 'ash', value: 'var(--color-ash)', hex: '#c9c8c3', hairline: false },
-  { name: 'graphite', value: 'var(--color-graphite)', hex: '#595853', hairline: false },
-  { name: 'ink', value: 'var(--color-ink)', hex: '#1a1a18', hairline: false },
+  { name: 'paper', value: 'var(--color-paper)', hex: '#fafafa', hairline: true },
+  { name: 'mist', value: 'var(--color-mist)', hex: '#ededed', hairline: true },
+  { name: 'ash', value: 'var(--color-ash)', hex: '#c8c8c8', hairline: false },
+  { name: 'graphite', value: 'var(--color-graphite)', hex: '#585858', hairline: false },
+  { name: 'ink', value: 'var(--color-ink)', hex: '#1a1a1a', hairline: false },
   { name: 'void', value: 'var(--color-void)', hex: '#000000', hairline: false },
 ] as const;
 
@@ -205,15 +205,15 @@ export default function StyleguidePage() {
         <div className="mt-4 flex flex-wrap gap-8">
           <StateExample
             state="rest"
-            anchorClassName="inline-block border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper"
+            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-ink hover:text-paper"
           />
           <StateExample
             state="hover (forced for preview)"
-            anchorClassName="inline-block border border-ink bg-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-paper"
+            anchorClassName="inline-block rounded-edge border border-ink bg-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-paper"
           />
           <StateExample
             state="focus (forced for preview)"
-            anchorClassName="inline-block border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink outline-2 outline-offset-2 outline-[var(--color-void)]"
+            anchorClassName="inline-block rounded-edge border border-ink px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-body)] text-ink outline-2 outline-offset-2 outline-[var(--color-void)]"
           />
         </div>
 
@@ -235,7 +235,8 @@ export default function StyleguidePage() {
 
         <p className="mt-8 font-[family-name:var(--font-body)] text-[length:var(--text-small)] text-graphite">
           Tab to either rest example to see the real focus outline; move the mouse over it to see
-          the real hover change.
+          the real hover change. The primary action uses radius-edge, 3px, the only radius in the
+          system besides zero. Structural edges such as section blocks and images stay square.
         </p>
       </section>
 

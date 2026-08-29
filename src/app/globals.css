@@ -2,19 +2,26 @@
 
 /* Tailwind's default theme adds radius, shadow and blur scales on top of
    whatever @theme declares. Depth here comes from grayscale, hairlines and
-   space, so those namespaces are cleared rather than left reachable. */
+   space, so those namespaces are cleared rather than left reachable.
+   Two radii survive and nothing between them: 0 for structural edges, and a
+   small one for interactive surfaces, because a button with a genuinely sharp
+   corner reads as stiff on screen rather than precise. */
 @theme {
   --radius-*: initial;
   --radius-none: 0;
+  --radius-edge: 3px;
 
   --shadow-*: initial;
   --blur-*: initial;
 
-  --color-paper: #faf9f7;
-  --color-mist: #eeedea;
-  --color-ash: #c9c8c3;
-  --color-graphite: #595853;
-  --color-ink: #1a1a18;
+  /* Every value is neutral, R equal to G equal to B. The guard in
+     tokens.test.ts rejects any channel spread above zero, so a hue cannot
+     enter at all rather than merely being kept small. */
+  --color-paper: #fafafa;
+  --color-mist: #ededed;
+  --color-ash: #c8c8c8;
+  --color-graphite: #585858;
+  --color-ink: #1a1a1a;
   --color-void: #000000;
 
   --font-display: var(--font-bodoni), Georgia, 'Times New Roman', serif;
