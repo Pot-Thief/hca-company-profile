@@ -20,6 +20,13 @@ jobs:
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+      # The fallback layer is the only part of the content pipeline that cannot
+      # be proved by the build succeeding, since its whole job is what happens
+      # when the content is wrong. These two runs are that proof, and they run
+      # against a fixture server rather than the shipped JSON, so nothing else
+      # in this workflow exercises them.
+      - run: pnpm test:e2e:live
+      - run: pnpm test:e2e:broken
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
