@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { GridLines } from './GridLines';
 
 export function SectionShell({
   id,
@@ -23,10 +24,13 @@ export function SectionShell({
     <section
       id={id}
       data-surface={surface === 'ink' ? 'ink' : undefined}
-      className={`bg-surface text-on-surface${edge}`}
+      className={`relative bg-surface text-on-surface${edge}`}
     >
-      <div className="mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
-        <div className="mb-[var(--space-block)] md:mb-0 md:border-r md:border-rule">
+      {/* This block has a rail, so the grid draws its boundary too. */}
+      <GridLines rail />
+
+      <div className="relative mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
+        <div className="mb-[var(--space-block)] md:mb-0">
           {label ? (
             <p className="font-mono text-label uppercase tracking-label text-on-surface-muted md:sticky md:top-[calc(var(--nav-h)+var(--space-block))]">
               {label}
