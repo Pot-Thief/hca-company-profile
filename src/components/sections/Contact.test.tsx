@@ -75,6 +75,11 @@ describe('Contact', () => {
     expect(screen.getAllByRole('button', { name: /^COPY_X / })).toHaveLength(3);
   });
 
+  test('marks the channel list as the channels block', () => {
+    const { container } = render(<Contact {...props} />);
+    expect(container.querySelector('[data-block="channels"]')).toBeInTheDocument();
+  });
+
   test('contains no form and no input', () => {
     const { container } = render(<Contact {...props} />);
     expect(container.querySelector('form')).toBeNull();
@@ -86,5 +91,10 @@ describe('Contact', () => {
     expect(
       screen.getByText('No contact channels yet. Add channels to contact.json.'),
     ).toBeInTheDocument();
+  });
+
+  test('has no channels block when channels is empty', () => {
+    const { container } = render(<Contact {...props} channels={[]} />);
+    expect(container.querySelector('[data-block="channels"]')).not.toBeInTheDocument();
   });
 });

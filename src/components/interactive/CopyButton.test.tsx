@@ -33,6 +33,7 @@ describe('CopyButton', () => {
     render(<CopyButton value="VALUE_X" label="LABEL_X" {...labels} />);
     await user.click(screen.getByRole('button'));
     expect(screen.getByRole('button')).toBeEnabled();
+    expect(screen.queryByText('COPIED_X')).not.toBeInTheDocument();
   });
 
   test('clears the confirmation about two seconds after copying', async () => {
@@ -51,9 +52,8 @@ describe('CopyButton', () => {
     expect(screen.queryByText('COPIED_X')).not.toBeInTheDocument();
   });
 
-  test('cannot update state after unmount once the timer would fire', async () => {
+  test('cancels the pending timer on unmount', async () => {
     vi.useFakeTimers();
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
     const { unmount } = render(<CopyButton value="VALUE_X" label="LABEL_X" {...labels} />);
@@ -62,9 +62,6 @@ describe('CopyButton', () => {
       await Promise.resolve();
     });
     unmount();
-    act(() => {
-      vi.advanceTimersByTime(2000);
-    });
-    expect(consoleError).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
   });
 });
