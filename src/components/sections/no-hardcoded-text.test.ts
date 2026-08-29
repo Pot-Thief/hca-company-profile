@@ -21,6 +21,14 @@ const ALLOWED = new Set([
   'No contact channels yet. Add channels to contact.json.',
 ]);
 
+// Comments are stripped before scanning. A JS comment between a comparison and a
+// tag — `{items.length > 0 ? ( /* why */ <div>` — otherwise reads as a span of
+// prose sitting between `>` and `<` and trips the scan. Left in, the tempting fix
+// for that false positive is deleting the comment, which is the wrong direction.
+// Text inside a comment never reaches the reader, so ignoring it is also correct.
+const stripComments = (source: string) =>
+  source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+
 const files = DIRS.flatMap((dir) =>
   readdirSync(join(process.cwd(), dir))
     .filter((name) => name.endsWith('.tsx') && !name.includes('.test.'))
@@ -33,7 +41,7 @@ describe('components carry no display copy', () => {
   });
 
   test.each(files)('%s', (file) => {
-    const source = readFileSync(join(process.cwd(), file), 'utf8');
+    const source = stripComments(readFileSync(join(process.cwd(), file), 'utf8'));
     // Text sitting directly between JSX tags. Newlines are deliberately allowed
     // inside the span: prettier puts a text child on its own line, so a pattern
     // anchored to a single line sees almost nothing. It scanned clean here while
@@ -51,7 +59,7 @@ describe('components carry no display copy', () => {
 // through a prop would pass it unnoticed.
 describe('components carry no literal aria-label or title', () => {
   test.each(files)('%s', (file) => {
-    const source = readFileSync(join(process.cwd(), file), 'utf8');
+    const source = stripComments(readFileSync(join(process.cwd(), file), 'utf8'));
     expect(source).not.toMatch(/(aria-label|title|alt)="[^"]*[A-Za-z]{2,}[^"]*"/);
   });
 });

@@ -26,8 +26,7 @@ export function SectionShell({
       data-surface={surface === 'ink' ? 'ink' : undefined}
       className={`relative bg-surface text-on-surface${edge}`}
     >
-      {/* This block has a rail, so the grid draws its boundary too. */}
-      <GridLines rail />
+      <GridLines />
 
       <div className="relative mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
         <div className="mb-[var(--space-block)] md:mb-0">

@@ -106,16 +106,16 @@ describe('SectionShell', () => {
     expect(container.querySelector('section')).not.toHaveClass('border-t');
   });
 
-  // The grid draws the layout's own column edges — content left, rail boundary,
-  // content right — so it has to be exactly three lines. A fourth would mean it
-  // had drifted into texture, which is the failure the research names by name.
-  test('draws the three layout column edges', () => {
+  // The grid draws the container's own edges, so it has to be exactly two lines.
+  // A third would mean it had drifted into texture, which is the failure the
+  // research names by name.
+  test('draws the two container edges', () => {
     const { container } = render(
       <SectionShell id="services" label="LABEL_X" headline="HEADLINE_X">
         CHILD_X
       </SectionShell>,
     );
-    expect(container.querySelectorAll('[data-grid-line]')).toHaveLength(3);
+    expect(container.querySelectorAll('[data-grid-line]')).toHaveLength(2);
   });
 
   test('hides the grid from assistive technology', () => {

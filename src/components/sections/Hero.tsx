@@ -52,9 +52,11 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
           ) : null}
 
           {actions.length > 0 ? (
+            /* A pair of actions, not two unrelated links: the page gutter was
+               being used as the gap between them, which read as a standoff. */
             <div
               data-block="actions"
-              className="mt-[var(--space-block)] flex flex-wrap items-center gap-[var(--space-gutter)]"
+              className="mt-[var(--space-block)] flex flex-wrap items-center gap-[var(--space-block)]"
             >
               {actions.map((action) => (
                 <a

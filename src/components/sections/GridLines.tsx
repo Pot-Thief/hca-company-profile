@@ -1,8 +1,12 @@
-// The page showing its own coordinate system. These are the layout's real
-// column edges — where content starts, where the rail ends, where content stops
-// — not a lattice laid over it, which is the failure the design research names
-// outright: a grid that marks nothing becomes wallpaper. So a block without a
-// rail draws two lines, not three.
+// The page showing its own measure. The two lines are the container's real
+// edges — where the page's column begins and ends — drawn in the gutter rather
+// than on the content edge, so no line ever lands against the first or last
+// character of a line of text.
+//
+// It was three lines: the rail boundary was drawn too, which put two lines in
+// the small space beside every section title and made the eye read a bracket
+// where there was only a label. One line to the left of a heading says the same
+// thing the pair said, quieter.
 //
 // They align down the whole page because every block is built on the same
 // container, and they follow the surface because --color-grid flips with it, so
@@ -11,18 +15,12 @@
 // off by a pixel.
 const LINE = 'absolute inset-y-0 w-px bg-grid';
 
-export function GridLines({ rail = false }: { rail?: boolean }) {
+export function GridLines() {
   return (
     <div data-grid aria-hidden="true" className="pointer-events-none absolute inset-0">
-      <div className="relative mx-auto h-full max-w-page px-[var(--space-gutter)]">
-        <span data-grid-line className={`${LINE} left-[var(--space-gutter)]`} />
-        {rail ? (
-          <span
-            data-grid-line
-            className={`${LINE} left-[calc(var(--space-gutter)+8rem)] hidden md:block`}
-          />
-        ) : null}
-        <span data-grid-line className={`${LINE} right-[var(--space-gutter)]`} />
+      <div className="relative mx-auto h-full max-w-page">
+        <span data-grid-line className={`${LINE} left-0`} />
+        <span data-grid-line className={`${LINE} right-0`} />
       </div>
     </div>
   );
