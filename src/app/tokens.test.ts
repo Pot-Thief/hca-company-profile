@@ -32,7 +32,11 @@ const REQUIRED = [
   '--space-gutter',
   '--tracking-label',
   '--container-measure',
+  '--container-page',
   '--space-block',
+  '--leading-display',
+  '--leading-heading',
+  '--leading-body',
 ];
 
 describe('design tokens', () => {

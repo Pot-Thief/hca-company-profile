@@ -26,13 +26,17 @@ describe('Hero', () => {
   });
 
   test('renders no eyebrow element when the eyebrow is empty', () => {
-    render(<Hero {...props} eyebrow="" />);
-    expect(screen.queryByText('EYEBROW_X')).not.toBeInTheDocument();
+    const { container } = render(<Hero {...props} eyebrow="" />);
+    const paragraphs = container.querySelectorAll('p');
+    expect(paragraphs).toHaveLength(1);
+    expect(paragraphs[0]).toHaveTextContent('SUBHEADLINE_X');
   });
 
   test('renders no subheadline element when the subheadline is empty', () => {
-    render(<Hero {...props} subheadline="" />);
-    expect(screen.queryByText('SUBHEADLINE_X')).not.toBeInTheDocument();
+    const { container } = render(<Hero {...props} subheadline="" />);
+    const paragraphs = container.querySelectorAll('p');
+    expect(paragraphs).toHaveLength(1);
+    expect(paragraphs[0]).toHaveTextContent('EYEBROW_X');
   });
 
   test('renders one link per action with its href', () => {
@@ -41,9 +45,13 @@ describe('Hero', () => {
     expect(screen.getByRole('link', { name: 'GHOST_X' })).toHaveAttribute('href', '#contact');
   });
 
-  test('renders no links when actions is empty', () => {
-    render(<Hero {...props} actions={[]} />);
+  test('renders no links and no actions wrapper when actions is empty', () => {
+    const { container } = render(<Hero {...props} actions={[]} />);
     expect(screen.queryAllByRole('link')).toHaveLength(0);
+    // eyebrow <p> + h1 + subheadline <p>, no fourth child for an actions
+    // wrapper: a div rendered around an empty map would still show up here
+    // with zero links, so the link-count check above cannot catch it alone.
+    expect(container.querySelector('.max-w-measure')?.children).toHaveLength(3);
   });
 
   test('uses the alt text from props for the background image', () => {

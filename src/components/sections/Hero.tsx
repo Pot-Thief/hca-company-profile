@@ -19,22 +19,18 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
       />
       <div className="absolute inset-0 bg-ink/60" />
 
-      <div className="relative mx-auto w-full max-w-6xl px-[var(--space-gutter)] pb-[var(--space-section)] pt-[calc(var(--nav-h)+var(--space-section))]">
-        <div className="max-w-[var(--container-measure)]">
+      <div className="relative mx-auto w-full max-w-page px-[var(--space-gutter)] pb-[var(--space-section)] pt-[calc(var(--nav-h)+var(--space-section))]">
+        <div className="max-w-measure">
           {eyebrow ? (
-            <p className="font-[family-name:var(--font-mono)] text-[length:var(--text-label)] uppercase tracking-label text-mist">
-              {eyebrow}
-            </p>
+            <p className="font-mono text-label uppercase tracking-label text-mist">{eyebrow}</p>
           ) : null}
 
-          <h1 className="mt-[var(--space-block)] font-[family-name:var(--font-display)] text-[length:var(--text-display)] leading-[1.02] text-paper text-balance">
+          <h1 className="mt-[var(--space-block)] font-display text-display leading-display text-paper text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-[var(--space-block)] text-[length:var(--text-body)] text-mist">
-              {subheadline}
-            </p>
+            <p className="mt-[var(--space-block)] text-body text-mist">{subheadline}</p>
           ) : null}
 
           {actions.length > 0 ? (
@@ -43,7 +39,7 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
                 <a
                   key={action.href}
                   href={action.href}
-                  className={`rounded-edge px-6 py-3 font-[family-name:var(--font-body)] text-[length:var(--text-small)] transition-[background-color,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] ${actionClass[action.variant]}`}
+                  className={`rounded-edge px-6 py-3 font-body text-small transition-[background-color,color] duration-[var(--duration-fast)] ease-out ${actionClass[action.variant]}`}
                 >
                   {action.label}
                 </a>

@@ -36,7 +36,16 @@
   --text-label: 0.75rem;
   --tracking-label: 0.12em;
 
+  /* Two container jobs, two tokens: measure limits a line of text to a
+     readable width, page limits the whole section to a shared outer edge. */
   --container-measure: 62ch;
+  --container-page: 72rem;
+
+  /* An editorial display size needs its own tight leading; body text needs
+     its own loose one. Nothing here should fall back to the browser default. */
+  --leading-display: 1.02;
+  --leading-heading: 1.1;
+  --leading-body: 1.6;
 
   --duration-fast: 150ms;
   --duration-base: 250ms;
@@ -61,6 +70,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: var(--text-body);
+  line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
 }
 
