@@ -1,0 +1,22 @@
+{
+  "label": "Purpose",
+  "headline": "Lorem ipsum dolor sit amet",
+  "items": [
+    {
+      "title": "Lorem Ipsum Placeholder One",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Two",
+      "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Three",
+      "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "title": "Lorem Ipsum Placeholder Four",
+      "body": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim."
+    }
+  ]
+}

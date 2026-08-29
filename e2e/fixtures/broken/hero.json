@@ -1,0 +1,10 @@
+{
+  "eyebrow": "Lorem ipsum dolor",
+  "headline": 42,
+  "subheadline": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "backgroundImage": { "src": "/assets/images/hero-bg.jpg", "alt": "Placeholder background image" },
+  "actions": [
+    { "label": "View services", "href": "#services", "variant": "primary" },
+    { "label": "Get in touch", "href": "#contact", "variant": "ghost" }
+  ]
+}

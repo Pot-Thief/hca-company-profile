@@ -2,6 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  // resilience.spec.ts has its own config (playwright.resilience.config.ts)
+  // and its own webServer pair; it must never run under this one.
+  testIgnore: /resilience\.spec\.ts/,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

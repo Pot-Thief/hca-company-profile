@@ -1,0 +1,17 @@
+{
+  "label": "Contact",
+  "headline": "Lorem ipsum dolor sit amet",
+  "channels": [
+    {
+      "type": "address",
+      "label": "Office",
+      "value": "Placeholder Street 1, Placeholder City 00000"
+    },
+    { "type": "email", "label": "Email", "value": "hello@placeholder.test" },
+    { "type": "phone", "label": "Phone", "value": "+62 21 0000 0000" },
+    { "type": "whatsapp", "label": "WhatsApp", "value": "+62 812 0000 0000" },
+    { "type": "hours", "label": "Hours", "value": "Monday to Friday, 09.00 to 17.00" },
+    { "type": "social", "label": "Instagram", "value": "https://instagram.example/placeholder" },
+    { "type": "social", "label": "LinkedIn", "value": "https://linkedin.example/placeholder" }
+  ]
+}
