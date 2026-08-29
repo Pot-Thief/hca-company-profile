@@ -11,6 +11,11 @@ const items = Array.from({ length: 6 }, (_, i) => ({
 const props = { label: 'LABEL_X', headline: 'HEADLINE_X', items };
 
 describe('Portfolio', () => {
+  test('renders the items block when there are items', () => {
+    const { container } = render(<Portfolio {...props} />);
+    expect(container.querySelector('[data-block="items"]')).not.toBeNull();
+  });
+
   test('renders all six items', () => {
     render(<Portfolio {...props} />);
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(6);
@@ -32,7 +37,10 @@ describe('Portfolio', () => {
   });
 
   test('renders an empty state when items is empty', () => {
-    render(<Portfolio {...props} items={[]} />);
+    const { container } = render(<Portfolio {...props} items={[]} />);
     expect(screen.getByText('No projects yet. Add items to portfolio.json.')).toBeInTheDocument();
+    // The empty-state string alone cannot catch a wrapper that renders around
+    // an empty map, so the block's absence is asserted structurally too.
+    expect(container.querySelector('[data-block="items"]')).toBeNull();
   });
 });
