@@ -2,8 +2,8 @@ import Image from 'next/image';
 import type { Hero as HeroContent } from '@/lib/content/types';
 
 const actionClass = {
-  primary: 'bg-paper text-ink hover:bg-mist',
-  ghost: 'border border-paper text-paper hover:bg-paper/10',
+  primary: 'bg-on-surface text-surface hover:bg-on-surface/90',
+  ghost: 'border border-on-surface text-on-surface hover:bg-on-surface/10',
 };
 
 export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions }: HeroContent) {
@@ -11,7 +11,10 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
     // svh rather than vh: on mobile browsers vh includes the collapsing
     // toolbar, which crops the content. The cap keeps a tall monitor from
     // stretching the hero past what the copy needs.
-    <section className="relative flex min-h-[min(88svh,38rem)] items-end overflow-hidden">
+    <section
+      data-surface="ink"
+      className="relative flex min-h-[min(88svh,38rem)] items-end overflow-hidden"
+    >
       <Image
         src={backgroundImage.src}
         alt={backgroundImage.alt}
@@ -20,6 +23,8 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
         sizes="100vw"
         className="rounded-none object-cover"
       />
+      {/* The one place a token is bypassed: this darkens the photograph
+          underneath it, not a section surface, so it stays tied to ink. */}
       <div className="absolute inset-0 bg-ink/60" />
 
       <div className="relative mx-auto w-full max-w-page px-[var(--space-gutter)] pb-[var(--space-section)] pt-[calc(var(--nav-h)+var(--space-section))]">
@@ -29,15 +34,17 @@ export function Hero({ eyebrow, headline, subheadline, backgroundImage, actions 
             takes the measure. */}
         <div>
           {eyebrow ? (
-            <p className="font-mono text-label uppercase tracking-label text-mist">{eyebrow}</p>
+            <p className="font-mono text-label uppercase tracking-label text-on-surface-muted">
+              {eyebrow}
+            </p>
           ) : null}
 
-          <h1 className="mt-[var(--space-block)] max-w-[24ch] type-display text-display leading-display text-paper text-balance">
+          <h1 className="mt-[var(--space-block)] max-w-[24ch] type-display text-display leading-display text-on-surface text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-[var(--space-block)] max-w-measure text-body text-mist">
+            <p className="mt-[var(--space-block)] max-w-measure text-body text-on-surface-muted">
               {subheadline}
             </p>
           ) : null}

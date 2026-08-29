@@ -84,13 +84,40 @@
   letter-spacing: var(--tracking-display);
 }
 
+/* A semantic layer over the palette above. Components reach for bg-surface,
+   text-on-surface, text-on-surface-muted and border-rule and never name
+   paper or ink directly; a section flips its whole colour set by carrying
+   data-surface="ink", nothing inside it changes. */
+@theme {
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-muted: var(--on-surface-muted);
+  --color-rule: var(--rule);
+}
+
+:root {
+  --surface: var(--color-paper);
+  --on-surface: var(--color-ink);
+  --on-surface-muted: var(--color-graphite);
+  --rule: var(--color-ash);
+}
+
+/* Ash reads as nearly invisible against ink, so the ink surface gets its own
+   rule colour rather than reusing the paper one. */
+[data-surface='ink'] {
+  --surface: var(--color-ink);
+  --on-surface: var(--color-paper);
+  --on-surface-muted: var(--color-ash);
+  --rule: var(--color-graphite);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--surface);
+  color: var(--on-surface);
   font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -102,9 +129,11 @@ section[id] {
 }
 
 /* Focus never changes the background, hover never draws an outline.
-   Keeping the two channels separate is what makes them tell apart. */
+   Keeping the two channels separate is what makes them tell apart. The
+   outline colour follows on-surface rather than a fixed void, because void
+   is near-black and disappears against an ink section. */
 :focus-visible {
-  outline: 2px solid var(--color-void);
+  outline: 2px solid var(--on-surface);
   outline-offset: 2px;
 }
 

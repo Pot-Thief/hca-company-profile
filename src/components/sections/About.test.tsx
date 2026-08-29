@@ -50,4 +50,9 @@ describe('About', () => {
     expect(container.querySelector('[data-block="paragraphs"]')).toBeNull();
     expect(screen.queryByText('PARA_ONE_X')).not.toBeInTheDocument();
   });
+
+  test('carries the paper surface', () => {
+    const { container } = render(<About {...props} />);
+    expect(container.querySelector('section#about')).not.toHaveAttribute('data-surface');
+  });
 });

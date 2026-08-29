@@ -63,4 +63,9 @@ describe('Hero', () => {
     render(<Hero {...props} />);
     expect(screen.getByAltText('ALT_X')).toBeInTheDocument();
   });
+
+  test('carries the ink surface', () => {
+    const { container } = render(<Hero {...props} />);
+    expect(container.querySelector('section')).toHaveAttribute('data-surface', 'ink');
+  });
 });

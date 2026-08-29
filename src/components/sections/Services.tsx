@@ -1,5 +1,5 @@
 import { getIcon } from '@/lib/icons';
-import { SectionHeading } from './SectionHeading';
+import { SectionShell } from './SectionShell';
 import type { Services as ServicesContent } from '@/lib/content/types';
 
 // Column count changes per breakpoint (1 / 2 / 3), so "first row" isn't a
@@ -8,7 +8,7 @@ import type { Services as ServicesContent } from '@/lib/content/types';
 // that: "index < columns-at-this-breakpoint" identifies the first row correctly
 // at every breakpoint and for any item count, not just twelve.
 function hairlines(index: number) {
-  const classes = ['border-ash'];
+  const classes = ['border-rule'];
   if (index > 0) classes.push('border-t');
   if (index > 0 && index < 2) classes.push('md:border-t-0');
   if (index > 0 && index < 3) classes.push('xl:border-t-0');
@@ -17,12 +17,7 @@ function hairlines(index: number) {
 
 export function Services({ label, headline, items }: ServicesContent) {
   return (
-    <section
-      id="services"
-      className="mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)]"
-    >
-      <SectionHeading id="services" label={label} headline={headline} />
-
+    <SectionShell id="services" label={label} headline={headline}>
       {items.length > 0 ? (
         <div
           data-block="items"
@@ -35,18 +30,22 @@ export function Services({ label, headline, items }: ServicesContent) {
                 key={index}
                 className={`py-[var(--space-block)] md:px-[var(--space-gutter)] ${hairlines(index)}`}
               >
-                <Icon aria-hidden="true" size={20} className="text-graphite" />
-                <h3 className="mt-3 font-body font-semibold text-h3 leading-heading text-ink">
+                <Icon aria-hidden="true" size={20} className="text-on-surface-muted" />
+                <h3 className="mt-3 font-body font-semibold text-h3 leading-heading text-on-surface">
                   {item.name}
                 </h3>
-                <p className="mt-3 max-w-measure text-body text-graphite">{item.description}</p>
+                <p className="mt-3 max-w-measure text-body text-on-surface-muted">
+                  {item.description}
+                </p>
               </div>
             );
           })}
         </div>
       ) : (
-        <p className="text-body text-graphite">No services yet. Add items to services.json.</p>
+        <p className="text-body text-on-surface-muted">
+          No services yet. Add items to services.json.
+        </p>
       )}
-    </section>
+    </SectionShell>
   );
 }

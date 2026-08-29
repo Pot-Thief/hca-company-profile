@@ -67,4 +67,9 @@ describe('Services', () => {
     const { container } = render(<Services {...props} items={[]} />);
     expect(container.querySelector('[data-block="items"]')).not.toBeInTheDocument();
   });
+
+  test('carries the paper surface', () => {
+    render(<Services {...props} />);
+    expect(document.querySelector('section#services')).not.toHaveAttribute('data-surface');
+  });
 });

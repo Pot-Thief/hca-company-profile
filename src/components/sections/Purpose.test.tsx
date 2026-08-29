@@ -36,6 +36,11 @@ describe('Purpose', () => {
     expect(screen.queryByText('TITLE_1_X')).not.toBeInTheDocument();
   });
 
+  test('carries the ink surface', () => {
+    const { container } = render(<Purpose {...props} />);
+    expect(container.querySelector('section#purpose')).toHaveAttribute('data-surface', 'ink');
+  });
+
   test('keeps hairline borders sane with an odd, five-item count', () => {
     const fiveItems = [1, 2, 3, 4, 5].map((n) => ({ title: `TITLE_${n}_X`, body: `BODY_${n}_X` }));
     const { container } = render(<Purpose {...props} items={fiveItems} />);
