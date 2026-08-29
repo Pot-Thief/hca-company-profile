@@ -14,7 +14,7 @@ export function Navbar({
 }) {
   return (
     <header data-nav className="fixed inset-x-0 top-0 z-30 h-[var(--nav-h)]">
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-[var(--space-gutter)] px-[var(--space-gutter)]">
+      <div className="mx-auto flex h-full max-w-page items-center justify-between gap-[var(--space-gutter)] px-[var(--space-gutter)]">
         <span className="font-[family-name:var(--font-display)] text-[length:var(--text-h3)] text-ink">
           {logo.wordmark}
         </span>

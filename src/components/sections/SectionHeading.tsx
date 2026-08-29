@@ -13,7 +13,7 @@ export function SectionHeading({
       {label ? (
         <p className="font-mono text-label uppercase tracking-label text-graphite">{label}</p>
       ) : null}
-      <h2 className="font-display text-h2 leading-[1.05] text-balance">{text}</h2>
+      <h2 className="font-display text-h2 leading-heading text-balance">{text}</h2>
     </div>
   );
 }
