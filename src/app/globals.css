@@ -30,14 +30,16 @@
   --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
 
-  /* Capped at 4.5rem: above that the headline needs a line box wider than the
-     page to avoid stacking into five or six lines. */
-  --text-display: clamp(2.5rem, 5.5vw, 4.5rem);
-  --text-h2: clamp(1.875rem, 4vw, 3.25rem);
-  --text-h3: 1.25rem;
-  --text-body: 1.0625rem;
-  --text-small: 0.875rem;
-  --text-label: 0.75rem;
+  /* The scale is deliberately gapped rather than even: display grew and the
+     middle shrank, so the distance between the largest and smallest type is
+     what carries the confidence. Display stays capped because above 5rem the
+     headline needs a line box wider than the page and starts stacking. */
+  --text-display: clamp(2.75rem, 6vw, 5rem);
+  --text-h2: clamp(1.75rem, 3.2vw, 2.5rem);
+  --text-h3: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.8125rem;
+  --text-label: 0.6875rem;
   --tracking-label: 0.12em;
   /* Negative tracking is what makes large grotesque type read as set rather
      than as default. It only works at display sizes. */
@@ -54,21 +56,22 @@
   --leading-heading: 1.1;
   --leading-body: 1.6;
 
-  --duration-fast: 150ms;
-  --duration-base: 250ms;
-  --duration-slow: 400ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Short and hard-stopping. The earlier expo-out curve eased into place, which
+     reads organic; a mechanism arrives and stops. */
+  --duration-fast: 100ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.3, 0, 0.2, 1);
 
   --nav-h: 4.5rem;
   /* Section-level intervals are tokenised; anything finer uses Tailwind's
-     default scale on purpose, not because it was overlooked. */
-  /* Keyed to viewport width because it also governs horizontal rhythm, but
-     capped low enough that a short laptop is not given a tall monitor's
-     padding. Top and bottom together stay under 12rem. */
+     default scale on purpose, not because it was overlooked. `section` is kept
+     wide and `block` was tightened, so things that belong together sit close
+     and things that do not stay far apart. */
   --space-section: clamp(3.5rem, 5vw, 6rem);
   --space-gutter: clamp(1.25rem, 4vw, 4rem);
-  --space-block: clamp(1.75rem, 3vw, 3rem);
+  --space-block: clamp(1.25rem, 2vw, 2rem);
 }
 
 /* The display setting is four properties that must agree wherever large type
