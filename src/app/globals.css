@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 
+/* Tailwind's default theme adds radius, shadow and blur scales on top of
+   whatever @theme declares. Depth here comes from grayscale, hairlines and
+   space, so those namespaces are cleared rather than left reachable. */
 @theme {
+  --radius-*: initial;
+  --radius-none: 0;
+
+  --shadow-*: initial;
+  --blur-*: initial;
+
   --color-paper: #faf9f7;
   --color-mist: #eeedea;
   --color-ash: #c9c8c3;
@@ -28,8 +37,6 @@
   --nav-h: 4.5rem;
   --space-section: clamp(5rem, 10vw, 9rem);
   --space-gutter: clamp(1.25rem, 4vw, 4rem);
-
-  --radius-none: 0;
 }
 
 html {

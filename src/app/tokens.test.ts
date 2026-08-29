@@ -41,6 +41,18 @@ describe('design tokens', () => {
     expect(css).toContain(':focus-visible');
   });
 
+  test('clears the default radius scale', () => {
+    expect(css).toContain('--radius-*: initial');
+  });
+
+  test('clears the default shadow scale', () => {
+    expect(css).toContain('--shadow-*: initial');
+  });
+
+  test('clears the default blur scale', () => {
+    expect(css).toContain('--blur-*: initial');
+  });
+
   test('contains no hue outside the grayscale palette', () => {
     const hexes = css.match(/#[0-9a-fA-F]{6}/g) ?? [];
     for (const hex of hexes) {
