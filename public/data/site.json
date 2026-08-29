@@ -28,6 +28,8 @@
     "copy": "Copy",
     "copied": "Copied",
     "expandBio": "Read bio",
-    "collapseBio": "Hide bio"
+    "collapseBio": "Hide bio",
+    "expandProject": "Read detail",
+    "collapseProject": "Hide detail"
   }
 }

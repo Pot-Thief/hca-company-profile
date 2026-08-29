@@ -2,18 +2,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test } from 'vitest';
 import { MobileNav } from './MobileNav';
+import { uiLabels } from '@/lib/content/ui-fixture';
 
 const props = {
   nav: [{ label: 'NAV_ONE_X', href: '#about' }],
   cta: { label: 'CTA_X', href: '#contact' },
-  ui: {
-    menu: 'MENU_X',
-    closeMenu: 'CLOSE_MENU_X',
-    copy: 'COPY_X',
-    copied: 'COPIED_X',
-    expandBio: 'EXPAND_BIO_X',
-    collapseBio: 'COLLAPSE_BIO_X',
-  },
+  ui: uiLabels,
 };
 
 describe('MobileNav', () => {

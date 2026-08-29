@@ -2,21 +2,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test } from 'vitest';
 import { TeamMember } from './TeamMember';
+import { uiLabels as ui } from '@/lib/content/ui-fixture';
 
 const member = {
   photo: { src: '/assets/images/team-01.jpg', alt: 'PHOTO_ALT_X' },
   name: 'NAME_X',
   role: 'ROLE_X',
   bio: 'BIO_X',
-};
-
-const ui = {
-  menu: 'MENU_X',
-  closeMenu: 'CLOSE_MENU_X',
-  copy: 'COPY_X',
-  copied: 'COPIED_X',
-  expandBio: 'EXPAND_BIO_X',
-  collapseBio: 'COLLAPSE_BIO_X',
 };
 
 describe('TeamMember', () => {

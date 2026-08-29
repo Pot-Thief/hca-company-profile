@@ -38,10 +38,22 @@ describe('shipped content files', () => {
     }
   });
 
-  test('the ui block is physically present in site.json with all six keys', () => {
+  // Exact set, not a subset: a key the schema defaults but site.json never
+  // declares still renders, silently, and would only surface when someone edits
+  // the file looking for a label that is not there.
+  test('the ui block is physically present in site.json with every key', () => {
     const raw = read('site');
     expect(Object.keys(raw.ui).sort()).toEqual(
-      ['closeMenu', 'collapseBio', 'copied', 'copy', 'expandBio', 'menu'].sort(),
+      [
+        'closeMenu',
+        'collapseBio',
+        'collapseProject',
+        'copied',
+        'copy',
+        'expandBio',
+        'expandProject',
+        'menu',
+      ].sort(),
     );
   });
 });

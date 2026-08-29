@@ -39,6 +39,8 @@ export const siteSchema = z.object({
       copied: str('site.ui.copied', 'Copied'),
       expandBio: str('site.ui.expandBio', 'Read bio'),
       collapseBio: str('site.ui.collapseBio', 'Hide bio'),
+      expandProject: str('site.ui.expandProject', 'Read detail'),
+      collapseProject: str('site.ui.collapseProject', 'Hide detail'),
     }),
     {
       menu: 'Menu',
@@ -47,6 +49,8 @@ export const siteSchema = z.object({
       copied: 'Copied',
       expandBio: 'Read bio',
       collapseBio: 'Hide bio',
+      expandProject: 'Read detail',
+      collapseProject: 'Hide detail',
     },
     'site.ui',
   ),

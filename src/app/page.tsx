@@ -42,7 +42,7 @@ export default async function Page() {
           <Services {...services} />
         </Reveal>
         <Reveal>
-          <Portfolio {...portfolio} />
+          <Portfolio {...portfolio} ui={site.ui} />
         </Reveal>
         <Reveal>
           <Team {...team} ui={site.ui} />

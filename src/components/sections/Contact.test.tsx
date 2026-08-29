@@ -1,15 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Contact } from './Contact';
-
-const ui = {
-  menu: 'MENU_X',
-  closeMenu: 'CLOSE_MENU_X',
-  copy: 'COPY_X',
-  copied: 'COPIED_X',
-  expandBio: 'EXPAND_BIO_X',
-  collapseBio: 'COLLAPSE_BIO_X',
-};
+import { uiLabels as ui } from '@/lib/content/ui-fixture';
 
 const props = {
   label: 'LABEL_X',

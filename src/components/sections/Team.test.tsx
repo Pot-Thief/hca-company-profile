@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { Team } from './Team';
+import { uiLabels as ui } from '@/lib/content/ui-fixture';
 
 const members = [1, 2].map((n) => ({
   photo: { src: `/assets/images/team-0${n}.jpg`, alt: `PHOTO_ALT_${n}_X` },
@@ -8,14 +9,6 @@ const members = [1, 2].map((n) => ({
   role: `ROLE_${n}_X`,
   bio: `BIO_${n}_X`,
 }));
-const ui = {
-  menu: 'MENU_X',
-  closeMenu: 'CLOSE_MENU_X',
-  copy: 'COPY_X',
-  copied: 'COPIED_X',
-  expandBio: 'EXPAND_BIO_X',
-  collapseBio: 'COLLAPSE_BIO_X',
-};
 const props = { label: 'LABEL_X', headline: 'HEADLINE_X', members, ui };
 
 describe('Team', () => {
