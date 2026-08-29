@@ -4,9 +4,11 @@ import { warnContent } from './warn';
 // .default() short-circuits on `undefined` before the inner schema ever runs, so a missing
 // field never reaches .catch(). Only a present-but-wrong-typed value fails the inner parse
 // and lands in .catch(), which is what triggers the warning. Swapping the order (or dropping
-// .default()) would make missing fields warn too, or wrong-typed fields warn twice.
+// .default()) would make missing fields warn too.
 export function field<S extends z.ZodTypeAny>(
   schema: S,
+  // z.core.util is a re-exported internal Zod namespace (source: zod/v4/core/util), not
+  // public API. A minor version bump that restructures core.util can break this type.
   fallback: z.core.util.NoUndefined<z.output<S>>,
   path: string,
 ) {

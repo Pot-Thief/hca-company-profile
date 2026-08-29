@@ -36,14 +36,14 @@ describe('arrayOf', () => {
     });
   });
 
-  test('drops invalid elements, keeps the rest, and warns once with the index', () => {
+  test('drops invalid elements, keeps the rest, and warns once with the indices', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const schema = z.object({ items: arrayOf(item, 'x.items') });
-    expect(schema.parse({ items: [{ id: 'a' }, { id: 7 }, { id: 'c' }] })).toEqual({
-      items: [{ id: 'a' }, { id: 'c' }],
+    expect(schema.parse({ items: [{ id: 'a' }, { id: 7 }, { id: 'b' }, { id: 8 }] })).toEqual({
+      items: [{ id: 'a' }, { id: 'b' }],
     });
     expect(warn).toHaveBeenCalledOnce();
-    expect(String(warn.mock.calls[0]?.[0])).toContain('1');
+    expect(String(warn.mock.calls[0]?.[0])).toContain('at index 1, 3');
     warn.mockRestore();
   });
 
