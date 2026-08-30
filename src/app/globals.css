@@ -148,27 +148,17 @@ section[id] {
 [data-reveal] {
   opacity: 1;
   transform: none;
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
 }
 
-/* Keyed on an attribute this app sets itself, not on @media (scripting:
-   enabled). That media query means the browser permits scripts, which is not
-   the same as ours having run: when the bundle failed to load, it kept six of
-   the eight blocks at opacity 0 with nothing left to reveal them. The inline
-   script in layout.tsx arms this and removes it again if hydration never
-   happens, so the page fails open. */
-html[data-reveal-armed] {
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(10px);
-    transition:
-      opacity var(--duration-slow) var(--ease-out),
-      transform var(--duration-slow) var(--ease-out);
-  }
-
-  [data-reveal='shown'] {
-    opacity: 1;
-    transform: none;
-  }
+/* Only a block that has marked itself pending is hidden, and a block can only
+   do that from inside React after it has measured itself off screen. Nothing
+   here hides content that JavaScript is not already guaranteed to bring back. */
+[data-reveal='pending'] {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -184,14 +174,8 @@ html[data-reveal-armed] {
     transition-duration: 1ms !important;
   }
 
-  /* Matched to the arming selector's specificity on purpose. The hidden state
-     used to sit in a plain `[data-reveal]` rule and this override won on source
-     order alone; once arming moved under `html[data-reveal-armed]` that stopped
-     being true, and reduced motion silently lost. */
-  html[data-reveal-armed] [data-reveal],
-  html[data-reveal-armed] [data-reveal='shown'],
   [data-reveal],
-  [data-reveal='shown'] {
+  [data-reveal='pending'] {
     opacity: 1;
     transform: none;
   }

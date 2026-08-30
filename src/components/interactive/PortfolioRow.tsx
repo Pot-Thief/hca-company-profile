@@ -18,27 +18,34 @@ import type { Portfolio, UiLabels } from '@/lib/content/types';
 // in the same mono register as every other label on the page.
 function RowContent({ item, action }: { item: Portfolio['items'][number]; action?: string }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-[var(--space-gutter)] gap-y-3 px-[var(--space-block)] py-[var(--space-block)]">
-      <div className="relative h-[calc(200px/3)] w-[200px] shrink-0">
+    <div className="grid grid-cols-2 items-center gap-y-3 px-[var(--space-block)] py-[var(--space-block)] md:flex md:flex-row md:items-center md:gap-x-[var(--space-gutter)]">
+      {/* Logo: Col 1 on mobile */}
+      <div className="relative h-[calc(200px/3)] w-[160px] sm:w-[200px] shrink-0">
         <Image
           src={item.logo.src}
           alt={item.logo.alt}
           fill
           sizes="200px"
-          className="object-contain"
+          className="object-contain object-left"
         />
       </div>
-      <h3 className="font-body font-semibold text-h3 leading-heading text-on-surface">
-        {item.title}
-      </h3>
-      <p className="font-mono text-label uppercase tracking-label text-on-surface-muted">
-        {item.category}
-      </p>
+
+      {/* Action: Col 2 (right-aligned) on mobile; on desktop pushed to far right */}
       {action ? (
-        <span className="ml-auto font-mono text-label uppercase tracking-label text-on-surface-muted">
+        <span className="col-start-2 justify-self-end font-mono text-label uppercase tracking-label text-on-surface-muted md:order-last md:ml-auto md:justify-self-auto">
           {action}
         </span>
       ) : null}
+
+      {/* Title & Category: Full row 2 on mobile; middle item on desktop */}
+      <div className="col-span-2 flex flex-col gap-y-1 md:col-span-1 md:flex-row md:items-center md:gap-x-[var(--space-gutter)]">
+        <h3 className="font-body font-semibold text-h3 leading-heading text-on-surface">
+          {item.title}
+        </h3>
+        <p className="font-mono text-label uppercase tracking-label text-on-surface-muted">
+          {item.category}
+        </p>
+      </div>
     </div>
   );
 }

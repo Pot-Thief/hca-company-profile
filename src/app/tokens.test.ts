@@ -71,9 +71,15 @@ describe('design tokens', () => {
   // back, never behind `@media (scripting: enabled)`. That media query says the
   // browser permits scripts, not that ours ran, and under it a failed bundle
   // left six of the page's eight blocks invisible for good.
-  test('the reveal hidden state is armed by the app, not by a media query', () => {
-    expect(css).toContain('html[data-reveal-armed]');
+  // Content must never be hidden by a rule that JavaScript is not guaranteed to
+  // undo. `@media (scripting: enabled)` says the browser permits scripts, not
+  // that ours ran, and a document-level attribute stamped on before hydration
+  // caused a root mismatch that killed every client component. Only a block that
+  // has marked itself pending, from inside React, may be hidden.
+  test('only a self-marked pending block is hidden', () => {
+    expect(css).toContain("[data-reveal='pending']");
     expect(css).not.toContain('scripting: enabled');
+    expect(css).not.toContain('data-reveal-armed');
   });
 
   test('defines a focus-visible outline', () => {
