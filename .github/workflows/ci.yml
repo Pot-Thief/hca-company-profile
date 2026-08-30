@@ -15,8 +15,12 @@ jobs:
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      # Formatting was gated only by whoever remembered to run it locally.
+      - run: pnpm prettier --check .
       - run: pnpm typecheck
-      - run: pnpm test
+      # test:coverage, not test: the coverage thresholds in vitest.config.mts
+      # are what make 100% a condition rather than a figure in a table.
+      - run: pnpm test:coverage
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e

@@ -13,6 +13,11 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/lib/**', 'src/components/**'],
       reporter: ['text', 'json-summary'],
+      // The project has been at 100% since the first task, but until now that
+      // was a number someone read off a table rather than a condition anything
+      // checked. Printing a figure is not enforcing it: coverage could have
+      // fallen at any point and every gate would still have exited 0.
+      thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
     },
   },
 });
