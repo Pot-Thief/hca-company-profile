@@ -7,3 +7,4 @@ test-results/
 playwright-report/
 # Deliberately truncated to be invalid JSON; part of the resilience fixtures.
 e2e/fixtures/broken/site.json
+.lighthouseci/

@@ -15,7 +15,7 @@
     "test:e2e": "playwright test",
     "test:e2e:live": "playwright test --config playwright.resilience.config.ts",
     "test:e2e:broken": "FIXTURE_SET=broken playwright test --config playwright.resilience.config.ts",
-    "test:lighthouse": "pnpm build && lhci autorun"
+    "test:lighthouse": "pnpm build && CHROME_PATH=$(node -e \"console.log(require('@playwright/test').chromium.executablePath())\") lhci autorun"
   },
   "dependencies": {
     "clsx": "^2.1.1",
