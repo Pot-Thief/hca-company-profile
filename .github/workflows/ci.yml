@@ -27,6 +27,10 @@ jobs:
       # in this workflow exercises them.
       - run: pnpm test:e2e:live
       - run: pnpm test:e2e:broken
+      # Median of three runs, and the budget it must clear is 0.90 against a
+      # measured 0.97, so there is room for a loaded runner without the score
+      # becoming noise. It uses the chromium Playwright already installed above.
+      - run: pnpm test:lighthouse
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
