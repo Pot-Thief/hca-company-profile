@@ -1,214 +1,383 @@
 # Panduan Mengedit Konten Website
 
-Panduan ini untuk siapa saja yang perlu mengubah teks, gambar, atau daftar isi di
-website ini, tanpa perlu tahu cara kerja kodenya.
+Panduan ini untuk siapa saja yang perlu mengubah teks, gambar, atau daftar isi
+di website ini, tanpa perlu tahu cara kerja kodenya.
+
+Semua contoh di panduan ini bisa disalin apa adanya. Tidak ada satu pun contoh
+yang mengandung catatan tambahan di dalamnya, karena catatan seperti itu akan
+membuat file JSON rusak.
+
+---
 
 ## 1. Aturan dasar
 
-Semua teks dan tautan gambar yang tampil di website disimpan dalam delapan file
+Semua teks dan alamat gambar yang tampil di website disimpan dalam delapan file
 di folder `public/data/`:
 
-- `site.json` — nama perusahaan, menu navigasi, tombol, dan label tombol kecil
-- `hero.json` — judul besar paling atas halaman
-- `about.json` — bagian "About"
-- `purpose.json` — bagian "Purpose"
-- `services.json` — bagian "Services"
-- `portfolio.json` — bagian "Portfolio"
-- `team.json` — bagian "Team"
-- `contact.json` — bagian "Contact"
+| File             | Mengatur bagian                                     |
+| ---------------- | --------------------------------------------------- |
+| `site.json`      | Judul di tab browser, nama perusahaan, menu, tombol |
+| `hero.json`      | Layar pembuka paling atas                           |
+| `about.json`     | Bagian "About"                                      |
+| `purpose.json`   | Bagian "Purpose"                                    |
+| `services.json`  | Bagian "Services"                                   |
+| `portfolio.json` | Bagian "Portfolio"                                  |
+| `team.json`      | Bagian "Team"                                       |
+| `contact.json`   | Bagian "Contact"                                    |
 
-Setiap file berisi baris berbentuk `"kunci": "nilai"`. **Kunci** (tulisan di
-sebelah kiri tanda titik dua, contoh `"headline"`) adalah nama teknis yang
-dibaca oleh website — jangan pernah diubah. **Nilai** (tulisan di sebelah kanan,
-di dalam tanda kutip) adalah teks yang tampil di layar — ini yang boleh dan
-memang untuk diubah.
+Setiap baris di dalamnya berbentuk `"kunci": "nilai"`.
 
-Contoh:
+**Kunci** adalah tulisan di sebelah kiri tanda titik dua, contohnya
+`"headline"`. Itu nama teknis yang dibaca website. **Jangan pernah diubah.**
+
+**Nilai** adalah tulisan di sebelah kanan, di dalam tanda kutip. Itu yang tampil
+di layar. **Inilah yang boleh dan memang untuk diubah.**
 
 ```json
 "headline": "Lorem ipsum dolor sit amet consectetur"
 ```
 
-`headline` adalah kunci (jangan diubah). `"Lorem ipsum dolor sit amet
-consectetur"` adalah nilai (ganti dengan judul Anda sendiri).
+Di contoh itu `headline` adalah kunci, dan `"Lorem ipsum dolor sit amet
+consectetur"` adalah nilai yang Anda ganti.
+
+### Satu kunci yang ada di hampir semua file: `label`
+
+Enam file bagian (`about`, `purpose`, `services`, `portfolio`, `team`,
+`contact`) punya kunci `"label"` di paling atas. Itu tulisan kecil bergaya
+mesin ketik yang tampil di sisi kiri tiap bagian, misalnya `ABOUT`. Huruf
+besar-kecilnya diatur otomatis oleh website, jadi Anda bisa menulisnya biasa
+saja. Isi yang pendek, satu atau dua kata.
 
 ---
 
-## 2. Mengubah teks
+## 2. Peta lengkap: apa saja yang bisa diubah
 
-Satu contoh sebelum/sesudah untuk tiap file.
+Tabel ini memuat **setiap** kunci yang isinya tampil ke pengunjung. Kalau ada
+sesuatu di halaman yang ingin Anda ubah, tempatnya pasti ada di sini.
 
-### `site.json` — nama perusahaan dan menu
+### `site.json`
 
-Kunci `logo.wordmark`:
+| Kunci                | Mengatur apa                                                     |
+| -------------------- | ---------------------------------------------------------------- |
+| `meta.title`         | Judul di tab browser dan di hasil pencarian Google               |
+| `meta.description`   | Kalimat ringkas di bawah judul pada hasil pencarian Google       |
+| `meta.ogImage.src`   | Gambar yang muncul saat link dibagikan di WhatsApp atau LinkedIn |
+| `meta.ogImage.alt`   | Penjelasan singkat gambar tersebut                               |
+| `logo.wordmark`      | Nama perusahaan di kiri atas dan di footer                       |
+| `nav[].label`        | Tulisan tiap menu di kanan atas                                  |
+| `nav[].href`         | Tujuan menu. **Jangan diubah**, lihat Bagian 5                   |
+| `cta.label`          | Tulisan pada tombol utama di kanan atas                          |
+| `cta.href`           | Tujuan tombol itu. **Jangan diubah**, lihat Bagian 5             |
+| `footer.nav[].label` | Tulisan tiap tautan di footer                                    |
+| `footer.nav[].href`  | Tujuan tautan footer. **Jangan diubah**, lihat Bagian 5          |
+| `footer.copyright`   | Baris hak cipta paling bawah                                     |
+| `ui.*`               | Label tombol-tombol kecil, lihat tabel di bawah                  |
 
-```json
-// Sebelum
-"logo": { "wordmark": "PLACEHOLDER" }
-
-// Sesudah
-"logo": { "wordmark": "PT Nama Perusahaan" }
-```
-
-Kunci `nav[0].label` (nama menu pertama):
-
-```json
-// Sebelum
-{ "label": "About", "href": "#about" }
-
-// Sesudah
-{ "label": "Tentang Kami", "href": "#about" }
-```
-
-Perhatikan: nilai `"href"` (`#about`) **tidak ikut diubah** — lihat Bagian 7.
-
-`site.json` juga punya kunci `ui` yang isinya label tombol-tombol kecil di
-seluruh halaman:
+Kunci `ui` mengatur tulisan pada tombol kecil di seluruh halaman:
 
 | Kunci             | Tampil di mana                                       |
 | ----------------- | ---------------------------------------------------- |
 | `menu`            | Tombol buka menu di layar sempit (HP)                |
 | `closeMenu`       | Tombol tutup menu di layar sempit                    |
-| `copy`            | Tombol salin di sebelah email/telepon/WhatsApp       |
+| `copy`            | Tombol salin di sebelah email, telepon, dan WhatsApp |
 | `copied`          | Teks yang muncul sesaat setelah tombol salin ditekan |
-| `expandBio`       | Tombol "buka" riwayat anggota tim                    |
-| `collapseBio`     | Tombol "tutup" riwayat anggota tim                   |
-| `expandProject`   | Tombol "buka" detail proyek portfolio                |
-| `collapseProject` | Tombol "tutup" detail proyek portfolio               |
+| `expandBio`       | Tombol buka riwayat anggota tim                      |
+| `collapseBio`     | Tombol tutup riwayat anggota tim                     |
+| `expandProject`   | Tombol buka detail proyek di Portfolio               |
+| `collapseProject` | Tombol tutup detail proyek di Portfolio              |
 
-### `hero.json` — judul besar
+### `hero.json`
 
-Kunci `headline`:
-
-```json
-// Sebelum
-"headline": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
-
-// Sesudah
-"headline": "Solusi Teknologi untuk Bisnis Anda"
-```
+| Kunci                 | Mengatur apa                                                     |
+| --------------------- | ---------------------------------------------------------------- |
+| `eyebrow`             | Tulisan kecil di atas judul besar                                |
+| `headline`            | Judul besar pembuka                                              |
+| `subheadline`         | Kalimat penjelas di bawah judul                                  |
+| `backgroundImage.src` | Alamat gambar latar, lihat Bagian 4                              |
+| `backgroundImage.alt` | Penjelasan singkat gambar latar                                  |
+| `actions[].label`     | Tulisan pada tombol                                              |
+| `actions[].href`      | Tujuan tombol. **Jangan diubah**, lihat Bagian 5                 |
+| `actions[].variant`   | Tampilan tombol: `primary` (isi penuh) atau `ghost` (garis tepi) |
 
 ### `about.json`
 
-Kunci `headline` dan salah satu isi `paragraphs`:
-
-```json
-// Sebelum
-"headline": "Lorem ipsum dolor sit amet consectetur",
-"paragraphs": ["Lorem ipsum dolor sit amet, consectetur adipiscing elit..."]
-
-// Sesudah
-"headline": "Siapa Kami",
-"paragraphs": ["Kami adalah perusahaan yang berdiri sejak 2015..."]
-```
-
-Bagian ini idealnya diisi 2 sampai 3 paragraf, dan 3 kartu `stats` (angka +
-label di bawahnya, contoh `"120+"` dan `"Klien Puas"`).
+| Kunci           | Mengatur apa                                             |
+| --------------- | -------------------------------------------------------- |
+| `label`         | Label kecil di sisi kiri bagian                          |
+| `headline`      | Judul bagian                                             |
+| `paragraphs[]`  | Daftar paragraf. Idealnya 2 sampai 3                     |
+| `stats[].value` | Angka besar, contoh `120+` atau `98%`                    |
+| `stats[].label` | Keterangan kecil di bawah angka. Dirancang untuk 3 angka |
 
 ### `purpose.json`
 
-Kunci `items[0].title` dan `items[0].body`:
-
-```json
-// Sebelum
-{ "title": "Lorem Ipsum Placeholder One", "body": "Lorem ipsum dolor sit amet..." }
-
-// Sesudah
-{ "title": "Fokus pada Kualitas", "body": "Setiap proyek melewati proses..." }
-```
-
-Bagian ini dirancang untuk persis 4 item.
+| Kunci           | Mengatur apa                            |
+| --------------- | --------------------------------------- |
+| `label`         | Label kecil di sisi kiri bagian         |
+| `headline`      | Judul bagian                            |
+| `items[].title` | Judul tiap poin. Dirancang untuk 4 poin |
+| `items[].body`  | Penjelasan tiap poin                    |
 
 ### `services.json`
 
-Kunci `items[0].name` dan `items[0].description`:
-
-```json
-// Sebelum
-{ "icon": "code", "name": "Service Name Placeholder 01", "description": "Lorem ipsum..." }
-
-// Sesudah
-{ "icon": "code", "name": "Pengembangan Aplikasi", "description": "Kami membangun aplikasi..." }
-```
-
-Kunci `icon` juga wajib diisi — lihat daftar nama ikon yang boleh dipakai di
-Bagian 4.
+| Kunci                 | Mengatur apa                             |
+| --------------------- | ---------------------------------------- |
+| `label`               | Label kecil di sisi kiri bagian          |
+| `headline`            | Judul bagian                             |
+| `items[].icon`        | Nama ikon. Harus dari daftar di Bagian 6 |
+| `items[].name`        | Nama layanan. Dirancang untuk 12 layanan |
+| `items[].description` | Penjelasan singkat layanan               |
 
 ### `portfolio.json`
 
-Kunci `items[0].title` dan `items[0].category`:
-
-```json
-// Sebelum
-{ "title": "Client Placeholder 01", "category": "Lorem ipsum" }
-
-// Sesudah
-{ "title": "Toko Online Maju Jaya", "category": "E-commerce" }
-```
+| Kunci                 | Mengatur apa                                        |
+| --------------------- | --------------------------------------------------- |
+| `label`               | Label kecil di sisi kiri bagian                     |
+| `headline`            | Judul bagian                                        |
+| `items[].logo.src`    | Alamat logo klien, lihat Bagian 4                   |
+| `items[].logo.alt`    | Penjelasan singkat logo                             |
+| `items[].title`       | Nama klien atau proyek. Dirancang untuk 6 baris     |
+| `items[].category`    | Kategori singkat di sebelah nama                    |
+| `items[].description` | Detail yang muncul saat baris dibuka. Boleh dihapus |
 
 ### `team.json`
 
-Kunci `members[0].name`, `members[0].role`, dan `members[0].bio`:
-
-```json
-// Sebelum
-{ "name": "Team Member Placeholder 01", "role": "Role Placeholder", "bio": "Lorem ipsum..." }
-
-// Sesudah
-{ "name": "Budi Santoso", "role": "Direktur Teknologi", "bio": "Budi memimpin tim..." }
-```
+| Kunci                 | Mengatur apa                                     |
+| --------------------- | ------------------------------------------------ |
+| `label`               | Label kecil di sisi kiri bagian                  |
+| `headline`            | Judul bagian                                     |
+| `members[].photo.src` | Alamat foto, lihat Bagian 4                      |
+| `members[].photo.alt` | Penjelasan singkat foto                          |
+| `members[].name`      | Nama orang. Dirancang untuk 2 orang              |
+| `members[].role`      | Jabatan                                          |
+| `members[].bio`       | Riwayat singkat, muncul saat tombol buka ditekan |
 
 ### `contact.json`
 
-Kunci `channels[].value`, contoh untuk email:
-
-```json
-// Sebelum
-{ "type": "email", "label": "Email", "value": "hello@placeholder.test" }
-
-// Sesudah
-{ "type": "email", "label": "Email", "value": "halo@perusahaananda.com" }
-```
-
-Cara menambah dan menghapus baris kontak dijelaskan di Bagian 6.
+| Kunci              | Mengatur apa                                   |
+| ------------------ | ---------------------------------------------- |
+| `label`            | Label kecil di sisi kiri bagian                |
+| `headline`         | Judul bagian                                   |
+| `channels[].type`  | Jenis kontak. Harus dari enam kata di Bagian 7 |
+| `channels[].label` | Tulisan di sisi kiri baris, contoh `Email`     |
+| `channels[].value` | Isi yang tampil dan yang dijadikan tautan      |
+| `channels[].href`  | Hanya untuk `address`, lihat Bagian 7          |
 
 ---
 
-## 3. Mengubah gambar
+## 3. Mengubah teks
 
-Semua file gambar disimpan di folder `public/assets/images/`. Setiap slot
-punya **nama file tetap** dan **ukuran piksel serta rasio** yang harus diikuti
-supaya tampilannya tidak gepeng atau terpotong aneh.
+Cara mengubahnya sama untuk semua file: cari kunci yang Anda tuju di peta
+Bagian 2, lalu ganti tulisan di dalam tanda kutip sebelah kanan.
 
-| Slot                    | Nama file                                    | Ukuran piksel | Rasio |
-| ----------------------- | -------------------------------------------- | ------------- | ----- |
-| Gambar latar Hero       | `hero-bg.jpg`                                | 1920 × 1080   | 16:9  |
-| Logo klien di Portfolio | `portfolio-01.png` sampai `portfolio-06.png` | 600 × 200     | 3:1   |
-| Foto anggota Tim        | `team-01.jpg`, `team-02.jpg`                 | 800 × 800     | 1:1   |
+Contoh pada `site.json`.
 
-Cara mengganti: siapkan gambar baru dengan ukuran piksel yang sama persis,
-beri nama file **yang sama persis** dengan nama di tabel (termasuk huruf besar
-kecil dan angka di depannya), lalu ganti file lama dengan file baru itu di
-folder yang sama. Nama file tidak pernah disebut di dalam JSON kecuali sebagai
-nilai `"src"`, jadi kalau nama filenya diganti, kunci `"src"` yang menunjuk ke
-file itu juga harus diubah supaya tetap cocok, contoh:
+Sebelum:
 
 ```json
-"backgroundImage": { "src": "/assets/images/hero-bg.jpg", "alt": "..." }
+"logo": { "wordmark": "PLACEHOLDER" }
 ```
 
-Setiap gambar juga punya kunci `"alt"` di sebelahnya, isinya kalimat pendek
-yang menjelaskan isi gambar itu (dibaca oleh pengguna tunanetra lewat pembaca
-layar, dan oleh mesin pencari). Selalu ubah `"alt"` setiap kali gambar diganti
-supaya kalimatnya tetap menggambarkan gambar yang baru.
+Sesudah:
+
+```json
+"logo": { "wordmark": "PT Nama Perusahaan" }
+```
+
+Contoh pada `hero.json`, mengganti tiga baris sekaligus:
+
+Sebelum:
+
+```json
+"eyebrow": "Lorem ipsum dolor",
+"headline": "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+"subheadline": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+```
+
+Sesudah:
+
+```json
+"eyebrow": "Konsultan Teknologi",
+"headline": "Solusi Teknologi untuk Bisnis Anda",
+"subheadline": "Kami membantu perusahaan merancang dan membangun sistem yang andal."
+```
+
+Contoh pada `services.json`, satu layanan:
+
+Sebelum:
+
+```json
+{
+  "icon": "code",
+  "name": "Service Name Placeholder 01",
+  "description": "Lorem ipsum dolor sit amet."
+}
+```
+
+Sesudah:
+
+```json
+{
+  "icon": "code",
+  "name": "Pengembangan Aplikasi",
+  "description": "Kami membangun aplikasi web dan mobile sesuai kebutuhan."
+}
+```
+
+Contoh pada `team.json`, satu orang:
+
+Sebelum:
+
+```json
+{
+  "name": "Team Member Placeholder 01",
+  "role": "Role Placeholder",
+  "bio": "Lorem ipsum dolor sit amet."
+}
+```
+
+Sesudah:
+
+```json
+{
+  "name": "Budi Santoso",
+  "role": "Direktur Teknologi",
+  "bio": "Budi memimpin tim rekayasa sejak 2018."
+}
+```
+
+### Tanda kutip di dalam teks
+
+Kalau teks Anda sendiri mengandung tanda kutip, tambahkan garis miring
+terbalik di depannya, supaya website tidak salah membaca di mana teksnya
+berakhir:
+
+```json
+"headline": "Kami menyebutnya \"satu atap\""
+```
 
 ---
 
-## 4. Daftar nama ikon (untuk `services.json`)
+## 4. Mengubah gambar
+
+Ada empat tempat gambar di website ini. Semua file gambar disimpan di folder
+`public/assets/images/`.
+
+| Tempat gambar         | Nama file sekarang                           | Ukuran      | Cara gambar menyesuaikan kotaknya         |
+| --------------------- | -------------------------------------------- | ----------- | ----------------------------------------- |
+| Latar belakang Hero   | `hero-bg.jpg`                                | 1920 × 1080 | Dipotong agar memenuhi kotak              |
+| Logo klien Portfolio  | `portfolio-01.png` sampai `portfolio-06.png` | 600 × 200   | Dikecilkan utuh, tidak pernah dipotong    |
+| Foto anggota Tim      | `team-01.jpg`, `team-02.jpg`                 | 800 × 800   | Dipotong agar memenuhi kotak persegi      |
+| Gambar saat dibagikan | `hero-bg.jpg` (dipakai ulang)                | 1920 × 1080 | Ditentukan oleh WhatsApp/LinkedIn sendiri |
+
+### Cara paling mudah: pakai nama file yang sama
+
+Siapkan gambar baru, beri **nama file yang sama persis** dengan yang lama,
+lalu timpa file lama di folder `public/assets/images/`. Selesai — tidak ada
+yang perlu diubah di file JSON mana pun.
+
+### Kalau Anda ingin memakai nama file baru
+
+Simpan gambar baru ke folder yang sama, lalu ubah nilai `src` yang menunjuk ke
+gambar itu. Tempat `src` untuk tiap gambar:
+
+| Tempat gambar         | File JSON        | Kunci                  |
+| --------------------- | ---------------- | ---------------------- |
+| Latar belakang Hero   | `hero.json`      | `backgroundImage.src`  |
+| Logo klien ke-1       | `portfolio.json` | `items[0].logo.src`    |
+| Foto anggota tim ke-1 | `team.json`      | `members[0].photo.src` |
+| Gambar saat dibagikan | `site.json`      | `meta.ogImage.src`     |
+
+Nilai `src` selalu ditulis dengan pola yang sama: diawali garis miring, lalu
+`assets/images/`, lalu nama filenya.
+
+```json
+"backgroundImage": { "src": "/assets/images/hero-bg.jpg", "alt": "Kantor kami dari luar" }
+```
+
+Yang sering salah: menulis alamat lengkap dari komputer Anda seperti
+`C:\Users\...`, atau lupa garis miring paling depan. Keduanya membuat gambar
+tidak muncul.
+
+### Format dan ukuran file
+
+Gunakan `.jpg` untuk foto dan `.png` untuk logo yang punya latar transparan.
+Website akan mengubahnya sendiri ke format modern yang lebih ringan, jadi Anda
+tidak perlu memikirkan itu.
+
+Ukuran piksel di tabel di atas adalah ukuran yang dirancang. Ukuran lain tetap
+tampil, tapi perhatikan kolom terakhir tabel: gambar Hero dan foto tim akan
+**dipotong** kalau perbandingan sisinya berbeda, jadi jangan letakkan wajah
+atau tulisan penting terlalu dekat ke tepi. Logo Portfolio tidak pernah
+dipotong, hanya dikecilkan sampai muat.
+
+### Kunci `alt` wajib ikut diubah
+
+Setiap gambar punya kunci `alt` di sebelah `src`. Isinya kalimat pendek yang
+menjelaskan isi gambar. Kalimat itu dibaca keras oleh pembaca layar untuk
+pengunjung tunanetra, dan dibaca oleh mesin pencari. Setiap kali gambar
+diganti, ganti juga `alt`-nya supaya tetap menggambarkan gambar yang baru.
+
+Tulis apa yang terlihat, bukan kata umum:
+
+```json
+"alt": "Tim sedang berdiskusi di ruang rapat"
+```
+
+bukan
+
+```json
+"alt": "gambar"
+```
+
+---
+
+## 5. Tautan
+
+Ada dua jenis tautan di website ini, dan aturannya berbeda.
+
+### Tautan ke bagian halaman ini sendiri — jangan diubah
+
+Nilai yang diawali tanda pagar (`#about`, `#purpose`, `#services`,
+`#portfolio`, `#team`, `#contact`) adalah alamat bagian di halaman ini
+sendiri. Kalau diubah, tombol atau menu itu tidak akan membawa pengunjung ke
+mana-mana.
+
+Kunci yang berisi tautan jenis ini:
+
+- `site.json` → `nav[].href`
+- `site.json` → `cta.href`
+- `site.json` → `footer.nav[].href`
+- `hero.json` → `actions[].href`
+
+Tulisan yang tampil (`label`) di sebelahnya **boleh** diganti sesuka Anda.
+Yang tidak boleh diganti hanya `href`-nya.
+
+Sebelum:
+
+```json
+{ "label": "About", "href": "#about" }
+```
+
+Sesudah:
+
+```json
+{ "label": "Tentang Kami", "href": "#about" }
+```
+
+### Tautan ke luar website — boleh diisi bebas
+
+Tautan ke Instagram, LinkedIn, atau peta ditulis lengkap beserta `https://`
+di depannya, dan letaknya di `contact.json`. Cara menulisnya dijelaskan di
+Bagian 7.
+
+---
+
+## 6. Daftar nama ikon untuk `services.json`
 
 Setiap item di `services.json` punya kunci `"icon"`. Nilainya harus **persis
-sama** dengan salah satu dari 20 nama berikut (huruf kecil semua, tanda hubung
-`-` untuk nama dua kata):
+sama** dengan salah satu dari 20 nama berikut. Semuanya huruf kecil, dan nama
+dua kata memakai tanda hubung.
 
 ```
 boxes, cloud, code, cpu, database, globe, headphones, layers, line-chart,
@@ -216,29 +385,27 @@ lock, monitor, network, search, server, settings, shield, smartphone,
 terminal, workflow, wrench
 ```
 
-Nama di luar daftar ini akan tampil sebagai lingkaran putus-putus, bukan
-ikon yang dimaksud — lihat Bagian 9.
+Nama di luar daftar ini akan tampil sebagai lingkaran putus-putus. Lihat
+Bagian 10.
 
 ---
 
-## 5. Menambah dan menghapus item
+## 7. Menambah dan menghapus item
 
 `services.json`, `portfolio.json`, dan `team.json` masing-masing punya satu
-daftar (`items` untuk dua yang pertama, `members` untuk tim). Menambah atau
-menghapus baris di sana berarti menambah atau menghapus satu blok `{ ... }` di
-dalam daftar itu.
+daftar: `items` untuk dua yang pertama, `members` untuk tim. `contact.json`
+punya daftar `channels`. Menambah atau menghapus baris berarti menambah atau
+menghapus satu blok `{ ... }` di dalam daftar itu.
 
-**Menambah**: salin satu blok `{ ... }` yang sudah ada (termasuk tanda kurung
-kurawal pembuka dan penutupnya), tempel di bawah blok terakhir, beri tanda
-koma `,` di akhir blok sebelumnya, lalu ubah isinya.
+**Menambah**: salin satu blok `{ ... }` yang sudah ada beserta kurung kurawal
+pembuka dan penutupnya, tempel di bawah blok terakhir, beri tanda koma `,` di
+akhir blok sebelumnya, lalu ubah isinya.
 
 **Menghapus**: hapus satu blok `{ ... }` secara utuh beserta satu tanda koma
-di dekatnya (koma yang memisahkannya dari blok tetangga), supaya tidak
-tersisa koma ganda atau koma yang menggantung di akhir daftar.
+di dekatnya, supaya tidak tersisa koma ganda atau koma menggantung di akhir
+daftar.
 
-Layout halaman ini dirancang untuk jumlah item berikut. Menambah atau
-mengurangi sedikit tidak merusak website, tapi jumlah yang jauh berbeda akan
-membuat tampilan grid terasa janggal (baris tidak penuh atau terlalu panjang):
+Jumlah yang dirancang untuk tampilan halaman ini:
 
 | File             | Kunci daftar | Jumlah yang dirancang |
 | ---------------- | ------------ | --------------------- |
@@ -246,112 +413,121 @@ membuat tampilan grid terasa janggal (baris tidak penuh atau terlalu panjang):
 | `portfolio.json` | `items`      | 6 item                |
 | `team.json`      | `members`    | 2 orang               |
 
-Khusus `portfolio.json`: item yang kunci `"description"`-nya diisi akan
-mendapat tombol buka/tutup detail. Item yang kunci `"description"`-nya
-dihapus seluruhnya akan tampil sebagai baris biasa tanpa tombol.
+Menambah atau mengurangi sedikit tidak merusak website, tapi jumlah yang jauh
+berbeda akan membuat susunannya terasa janggal, misalnya baris terakhir yang
+hanya terisi satu kolom.
 
----
+Khusus `portfolio.json`: item yang punya isi `"description"` akan mendapat
+tombol buka-tutup detail. Item yang kunci `"description"`-nya dihapus akan
+tampil sebagai baris biasa tanpa tombol.
 
-## 6. Menambah dan menghapus channel kontak
+### Channel kontak
 
-`contact.json` punya daftar `channels`. Setiap channel punya kunci `"type"`
-yang nilainya harus persis salah satu dari enam kata berikut, dan setiap kata
-menentukan apa yang dihasilkan di layar:
+Setiap channel di `contact.json` punya kunci `"type"` yang nilainya harus
+persis salah satu dari enam kata berikut. Kata itu menentukan apa yang terjadi
+saat pengunjung menekannya:
 
-| `type`     | Yang dihasilkan                                                                     |
-| ---------- | ----------------------------------------------------------------------------------- |
-| `email`    | Tautan `mailto:` yang membuka aplikasi email, plus tombol salin                     |
-| `phone`    | Tautan telepon (`tel:`) yang bisa langsung ditekan di HP, plus tombol salin         |
-| `whatsapp` | Tautan yang membuka WhatsApp memakai angka di `"value"`, plus tombol salin          |
-| `social`   | Tautan biasa memakai `"value"` apa adanya — isi `"value"` dengan alamat web lengkap |
-| `address`  | Teks biasa, bukan tautan, kecuali diberi kunci `"href"` tambahan (lihat di bawah)   |
-| `hours`    | Selalu teks biasa, tidak pernah menjadi tautan                                      |
+| `type`     | Yang dihasilkan                                                            |
+| ---------- | -------------------------------------------------------------------------- |
+| `email`    | Tautan yang membuka aplikasi email, plus tombol salin                      |
+| `phone`    | Tautan yang bisa langsung ditelepon dari HP, plus tombol salin             |
+| `whatsapp` | Tautan yang membuka WhatsApp memakai angka di `"value"`, plus tombol salin |
+| `social`   | Tautan biasa memakai `"value"` apa adanya — isi dengan alamat web lengkap  |
+| `address`  | Teks biasa, bukan tautan, kecuali diberi kunci `"href"` tambahan           |
+| `hours`    | Selalu teks biasa, tidak pernah menjadi tautan                             |
 
-Contoh menambah channel Instagram:
+Contoh menambah Instagram:
 
 ```json
 { "type": "social", "label": "Instagram", "value": "https://instagram.com/perusahaananda" }
 ```
 
-Untuk membuat alamat kantor bisa diklik dan membuka peta, tambahkan kunci
-`"href"` di channel bertipe `address`:
+Contoh membuat alamat kantor bisa diklik dan membuka peta:
 
 ```json
 {
   "type": "address",
-  "label": "Office",
-  "value": "Jalan Placeholder No. 1",
-  "href": "https://maps.google.com/?q=Jalan+Placeholder+No.+1"
+  "label": "Kantor",
+  "value": "Jalan Merdeka No. 1, Jakarta",
+  "href": "https://maps.google.com/?q=Jalan+Merdeka+No+1+Jakarta"
 }
 ```
 
-Menambah dan menghapus channel mengikuti cara yang sama seperti Bagian 5:
-salin/tempel atau hapus satu blok `{ ... }` beserta koma di dekatnya.
-
 ---
 
-## 7. Yang tidak boleh diubah
+## 8. Yang tidak boleh diubah
 
-- **Nama kunci** (tulisan sebelum tanda titik dua, contoh `headline`,
-  `items`, `type`, `href`). Ini nama teknis yang dibaca oleh website, bukan
-  teks yang tampil di layar. Mengubah, menghapus, atau menerjemahkannya akan
-  membuat bagian itu berhenti tampil.
+- **Nama kunci**, yaitu tulisan sebelum tanda titik dua seperti `headline`,
+  `items`, `type`, `href`. Itu nama teknis, bukan teks yang tampil.
+  Mengubahnya, menghapusnya, atau menerjemahkannya akan membuat bagian itu
+  berhenti tampil.
 - **Struktur daftar**, yaitu tanda kurung siku `[ ]` yang membungkus deretan
-  blok `{ ... }`. Jangan pernah dihapus atau diganti jenis tandanya.
-- **Nilai `href` di dalam `site.json` bagian `nav`**. Nilai-nilainya
-  (`#about`, `#purpose`, `#services`, `#portfolio`, `#team`, `#contact`) harus
-  tetap persis sama karena itulah yang menghubungkan setiap menu ke bagian
-  halaman yang bersangkutan. Hanya nilai `"label"` di sebelahnya yang boleh
-  diganti.
+  blok `{ ... }`. Jangan dihapus dan jangan diganti jenis tandanya.
+- **Nilai `href` yang diawali tanda pagar**, seperti dijelaskan di Bagian 5.
 
 ---
 
-## 8. Memeriksa file sebelum diunggah
+## 9. Memeriksa file sebelum diunggah
 
-Sebelum mengunggah file JSON yang sudah diubah, periksa dulu supaya
-susunannya tidak salah tulis (kurang tanda kutip, kurang koma, atau kurang
-kurung). Caranya:
+Sebelum mengunggah file JSON yang sudah diubah, periksa dulu susunannya.
+Kesalahan paling umum adalah kurang tanda kutip, kurang koma, atau koma
+menggantung di akhir daftar.
 
 1. Buka situs pemeriksa JSON, misalnya <https://jsonlint.com>.
-2. Salin seluruh isi file yang sudah diubah, tempel ke kotak di situs
-   tersebut.
-3. Tekan tombol "Validate JSON" (atau sejenisnya).
-4. Kalau muncul tanda hijau/pesan "Valid JSON", file aman diunggah. Kalau
-   muncul pesan merah, situs itu akan menunjukkan baris tempat kesalahannya —
-   biasanya tanda koma yang lupa dihapus atau lupa ditambah, atau tanda kutip
-   yang tidak berpasangan.
+2. Salin **seluruh** isi file yang sudah diubah, tempel ke kotak di situs itu.
+3. Tekan tombol "Validate JSON".
+4. Kalau muncul pesan "Valid JSON", file aman diunggah. Kalau muncul pesan
+   merah, situs itu akan menunjukkan baris tempat kesalahannya.
+
+Satu hal yang sering membingungkan: JSON tidak mengenal catatan atau komentar.
+Kalau Anda menambahkan catatan untuk diri sendiri di dalam file, dengan tanda
+`//` atau tanda apa pun, seluruh file menjadi tidak terbaca. Simpan catatan di
+tempat lain.
 
 ---
 
-## 9. Troubleshooting
+## 10. Kalau ada yang tidak beres
 
-**Satu bagian di halaman terlihat kosong / kehilangan sebagian besar isinya**
+**Satu bagian halaman terlihat kosong atau kehilangan sebagian besar isinya**
 
-Penyebab yang paling umum: ada kesalahan susunan (tanda kutip atau tanda koma
-yang tidak lengkap) di suatu tempat dalam file JSON itu. Kalau seluruh file
-tidak bisa dibaca, bagian itu hanya menampilkan judul kecil tanpa isi lain.
-Perbaikan: buka file yang bersangkutan (nama filenya sama dengan nama
-bagian, misalnya `services.json` untuk bagian Services), periksa dengan
-pemeriksa JSON di Bagian 8, lalu perbaiki baris yang ditunjuk sebagai
-kesalahan.
+Penyebab paling umum: ada kesalahan susunan di file JSON bagian itu. Kalau
+seluruh file tidak terbaca, bagian itu hanya menampilkan judulnya saja.
+Perbaikan: buka file yang namanya sama dengan nama bagian, misalnya
+`services.json` untuk bagian Services, periksa dengan cara di Bagian 9, lalu
+perbaiki baris yang ditunjuk.
+
+**Hanya satu baris yang hilang, sisanya normal**
+
+Satu baris yang susunannya salah akan dibuang sendiri tanpa mengganggu yang
+lain. Periksa blok `{ ... }` yang hilang itu: biasanya ada kunci yang wajib
+tapi terhapus, atau nilai `"type"` yang salah ketik.
+
+**Gambar tidak muncul, hanya ruang kosong**
+
+Periksa nilai `src`-nya di file yang bersangkutan menurut tabel di Bagian 4.
+Tiga penyebab tersering: nama file tidak sama persis dengan file yang ada di
+folder termasuk huruf besar-kecilnya, garis miring paling depan hilang, atau
+filenya belum benar-benar diunggah ke `public/assets/images/`.
 
 **Sebuah ikon di bagian Services tampil sebagai lingkaran putus-putus**
 
-Penyebab: nilai kunci `"icon"` pada item itu tidak sama persis dengan salah
-satu nama di daftar Bagian 4 (salah ketik, huruf besar, atau lupa tanda
-hubung). Perbaikan: buka `services.json`, cari item yang ikonnya salah, ganti
-nilai `"icon"` dengan salah satu nama yang tertulis persis di Bagian 4.
+Nilai `"icon"` pada item itu tidak sama persis dengan salah satu nama di
+Bagian 6, biasanya karena salah ketik, memakai huruf besar, atau lupa tanda
+hubung. Perbaikan: ganti dengan nama yang tertulis persis di Bagian 6.
 
-**Tautan di bagian Contact tidak mengarah ke mana-mana saat diklik**
+**Tautan di bagian Contact tidak mengarah ke mana-mana**
 
-Ada dua kemungkinan penyebab, keduanya di `contact.json`:
+Dua kemungkinan, keduanya di `contact.json`:
 
-1. Nilai `"type"` pada channel itu salah ketik dan tidak sama persis dengan
-   salah satu dari enam kata di Bagian 6 — channel dengan `"type"` yang tidak
-   dikenal akan dibuang seluruhnya dari halaman. Perbaikan: perbaiki ejaan
-   `"type"` sampai sama persis dengan salah satu dari: `email`, `phone`,
-   `whatsapp`, `address`, `social`, `hours`.
-2. Channel itu bertipe `address` atau `hours` — keduanya memang **sengaja**
-   tidak pernah menjadi tautan, kecuali `address` diberi kunci `"href"`
-   tambahan (lihat Bagian 6). Kalau ini yang terjadi, bukan berarti ada yang
-   rusak.
+1. Nilai `"type"` salah ketik. Channel dengan `"type"` yang tidak dikenal
+   dibuang seluruhnya dari halaman. Perbaiki ejaannya sampai sama persis
+   dengan salah satu dari `email`, `phone`, `whatsapp`, `address`, `social`,
+   `hours`.
+2. Channel itu bertipe `address` atau `hours`. Keduanya memang sengaja tidak
+   pernah menjadi tautan, kecuali `address` diberi kunci `"href"` tambahan
+   seperti contoh di Bagian 7. Kalau ini yang terjadi, tidak ada yang rusak.
+
+**Judul di tab browser masih tulisan lama**
+
+Judul tab diatur oleh `meta.title` di `site.json`, bukan oleh `headline` di
+`hero.json`. Keduanya memang berbeda dan boleh berbeda isinya.
