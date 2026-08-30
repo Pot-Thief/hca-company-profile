@@ -99,10 +99,11 @@ describe('loadSection', () => {
       'fetch',
       vi.fn(async () => ({ ok: false, status: 404 }) as Response),
     );
-    const data = await loadSection('services', servicesSchema);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await loadSection('nonexistent' as any, servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('services.json'));
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('nonexistent.json'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('404'));
   });
 
@@ -185,10 +186,11 @@ describe('loadSection', () => {
           }) as unknown as Response,
       ),
     );
-    const data = await loadSection('services', servicesSchema);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await loadSection('nonexistent' as any, servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('services.json'));
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('nonexistent.json'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('Unexpected token'));
   });
 

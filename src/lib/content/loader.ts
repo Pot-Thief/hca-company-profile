@@ -62,23 +62,32 @@ export async function loadSection<S extends z.ZodType>(
   const fallback = schema.parse({});
 
   let raw: unknown;
+  let shouldFallbackToDisk = false;
+
   try {
     const response = await fetch(url, { next: { revalidate: revalidateSeconds() } });
     if (!response.ok) {
       warnContent(file, `fetch returned ${response.status} for ${url}`);
-      return fallback;
+      shouldFallbackToDisk = true;
+    } else {
+      raw = await response.json();
     }
-    raw = await response.json();
   } catch (error) {
-    if (isNetworkError(error)) {
-      const diskContent = readFromDisk(file);
-      if (diskContent !== undefined) {
-        const result = schema.safeParse(diskContent);
-        if (result.success) return result.data;
-      }
-    }
     const reason = error instanceof Error ? error.message : String(error);
     warnContent(file, `could not read ${url}: ${reason}`);
+    if (isNetworkError(error)) {
+      shouldFallbackToDisk = true;
+    } else {
+      return fallback;
+    }
+  }
+
+  if (shouldFallbackToDisk) {
+    const diskContent = readFromDisk(file);
+    if (diskContent !== undefined) {
+      const result = schema.safeParse(diskContent);
+      if (result.success) return result.data;
+    }
     return fallback;
   }
 
