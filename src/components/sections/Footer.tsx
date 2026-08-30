@@ -1,5 +1,4 @@
 import { channelHref } from '@/lib/content/channel-href';
-import { GridLines } from './GridLines';
 import type { ContactChannel, Site } from '@/lib/content/types';
 
 // Contact lands on ink and the footer continues it rather than breaking back
@@ -19,12 +18,8 @@ export function Footer({
   social: ContactChannel[];
 }) {
   return (
-    <footer data-surface="ink" className="relative border-t border-rule bg-surface text-on-surface">
-      {/* No rail here — the footer is a single justified row — so the grid draws
-          the two container edges only, carrying the page's column structure
-          through the closing block instead of stopping halfway down the ink. */}
-      <GridLines />
-      <div className="relative mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)]">
+    <footer data-surface="ink" className="border-t border-rule bg-surface text-on-surface">
+      <div className="mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)]">
         <div className="flex flex-wrap items-start justify-between gap-[var(--space-block)]">
           <span className="type-display text-h3">{logo.wordmark}</span>
 

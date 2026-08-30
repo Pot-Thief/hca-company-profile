@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { GridLines } from './GridLines';
 
 export function SectionShell({
   id,
@@ -24,11 +23,9 @@ export function SectionShell({
     <section
       id={id}
       data-surface={surface === 'ink' ? 'ink' : undefined}
-      className={`relative bg-surface text-on-surface${edge}`}
+      className={`bg-surface text-on-surface${edge}`}
     >
-      <GridLines />
-
-      <div className="relative mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
+      <div className="mx-auto max-w-page px-[var(--space-gutter)] py-[var(--space-section)] md:grid md:grid-cols-[8rem_1fr] md:gap-[var(--space-gutter)]">
         <div className="mb-[var(--space-block)] md:mb-0">
           {label ? (
             <p className="font-mono text-label uppercase tracking-label text-on-surface-muted md:sticky md:top-[calc(var(--nav-h)+var(--space-block))]">

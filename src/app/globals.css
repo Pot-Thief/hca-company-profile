@@ -98,14 +98,6 @@
      bg-signal / text-signal marks exactly one register, the primary call to
      action, and nothing else reaches for it. */
   --color-signal: var(--color-void);
-  /* The blueprint grid, pre-blended by hand rather than written as rule/15.
-     Tailwind's opacity modifier compiles to color-mix and computes to oklab
-     with non-zero chroma — the exact notation the monochrome guard exists to
-     keep out, arriving through a different door than shadcn did. This is ash
-     at 15% over paper: 0.15x200 + 0.85x250 = 242.5. The research caps the grid
-     at 10-20% and warns that mixing values breaks the illusion of precision,
-     so this one token is the site's only grid opacity. */
-  --color-grid: #f3f3f3;
 }
 
 /* The override lands on the same custom properties the utilities read, with no
@@ -123,8 +115,6 @@
   --color-on-surface-muted: var(--color-ash);
   --color-rule: var(--color-graphite);
   --color-signal: var(--color-paper);
-  /* Graphite at 15% over ink: 0.15x88 + 0.85x26 = 35.3. */
-  --color-grid: #232323;
 }
 
 html {

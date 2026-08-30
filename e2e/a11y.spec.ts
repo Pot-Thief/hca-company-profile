@@ -15,28 +15,45 @@ test('no serious or critical axe violations', async ({ page }) => {
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
 
-  // AxeBuilder scans the whole DOM by default, not the viewport — Reveal
-  // never conditionally renders its content (only opacity/transform change),
-  // so Contact and the Footer are already in the document axe walks even
-  // though they sit below the fold. Proved rather than assumed: every axe
-  // result (pass, violation, incomplete, inapplicable) carries the CSS
-  // selector path of the element it looked at, so collecting those and
-  // checking the ink sections show up is direct evidence axe actually
-  // analysed them, not just the top of the page.
-  const touchedSelectors = [
-    ...results.passes,
-    ...results.violations,
-    ...results.incomplete,
-    ...results.inapplicable,
-  ].flatMap((entry) => entry.nodes.map((node) => JSON.stringify(node.target)));
-  expect(touchedSelectors.some((selector) => selector.includes('#contact'))).toBe(true);
-  expect(touchedSelectors.some((selector) => selector.includes('footer'))).toBe(true);
-
   const blocking = results.violations.filter(
     (violation) => violation.impact === 'serious' || violation.impact === 'critical',
   );
   expect(blocking.map((violation) => `${violation.id}: ${violation.help}`)).toEqual([]);
 });
+
+// The two ink blocks get their own scans. A whole-page run does reach them —
+// Reveal only changes opacity, it never conditionally renders — but "did axe
+// look here" is worth proving rather than assuming, because the contrast risk
+// on this site lives in the dark blocks and a scan that quietly stopped at the
+// fold would still report clean.
+//
+// The first version of this proof searched the whole-page result for selector
+// strings containing "#contact" and "footer". That passed for the wrong reason:
+// axe names each node by the shortest selector that identifies it, so the match
+// depended on which elements happened to be there, and it broke the moment an
+// unrelated decorative element was removed from the footer. Scoping the scan is
+// the direct proof: axe is told to analyse exactly this region, so a non-empty
+// result set can only mean it did.
+for (const region of ['#contact', 'footer']) {
+  test(`the ${region} ink block is analysed and clean`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    const results = await new AxeBuilder({ page })
+      .include(region)
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+
+    expect(
+      results.passes.length + results.violations.length + results.incomplete.length,
+      `axe returned no results for ${region}, so nothing was actually analysed`,
+    ).toBeGreaterThan(0);
+
+    const blocking = results.violations.filter(
+      (violation) => violation.impact === 'serious' || violation.impact === 'critical',
+    );
+    expect(blocking.map((violation) => `${violation.id}: ${violation.help}`)).toEqual([]);
+  });
+}
 
 test('tabbing from the top reaches the footer with focus always visible', async ({ page }) => {
   await page.goto('/');

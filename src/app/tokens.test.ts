@@ -43,7 +43,6 @@ const REQUIRED = [
   '--color-on-surface-muted',
   '--color-rule',
   '--color-signal',
-  '--color-grid',
 ];
 
 // The five semantic colours are the layer every section reads. They once
@@ -57,7 +56,6 @@ const SEMANTIC_COLOURS = [
   '--color-on-surface-muted',
   '--color-rule',
   '--color-signal',
-  '--color-grid',
 ];
 
 describe('design tokens', () => {
@@ -118,41 +116,6 @@ describe('design tokens', () => {
     for (const name of SEMANTIC_COLOURS) {
       expect(block?.[1]).toContain(`${name}:`);
     }
-  });
-
-  // The research caps the blueprint grid at 10-20% and warns that past it the
-  // grid shouts over the content it exists to organise. That cap is a number, so
-  // it can be checked rather than trusted. --color-grid is written pre-blended,
-  // which is what keeps the site to a single grid value, so this recomputes the
-  // band from the palette and asserts the token lands inside it. Derived from
-  // the palette rather than hardcoded, so it follows a palette change.
-  test.each([
-    ['paper', '--color-paper', '--color-ash', 0],
-    ['ink', '--color-ink', '--color-graphite', 1],
-  ])('the %s grid line sits inside the band the research allows', (_name, s, r, index) => {
-    const channel = (hex: string) => parseInt(hex.slice(1, 3), 16);
-    const hexFor = (token: string) => {
-      const found = css.match(new RegExp(`${token}:\\s*(#[0-9a-fA-F]{6})`))?.[1];
-      expect(found, `${token} is not declared as a six-digit hex`).toBeDefined();
-      return channel(found as string);
-    };
-
-    const grids = [...css.matchAll(/--color-grid:\s*(#[0-9a-fA-F]{6})/g)].map((m) =>
-      channel(m[1] as string),
-    );
-    expect(grids, 'expected one --color-grid per surface, paper first').toHaveLength(2);
-
-    const surface = hexFor(s);
-    const rule = hexFor(r);
-    const bounds = [surface + (rule - surface) * 0.1, surface + (rule - surface) * 0.2];
-    const low = Math.min(...bounds);
-    const high = Math.max(...bounds);
-    const grid = grids[index] as number;
-
-    expect(grid, `--color-grid must blend ${s} toward ${r} by 10-20%`).toBeGreaterThanOrEqual(
-      Math.floor(low),
-    );
-    expect(grid).toBeLessThanOrEqual(Math.ceil(high));
   });
 
   test('no alias layer stands between the tokens and their consumers', () => {
