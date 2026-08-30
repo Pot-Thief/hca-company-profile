@@ -3,7 +3,10 @@
     "collect": {
       "startServerCommand": "PORT=3200 pnpm start",
       "url": ["http://localhost:3200/"],
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": {
+        "chromeFlags": "--no-sandbox"
+      }
     },
     "assert": {
       "assertions": {
