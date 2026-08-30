@@ -41,17 +41,6 @@ function readFromDisk(file: string): unknown | undefined {
   return undefined;
 }
 
-function isNetworkError(error: unknown): boolean {
-  if (error instanceof TypeError) return true;
-  if (
-    error instanceof Error &&
-    (error.message.includes('ECONNREFUSED') ||
-      error.message.includes('fetch failed') ||
-      error.message.includes('offline'))
-  )
-    return true;
-  return false;
-}
 
 export async function loadSection<S extends z.ZodType>(
   name: SectionName,
@@ -62,23 +51,28 @@ export async function loadSection<S extends z.ZodType>(
   const fallback = schema.parse({});
 
   let raw: unknown;
+  let fetchFailed = false;
+
   try {
     const response = await fetch(url, { next: { revalidate: revalidateSeconds() } });
     if (!response.ok) {
       warnContent(file, `fetch returned ${response.status} for ${url}`);
-      return fallback;
+      fetchFailed = true;
+    } else {
+      raw = await response.json();
     }
-    raw = await response.json();
   } catch (error) {
-    if (isNetworkError(error)) {
-      const diskContent = readFromDisk(file);
-      if (diskContent !== undefined) {
-        const result = schema.safeParse(diskContent);
-        if (result.success) return result.data;
-      }
-    }
     const reason = error instanceof Error ? error.message : String(error);
     warnContent(file, `could not read ${url}: ${reason}`);
+    fetchFailed = true;
+  }
+
+  if (fetchFailed) {
+    const diskContent = readFromDisk(file);
+    if (diskContent !== undefined) {
+      const result = schema.safeParse(diskContent);
+      if (result.success) return result.data;
+    }
     return fallback;
   }
 
