@@ -1,0 +1,40 @@
+{
+  "label": "Portfolio",
+  "headline": "Lorem ipsum dolor sit amet",
+  "items": [
+    {
+      "logo": { "src": "/assets/images/portfolio-01.png", "alt": "Placeholder client logo 01" },
+      "title": "Client Placeholder 01",
+      "category": "Lorem ipsum",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-02.png", "alt": "Placeholder client logo 02" },
+      "title": "Client Placeholder 02",
+      "category": "Dolor sit",
+      "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-03.png", "alt": "Placeholder client logo 03" },
+      "title": "Client Placeholder 03",
+      "category": "Amet consectetur",
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-04.png", "alt": "Placeholder client logo 04" },
+      "title": "Client Placeholder 04",
+      "category": "Adipiscing elit",
+      "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-05.png", "alt": "Placeholder client logo 05" },
+      "title": "Client Placeholder 05",
+      "category": "Sed do eiusmod"
+    },
+    {
+      "logo": { "src": "/assets/images/portfolio-06.png", "alt": "Placeholder client logo 06" },
+      "title": "Client Placeholder 06",
+      "category": "Tempor incididunt"
+    }
+  ]
+}

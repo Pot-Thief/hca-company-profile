@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      # Formatting was gated only by whoever remembered to run it locally.
+      - run: pnpm prettier --check .
+      - run: pnpm typecheck
+      # test:coverage, not test: the coverage thresholds in vitest.config.mts
+      # are what make 100% a condition rather than a figure in a table.
+      - run: pnpm test:coverage
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      # The fallback layer is the only part of the content pipeline that cannot
+      # be proved by the build succeeding, since its whole job is what happens
+      # when the content is wrong. These two runs are that proof, and they run
+      # against a fixture server rather than the shipped JSON, so nothing else
+      # in this workflow exercises them.
+      - run: pnpm test:e2e:live
+      - run: pnpm test:e2e:broken
+      # Median of three runs, and the budget it must clear is 0.90 against a
+      # measured 0.97, so there is room for a loaded runner without the score
+      # becoming noise. It uses the chromium Playwright already installed above.
+      - run: pnpm test:lighthouse
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/

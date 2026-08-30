@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+
+/* Tailwind's default theme adds radius, shadow and blur scales on top of
+   whatever @theme declares. Depth here comes from grayscale, hairlines and
+   space, so those namespaces are cleared rather than left reachable.
+   Two radii survive and nothing between them: 0 for structural edges, and a
+   small one for interactive surfaces, because a button with a genuinely sharp
+   corner reads as stiff on screen rather than precise. */
+@theme {
+  --radius-*: initial;
+  --radius-none: 0;
+  --radius-edge: 3px;
+
+  --shadow-*: initial;
+  --blur-*: initial;
+
+  /* Every value is neutral, R equal to G equal to B. The guard in
+     tokens.test.ts rejects any channel spread above zero, so a hue cannot
+     enter at all rather than merely being kept small. */
+  --color-paper: #fafafa;
+  --color-mist: #ededed;
+  --color-ash: #c8c8c8;
+  --color-graphite: #585858;
+  --color-ink: #1a1a1a;
+  --color-void: #000000;
+
+  /* Display and body are the same variable family. What separates them is
+     weight, width and tracking, not a second typeface. */
+  --font-display: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
+
+  /* The scale is deliberately gapped rather than even: display grew and the
+     middle shrank, so the distance between the largest and smallest type is
+     what carries the confidence. Display stays capped because above 5rem the
+     headline needs a line box wider than the page and starts stacking. */
+  --text-display: clamp(2rem, 6vw, 5rem);
+  --text-h2: clamp(1.75rem, 3.2vw, 2.5rem);
+  --text-h3: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.8125rem;
+  --text-label: 0.6875rem;
+  --tracking-label: 0.12em;
+  /* Negative tracking is what makes large grotesque type read as set rather
+     than as default. It only works at display sizes. */
+  --tracking-display: -0.02em;
+
+  /* Two container jobs, two tokens: measure limits a line of text to a
+     readable width, page limits the whole section to a shared outer edge. */
+  --container-measure: 62ch;
+  --container-page: 72rem;
+
+  /* An editorial display size needs its own tight leading; body text needs
+     its own loose one. Nothing here should fall back to the browser default. */
+  --leading-display: 1.02;
+  --leading-heading: 1.1;
+  --leading-body: 1.6;
+
+  /* Short and hard-stopping. The earlier expo-out curve eased into place, which
+     reads organic; a mechanism arrives and stops. */
+  --duration-fast: 100ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.3, 0, 0.2, 1);
+
+  --nav-h: 4.5rem;
+  /* Section-level intervals are tokenised; anything finer uses Tailwind's
+     default scale on purpose, not because it was overlooked. `section` is kept
+     wide and `block` was tightened, so things that belong together sit close
+     and things that do not stay far apart. */
+  --space-section: clamp(3.5rem, 5vw, 6rem);
+  --space-gutter: clamp(1.25rem, 4vw, 4rem);
+  --space-block: clamp(1.25rem, 2vw, 2rem);
+}
+
+/* The display setting is four properties that must agree wherever large type
+   appears. Naming it once stops nine sections each remembering all four, and
+   stops one of them drifting. */
+@utility type-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 125%;
+  letter-spacing: var(--tracking-display);
+}
+
+/* A semantic layer over the palette above. Components reach for bg-surface,
+   text-on-surface, text-on-surface-muted, border-rule and bg-signal /
+   text-signal, and never name paper or ink directly; a section flips its
+   whole colour set by carrying data-surface="ink", nothing inside it
+   changes. */
+@theme {
+  --color-surface: var(--color-paper);
+  --color-on-surface: var(--color-ink);
+  --color-on-surface-muted: var(--color-graphite);
+  --color-rule: var(--color-ash);
+  /* The one accent on the page: a value, not a hue. Void is pure black, so
+     bg-signal / text-signal marks exactly one register, the primary call to
+     action, and nothing else reaches for it. */
+  --color-signal: var(--color-void);
+}
+
+/* The override lands on the same custom properties the utilities read, with no
+   intermediate layer. A custom property that indirects through another one is
+   substituted where it is DECLARED, so a `:root` alias freezes at the root value
+   and a section-level override never reaches it. That is a silent failure: the
+   variable reads correctly while the rendered colour does not.
+   Ash is nearly invisible against ink, which is why the rule colour flips too
+   rather than one fixed hairline colour being reused. Signal flips to paper
+   here for the same reason: the one accent stays the maximum-contrast value
+   against whichever surface it sits on. */
+[data-surface='ink'] {
+  --color-surface: var(--color-ink);
+  --color-on-surface: var(--color-paper);
+  --color-on-surface-muted: var(--color-ash);
+  --color-rule: var(--color-graphite);
+  --color-signal: var(--color-paper);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+section[id] {
+  scroll-margin-top: var(--nav-h);
+}
+
+/* Focus never changes the background, hover never draws an outline.
+   Keeping the two channels separate is what makes them tell apart. The
+   outline colour follows on-surface rather than a fixed void, because void
+   is near-black and disappears against an ink section. */
+:focus-visible {
+  outline: 2px solid var(--color-on-surface);
+  outline-offset: 2px;
+}
+
+/* Reveal baseline: content is visible. Everything below only ever takes it
+   away while something is guaranteed to give it back. */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+
+/* Only a block that has marked itself pending is hidden, and a block can only
+   do that from inside React after it has measured itself off screen. Nothing
+   here hides content that JavaScript is not already guaranteed to bring back. */
+[data-reveal='pending'] {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  [data-reveal],
+  [data-reveal='pending'] {
+    opacity: 1;
+    transform: none;
+  }
+}

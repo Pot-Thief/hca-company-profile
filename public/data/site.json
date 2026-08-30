@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "title": "Company Profile Placeholder",
+    "description": "Placeholder description for the company profile site. Replace this text in site.json.",
+    "ogImage": { "src": "/assets/images/hero-bg.jpg", "alt": "Placeholder social share image" }
+  },
+  "logo": { "wordmark": "PLACEHOLDER" },
+  "nav": [
+    { "label": "About", "href": "#about" },
+    { "label": "Purpose", "href": "#purpose" },
+    { "label": "Services", "href": "#services" },
+    { "label": "Portfolio", "href": "#portfolio" },
+    { "label": "Team", "href": "#team" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "cta": { "label": "Get in touch", "href": "#contact" },
+  "footer": {
+    "nav": [
+      { "label": "Services", "href": "#services" },
+      { "label": "Portfolio", "href": "#portfolio" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "copyright": "2026 Company Placeholder. All rights reserved."
+  },
+  "ui": {
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "copy": "Copy",
+    "copied": "Copied",
+    "expandBio": "Read bio",
+    "collapseBio": "Hide bio",
+    "expandProject": "Read detail",
+    "collapseProject": "Hide detail"
+  }
+}
