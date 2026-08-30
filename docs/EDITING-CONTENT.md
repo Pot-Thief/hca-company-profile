@@ -60,7 +60,7 @@ Kunci `nav[0].label` (nama menu pertama):
 { "label": "Tentang Kami", "href": "#about" }
 ```
 
-Perhatikan: nilai `"href"` (`#about`) **tidak ikut diubah** — lihat Bagian 6.
+Perhatikan: nilai `"href"` (`#about`) **tidak ikut diubah** — lihat Bagian 7.
 
 `site.json` juga punya kunci `ui` yang isinya label tombol-tombol kecil di
 seluruh halaman:
@@ -170,7 +170,7 @@ Kunci `channels[].value`, contoh untuk email:
 { "type": "email", "label": "Email", "value": "halo@perusahaananda.com" }
 ```
 
-Cara menambah dan menghapus baris kontak dijelaskan di Bagian 5.
+Cara menambah dan menghapus baris kontak dijelaskan di Bagian 6.
 
 ---
 
@@ -217,7 +217,7 @@ terminal, workflow, wrench
 ```
 
 Nama di luar daftar ini akan tampil sebagai lingkaran putus-putus, bukan
-ikon yang dimaksud — lihat Bagian 7.
+ikon yang dimaksud — lihat Bagian 9.
 
 ---
 
