@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { z } from 'zod';
 import type { SectionName } from './schema';
 import { warnContent } from './warn';
@@ -27,6 +29,18 @@ function revalidateSeconds(): number {
   return Number.isFinite(raw) && raw >= 0 ? raw : 60;
 }
 
+function readFromDisk(file: string): unknown | undefined {
+  try {
+    const diskPath = path.join(process.cwd(), 'public', 'data', file);
+    if (fs.existsSync(diskPath)) {
+      return JSON.parse(fs.readFileSync(diskPath, 'utf-8'));
+    }
+  } catch {
+    // Return undefined if reading disk file fails
+  }
+  return undefined;
+}
+
 export async function loadSection<S extends z.ZodType>(
   name: SectionName,
   schema: S,
@@ -39,11 +53,27 @@ export async function loadSection<S extends z.ZodType>(
   try {
     const response = await fetch(url, { next: { revalidate: revalidateSeconds() } });
     if (!response.ok) {
+      if (!process.env.VITEST) {
+        const diskContent = readFromDisk(file);
+        if (diskContent !== undefined) {
+          raw = diskContent;
+          const result = schema.safeParse(raw);
+          if (result.success) return result.data;
+        }
+      }
       warnContent(file, `fetch returned ${response.status} for ${url}`);
       return fallback;
     }
     raw = await response.json();
   } catch (error) {
+    if (!process.env.VITEST) {
+      const diskContent = readFromDisk(file);
+      if (diskContent !== undefined) {
+        raw = diskContent;
+        const result = schema.safeParse(raw);
+        if (result.success) return result.data;
+      }
+    }
     const reason = error instanceof Error ? error.message : String(error);
     warnContent(file, `could not read ${url}: ${reason}`);
     return fallback;
