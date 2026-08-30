@@ -7,9 +7,10 @@ import { warnContent } from './warn';
 export function contentBase(): string {
   const explicit = process.env.CONTENT_BASE_URL;
   if (explicit) return explicit.replace(/\/+$/, '');
+  const vercelProd = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (vercelProd) return `https://${vercelProd}/data`;
   const vercel = process.env.VERCEL_URL;
   if (vercel) return `https://${vercel}/data`;
-  // The app serves its own content out of public/data, so the base has to
   // follow the port the server was actually started on. This was pinned to 3000
   // and the E2E and Lighthouse servers were later moved to 3300 and 3200, which
   // left a production build quietly fetching its content from whatever answered
@@ -66,8 +67,9 @@ export async function loadSection<S extends z.ZodType>(
 
   try {
     const response = await fetch(url, { next: { revalidate: revalidateSeconds() } });
-    if (!response.ok) {
-      warnContent(file, `fetch returned ${response.status} for ${url}`);
+    const contentType = response.headers?.get?.('content-type') ?? '';
+    if (!response.ok || contentType.includes('text/html')) {
+      warnContent(file, `fetch returned ${response.status} (${contentType}) for ${url}`);
       shouldFallbackToDisk = true;
     } else {
       raw = await response.json();
