@@ -7,7 +7,19 @@ export function contentBase(): string {
   if (explicit) return explicit.replace(/\/+$/, '');
   const vercel = process.env.VERCEL_URL;
   if (vercel) return `https://${vercel}/data`;
-  return 'http://localhost:3000/data';
+  // The app serves its own content out of public/data, so the base has to
+  // follow the port the server was actually started on. This was pinned to 3000
+  // and the E2E and Lighthouse servers were later moved to 3300 and 3200, which
+  // left a production build quietly fetching its content from whatever answered
+  // on 3000 — a developer's `next dev`. It passed locally for exactly that
+  // reason and could never have passed on a machine without one. PORT is the
+  // same variable `next start` reads, so the server and its content cannot
+  // disagree about which port they are on.
+  // `||`, not `??`: an empty PORT is what a shell leaves behind when a variable
+  // is exported without a value, and `??` would keep it, yielding
+  // `http://localhost:/data`. The two checks above already treat empty as unset.
+  const port = process.env.PORT || '3000';
+  return `http://localhost:${port}/data`;
 }
 
 function revalidateSeconds(): number {

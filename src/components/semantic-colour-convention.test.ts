@@ -10,7 +10,18 @@ import { describe, expect, test } from 'vitest';
 // result happened to be right. It only stayed right while those two components
 // never sat on an ink surface. This scans instead.
 
-const COMPONENT_DIRS = ['src/components/sections', 'src/components/interactive'];
+// src/components/ui/ is in this list, and leaving it out was the scanner's own
+// blind spot. Those files arrive generated, but they were hand-edited to use
+// this project's tokens the moment they landed, and the two that matter are the
+// menu button and the mobile sheet — the components the convention was written
+// after. They held seven palette names for the life of the project while the
+// scanner reported clean, so flipping the header to an ink surface would have
+// rendered ink on ink with nothing to say so.
+const COMPONENT_DIRS = [
+  'src/components/sections',
+  'src/components/interactive',
+  'src/components/ui',
+];
 const PALETTE = ['paper', 'mist', 'ash', 'graphite', 'ink', 'void'];
 
 // Anchored on a utility prefix so `data-surface="ink"` and prose mentioning ink
@@ -39,9 +50,14 @@ const PALETTE_UTILITY = new RegExp(
   'g',
 );
 
-// The one documented exception: this darkens a photograph, not a section
-// surface, so it is tied to ink by intent rather than reaching past the layer.
-const ALLOWED = new Map([['src/components/sections/Hero.tsx', ['bg-ink']]]);
+// Two documented exceptions, and they are the same exception twice: both darken
+// what sits behind them rather than painting a surface, so both are tied to a
+// value on purpose and must not follow the surface they happen to sit on. A
+// scrim that inverted with the theme would stop being a scrim.
+const ALLOWED = new Map([
+  ['src/components/sections/Hero.tsx', ['bg-ink']],
+  ['src/components/ui/sheet.tsx', ['bg-void']],
+]);
 
 function componentFiles(dir: string): string[] {
   return readdirSync(dir)

@@ -38,7 +38,7 @@ export default defineConfig({
   webServer: process.env.E2E_BASE_URL
     ? undefined
     : {
-        command: 'pnpm build && pnpm start --port 3300',
+        command: 'pnpm build && PORT=3300 pnpm start',
         url: 'http://localhost:3300',
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,

@@ -55,7 +55,7 @@ scripts/
 src/
   app/                               Root layout, home page, dev-only /styleguide, tokens.test.ts
   components/
-    sections/                        Nine Server Components, one per page section
+    sections/                        Nine page sections plus SectionShell, the frame they share
     interactive/                     Six client islands (nav, reveal, disclosures, copy button)
     ui/                              Generated shadcn primitives (button, sheet, collapsible)
   lib/

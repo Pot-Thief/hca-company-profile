@@ -26,6 +26,12 @@ they write `bg-surface`, `text-on-surface`, `text-on-surface-muted`,
 set flips off of one `data-surface` attribute rather than a change in every
 child.
 
+There are exactly two exceptions, both recorded in the scanner itself: the
+hero's photo overlay (`bg-ink/60`) and the mobile sheet's scrim
+(`bg-void/10`). Both darken what sits behind them rather than painting a
+surface, so both are tied to a value on purpose — a scrim that inverted with
+the theme would stop being a scrim.
+
 **Why `void` is reserved exclusively for `signal`.** Of the five semantic
 tokens, `void` is only ever assigned to one: `signal`, the single accent used
 for the primary call to action. On a paper section, `signal` resolves to
@@ -98,7 +104,9 @@ painting a section surface. It exists because the navbar and the mobile nav
 panel named palette colours directly in six places for the life of the
 project, invisibly, since the rendered result happened to be correct — it
 only stayed correct because those two components never had to sit on an ink
-surface.
+surface. The scanner then repeated the mistake at one remove: it excluded
+`src/components/ui/`, where the menu button and that same sheet held seven
+more, and reported clean the whole time. That directory is in scope now.
 
 **`src/components/sections/no-hardcoded-text.test.ts`.** Two checks. The
 first strips comments from every file in `sections/` and `interactive/` and
@@ -167,9 +175,11 @@ performance budget on a page that makes eight content fetches. The
 resilience specs set `CONTENT_REVALIDATE=0` so a fixture change is visible
 on the very next request instead of waiting out the window.
 
-**Fallback over failure.** Every schema field has a default, so `safeParse`
-only fails outright for genuinely malformed JSON or a root value that is not
-an object; a missing or wrong-shaped field never takes a whole section down.
+**Fallback over failure.** Malformed JSON never reaches the schema at all —
+`response.json()` throws and `loadSection`'s catch returns `schema.parse({})`
+for the whole section. `safeParse` sees only well-formed JSON, and fails
+outright just for a root value that is not an object; a missing or
+wrong-shaped field never takes a whole section down.
 The mechanism is in `src/lib/content/zod-helpers.ts`, and the order of
 `.default()` and `.catch()` in `field()` is the mechanism, not an
 implementation detail:

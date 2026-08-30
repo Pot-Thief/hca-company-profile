@@ -27,10 +27,22 @@ describe('contentBase', () => {
     expect(contentBase()).toBe('https://preview.vercel.app/data');
   });
 
-  test('falls back to localhost', () => {
+  test('falls back to localhost on the default port', () => {
     vi.stubEnv('CONTENT_BASE_URL', '');
     vi.stubEnv('VERCEL_URL', '');
+    vi.stubEnv('PORT', '');
     expect(contentBase()).toBe('http://localhost:3000/data');
+  });
+
+  // The app serves its own content, so the base must follow the port the server
+  // was started on. Pinned to 3000, a build served on any other port fetched
+  // from whatever happened to answer on 3000 instead — which on a developer's
+  // machine is `next dev`, and on a clean machine is nothing at all.
+  test('follows PORT so the server and its content cannot disagree', () => {
+    vi.stubEnv('CONTENT_BASE_URL', '');
+    vi.stubEnv('VERCEL_URL', '');
+    vi.stubEnv('PORT', '3300');
+    expect(contentBase()).toBe('http://localhost:3300/data');
   });
 });
 
