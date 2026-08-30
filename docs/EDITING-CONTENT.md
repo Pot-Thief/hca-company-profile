@@ -125,14 +125,11 @@ Kunci `items[0].name` dan `items[0].description`:
 
 ```json
 // Sebelum
-{ "icon": "code", "name": "Service Name Placeholder 01", "description": "Lorem ipsum..." }
+{ "name": "Service Name Placeholder 01", "description": "Lorem ipsum..." }
 
 // Sesudah
-{ "icon": "code", "name": "Pengembangan Aplikasi", "description": "Kami membangun aplikasi..." }
+{ "name": "Pengembangan Aplikasi", "description": "Kami membangun aplikasi..." }
 ```
-
-Kunci `icon` juga wajib diisi — lihat daftar nama ikon yang boleh dipakai di
-Bagian 4.
 
 ### `portfolio.json`
 
@@ -204,24 +201,9 @@ supaya kalimatnya tetap menggambarkan gambar yang baru.
 
 ---
 
-## 4. Daftar nama ikon (untuk `services.json`)
-
-Setiap item di `services.json` punya kunci `"icon"`. Nilainya harus **persis
-sama** dengan salah satu dari 20 nama berikut (huruf kecil semua, tanda hubung
-`-` untuk nama dua kata):
-
-```
-boxes, cloud, code, cpu, database, globe, headphones, layers, line-chart,
-lock, monitor, network, search, server, settings, shield, smartphone,
-terminal, workflow, wrench
-```
-
-Nama di luar daftar ini akan tampil sebagai lingkaran putus-putus, bukan
-ikon yang dimaksud — lihat Bagian 7.
-
 ---
 
-## 5. Menambah dan menghapus item
+## 4. Menambah dan menghapus item
 
 `services.json`, `portfolio.json`, dan `team.json` masing-masing punya satu
 daftar (`items` untuk dua yang pertama, `members` untuk tim). Menambah atau
@@ -252,7 +234,7 @@ dihapus seluruhnya akan tampil sebagai baris biasa tanpa tombol.
 
 ---
 
-## 6. Menambah dan menghapus channel kontak
+## 5. Menambah dan menghapus channel kontak
 
 `contact.json` punya daftar `channels`. Setiap channel punya kunci `"type"`
 yang nilainya harus persis salah satu dari enam kata berikut, dan setiap kata
@@ -285,12 +267,12 @@ Untuk membuat alamat kantor bisa diklik dan membuka peta, tambahkan kunci
 }
 ```
 
-Menambah dan menghapus channel mengikuti cara yang sama seperti Bagian 5:
+Menambah dan menghapus channel mengikuti cara yang sama seperti Bagian 4:
 salin/tempel atau hapus satu blok `{ ... }` beserta koma di dekatnya.
 
 ---
 
-## 7. Yang tidak boleh diubah
+## 6. Yang tidak boleh diubah
 
 - **Nama kunci** (tulisan sebelum tanda titik dua, contoh `headline`,
   `items`, `type`, `href`). Ini nama teknis yang dibaca oleh website, bukan
@@ -306,7 +288,7 @@ salin/tempel atau hapus satu blok `{ ... }` beserta koma di dekatnya.
 
 ---
 
-## 8. Memeriksa file sebelum diunggah
+## 7. Memeriksa file sebelum diunggah
 
 Sebelum mengunggah file JSON yang sudah diubah, periksa dulu supaya
 susunannya tidak salah tulis (kurang tanda kutip, kurang koma, atau kurang
@@ -323,7 +305,7 @@ kurung). Caranya:
 
 ---
 
-## 9. Troubleshooting
+## 8. Troubleshooting
 
 **Satu bagian di halaman terlihat kosong / kehilangan sebagian besar isinya**
 
@@ -332,26 +314,19 @@ yang tidak lengkap) di suatu tempat dalam file JSON itu. Kalau seluruh file
 tidak bisa dibaca, bagian itu hanya menampilkan judul kecil tanpa isi lain.
 Perbaikan: buka file yang bersangkutan (nama filenya sama dengan nama
 bagian, misalnya `services.json` untuk bagian Services), periksa dengan
-pemeriksa JSON di Bagian 8, lalu perbaiki baris yang ditunjuk sebagai
+pemeriksa JSON di Bagian 7, lalu perbaiki baris yang ditunjuk sebagai
 kesalahan.
-
-**Sebuah ikon di bagian Services tampil sebagai lingkaran putus-putus**
-
-Penyebab: nilai kunci `"icon"` pada item itu tidak sama persis dengan salah
-satu nama di daftar Bagian 4 (salah ketik, huruf besar, atau lupa tanda
-hubung). Perbaikan: buka `services.json`, cari item yang ikonnya salah, ganti
-nilai `"icon"` dengan salah satu nama yang tertulis persis di Bagian 4.
 
 **Tautan di bagian Contact tidak mengarah ke mana-mana saat diklik**
 
 Ada dua kemungkinan penyebab, keduanya di `contact.json`:
 
 1. Nilai `"type"` pada channel itu salah ketik dan tidak sama persis dengan
-   salah satu dari enam kata di Bagian 6 — channel dengan `"type"` yang tidak
+   salah satu dari enam kata di Bagian 5 — channel dengan `"type"` yang tidak
    dikenal akan dibuang seluruhnya dari halaman. Perbaikan: perbaiki ejaan
    `"type"` sampai sama persis dengan salah satu dari: `email`, `phone`,
    `whatsapp`, `address`, `social`, `hours`.
 2. Channel itu bertipe `address` atau `hours` — keduanya memang **sengaja**
    tidak pernah menjadi tautan, kecuali `address` diberi kunci `"href"`
-   tambahan (lihat Bagian 6). Kalau ini yang terjadi, bukan berarti ada yang
+   tambahan (lihat Bagian 5). Kalau ini yang terjadi, bukan berarti ada yang
    rusak.
