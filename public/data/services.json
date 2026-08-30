@@ -3,50 +3,62 @@
   "headline": "Lorem ipsum dolor sit amet consectetur",
   "items": [
     {
+      "icon": "code",
       "name": "Service Name Placeholder 01",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "smartphone",
       "name": "Service Name Placeholder 02",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "cloud",
       "name": "Service Name Placeholder 03",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "server",
       "name": "Service Name Placeholder 04",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "database",
       "name": "Service Name Placeholder 05",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "shield",
       "name": "Service Name Placeholder 06",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "network",
       "name": "Service Name Placeholder 07",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "workflow",
       "name": "Service Name Placeholder 08",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "line-chart",
       "name": "Service Name Placeholder 09",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "monitor",
       "name": "Service Name Placeholder 10",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "headphones",
       "name": "Service Name Placeholder 11",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     },
     {
+      "icon": "wrench",
       "name": "Service Name Placeholder 12",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod."
     }

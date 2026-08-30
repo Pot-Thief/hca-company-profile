@@ -87,7 +87,10 @@ export const purposeSchema = z.object({
 export const servicesSchema = z.object({
   label: str('services.label'),
   headline: str('services.headline'),
-  items: arrayOf(z.object({ name: z.string(), description: z.string() }), 'services.items'),
+  items: arrayOf(
+    z.object({ icon: z.string(), name: z.string(), description: z.string() }),
+    'services.items',
+  ),
 });
 
 export const portfolioSchema = z.object({

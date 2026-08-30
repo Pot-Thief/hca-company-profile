@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { Services } from './Services';
 
 const items = Array.from({ length: 12 }, (_, i) => ({
+  icon: 'code',
   name: `SERVICE_${i}_X`,
   description: `DESC_${i}_X`,
 }));
@@ -16,13 +17,23 @@ describe('Services', () => {
     expect(screen.getByText('DESC_11_X')).toBeInTheDocument();
   });
 
-  // Gate B removed the per-item icons and nothing was lost, so this asserts the
-  // absence: twelve generic technology glyphs used as filler is a pattern the
-  // design research names, and a stray svg creeping back in would say the
-  // decision had been quietly reversed.
-  test('renders no decorative icons', () => {
+  test('renders an icon for each item', () => {
     const { container } = render(<Services {...props} />);
-    expect(container.querySelectorAll('svg')).toHaveLength(0);
+    expect(container.querySelectorAll('svg')).toHaveLength(12);
+  });
+
+  test('icons are hidden from assistive technology', () => {
+    const { container } = render(<Services {...props} />);
+    for (const svg of container.querySelectorAll('svg')) {
+      expect(svg).toHaveAttribute('aria-hidden', 'true');
+    }
+  });
+
+  test('an unknown icon name renders the fallback and warns', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<Services {...props} items={[{ icon: 'nope-x', name: 'N_X', description: 'D_X' }]} />);
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
   });
 
   test('does not number the items', () => {

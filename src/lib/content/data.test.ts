@@ -22,6 +22,13 @@ describe('shipped content files', () => {
     expect(sectionSchemas.about.parse(read('about')).stats).toHaveLength(3);
   });
 
+  test('every service icon name exists in the registry', async () => {
+    const { ICON_NAMES } = await import('../icons');
+    for (const item of sectionSchemas.services.parse(read('services')).items) {
+      expect(ICON_NAMES).toContain(item.icon);
+    }
+  });
+
   test('every nav href points at a known section id', () => {
     const ids = ['#about', '#purpose', '#services', '#portfolio', '#team', '#contact'];
     const nav = sectionSchemas.site.parse(read('site')).nav;

@@ -75,9 +75,12 @@ describe('array items: an invalid entry is dropped, the valid one is kept', () =
       name: 'services / items / item missing description',
       buildKept: () =>
         servicesSchema.parse({
-          items: [{ name: 'N1', description: 'D1' }, { name: 'N2' }],
+          items: [
+            { icon: 'code', name: 'N1', description: 'D1' },
+            { icon: 'code', name: 'N2' },
+          ],
         }).items,
-      expected: [{ name: 'N1', description: 'D1' }],
+      expected: [{ icon: 'code', name: 'N1', description: 'D1' }],
     },
     {
       name: 'portfolio / items / item missing category',
@@ -145,16 +148,16 @@ describe('services schema', () => {
   test('keeps valid items', () => {
     const parsed = servicesSchema.parse({
       headline: 'H',
-      items: [{ name: 'N', description: 'D' }],
+      items: [{ icon: 'code', name: 'N', description: 'D' }],
     });
     expect(parsed.items).toHaveLength(1);
-    expect(parsed.items[0]?.name).toBe('N');
+    expect(parsed.items[0]?.icon).toBe('code');
   });
 
   test('drops an item missing required keys and keeps the rest', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const parsed = servicesSchema.parse({
-      items: [{ name: 'N', description: 'D' }, { name: 'N' }],
+      items: [{ icon: 'code', name: 'N', description: 'D' }, { icon: 'code' }],
     });
     expect(parsed.items).toHaveLength(1);
     expect(warn).toHaveBeenCalledTimes(1);
