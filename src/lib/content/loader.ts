@@ -41,7 +41,6 @@ function readFromDisk(file: string): unknown | undefined {
   return undefined;
 }
 
-
 export async function loadSection<S extends z.ZodType>(
   name: SectionName,
   schema: S,
