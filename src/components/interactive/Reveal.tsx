@@ -7,6 +7,11 @@ export function Reveal({ children }: { children: ReactNode }) {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
+    // Tells the inline script in layout.tsx that hydration actually happened,
+    // so its safety timer stands down. Without a signal from real React code
+    // the page cannot tell "scripts allowed" from "our bundle ran".
+    document.documentElement.dataset.hydrated = 'true';
+
     if (typeof IntersectionObserver === 'undefined') {
       queueMicrotask(() => setShown(true));
       return;

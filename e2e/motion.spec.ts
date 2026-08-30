@@ -25,10 +25,10 @@ test('all content is visible and no transition runs under reduced motion', async
   }
 });
 
-// The proof that the reveal baseline holds without JS: it fails if somebody
-// moves the hidden state out of the `scripting: enabled` block in
-// globals.css, because then Contact and the services would render at
-// opacity 0 with no client-side observer left to ever set opacity back to 1.
+// The proof that the reveal baseline holds with scripting switched off in the
+// browser. Its sibling in no-script.spec.ts covers the harder case, scripting
+// on but our bundle never arriving, which is the one that actually reached a
+// reader.
 test('content is visible before any observer fires', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

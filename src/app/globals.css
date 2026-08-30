@@ -143,14 +143,20 @@ section[id] {
   outline-offset: 2px;
 }
 
-/* Reveal baseline: content is visible with no JS. The hidden state only
-   exists where scripting can undo it. */
+/* Reveal baseline: content is visible. Everything below only ever takes it
+   away while something is guaranteed to give it back. */
 [data-reveal] {
   opacity: 1;
   transform: none;
 }
 
-@media (scripting: enabled) {
+/* Keyed on an attribute this app sets itself, not on @media (scripting:
+   enabled). That media query means the browser permits scripts, which is not
+   the same as ours having run: when the bundle failed to load, it kept six of
+   the eight blocks at opacity 0 with nothing left to reveal them. The inline
+   script in layout.tsx arms this and removes it again if hydration never
+   happens, so the page fails open. */
+html[data-reveal-armed] {
   [data-reveal] {
     opacity: 0;
     transform: translateY(10px);
@@ -178,6 +184,12 @@ section[id] {
     transition-duration: 1ms !important;
   }
 
+  /* Matched to the arming selector's specificity on purpose. The hidden state
+     used to sit in a plain `[data-reveal]` rule and this override won on source
+     order alone; once arming moved under `html[data-reveal-armed]` that stopped
+     being true, and reduced motion silently lost. */
+  html[data-reveal-armed] [data-reveal],
+  html[data-reveal-armed] [data-reveal='shown'],
   [data-reveal],
   [data-reveal='shown'] {
     opacity: 1;

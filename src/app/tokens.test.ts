@@ -67,8 +67,13 @@ describe('design tokens', () => {
     expect(css).toContain('prefers-reduced-motion: reduce');
   });
 
-  test('declares the scripting-enabled reveal baseline', () => {
-    expect(css).toContain('scripting: enabled');
+  // The hidden state must stay behind an attribute this app sets and can take
+  // back, never behind `@media (scripting: enabled)`. That media query says the
+  // browser permits scripts, not that ours ran, and under it a failed bundle
+  // left six of the page's eight blocks invisible for good.
+  test('the reveal hidden state is armed by the app, not by a media query', () => {
+    expect(css).toContain('html[data-reveal-armed]');
+    expect(css).not.toContain('scripting: enabled');
   });
 
   test('defines a focus-visible outline', () => {
