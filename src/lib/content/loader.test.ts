@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { contentBase, loadSection } from './loader';
 import { servicesSchema } from './schema';
@@ -105,7 +106,7 @@ describe('loadSection', () => {
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('404'));
   });
 
-  test('falls back and warns when fetch rejects', async () => {
+  test('falls back to disk when fetch rejects', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => {
@@ -113,9 +114,45 @@ describe('loadSection', () => {
       }),
     );
     const data = await loadSection('services', servicesSchema);
+    expect(data.items.length).toBeGreaterThan(0);
+  });
+
+  test('falls back to disk when fetch throws a TypeError', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('fetch failed');
+      }),
+    );
+    const data = await loadSection('services', servicesSchema);
+    expect(data.items.length).toBeGreaterThan(0);
+  });
+
+  test('falls back to warning when disk content fails schema validation', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new Error('offline');
+      }),
+    );
+    const strictSchema = z.object({ items: z.array(z.string()).default([]) });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await loadSection('services', strictSchema as any);
+    expect(console.warn).toHaveBeenCalledTimes(1);
+  });
+
+  test('falls back and warns when fetch rejects and file is missing from disk', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new Error('offline');
+      }),
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await loadSection('nonexistent' as any, servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('services.json'));
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('nonexistent.json'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('offline'));
   });
 
@@ -126,10 +163,11 @@ describe('loadSection', () => {
         throw 'offline string';
       }),
     );
-    const data = await loadSection('services', servicesSchema);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await loadSection('nonexistent' as any, servicesSchema);
     expect(data.items).toEqual([]);
     expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('services.json'));
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('nonexistent.json'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('offline string'));
   });
 
