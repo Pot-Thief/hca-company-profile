@@ -4,7 +4,12 @@ import { contentBase, loadSection } from './loader';
 import { servicesSchema } from './schema';
 
 const okResponse = (body: unknown) =>
-  ({ ok: true, status: 200, json: async () => body }) as Response;
+  ({
+    ok: true,
+    status: 200,
+    headers: new Headers({ 'content-type': 'application/json' }),
+    json: async () => body,
+  }) as unknown as Response;
 
 beforeEach(() => {
   vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -22,8 +27,16 @@ describe('contentBase', () => {
     expect(contentBase()).toBe('https://cdn.example/content');
   });
 
+  test('prefers VERCEL_PROJECT_PRODUCTION_URL over VERCEL_URL', () => {
+    vi.stubEnv('CONTENT_BASE_URL', '');
+    vi.stubEnv('VERCEL_PROJECT_PRODUCTION_URL', 'hardycahayaabadi.vercel.app');
+    vi.stubEnv('VERCEL_URL', 'preview.vercel.app');
+    expect(contentBase()).toBe('https://hardycahayaabadi.vercel.app/data');
+  });
+
   test('falls back to VERCEL_URL', () => {
     vi.stubEnv('CONTENT_BASE_URL', '');
+    vi.stubEnv('VERCEL_PROJECT_PRODUCTION_URL', '');
     vi.stubEnv('VERCEL_URL', 'preview.vercel.app');
     expect(contentBase()).toBe('https://preview.vercel.app/data');
   });
@@ -105,6 +118,22 @@ describe('loadSection', () => {
     expect(console.warn).toHaveBeenCalledTimes(1);
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('nonexistent.json'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('404'));
+  });
+  test('falls back to disk when fetch returns 200 with text/html (Vercel deployment protection)', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            headers: new Headers({ 'content-type': 'text/html; charset=utf-8' }),
+            text: async () => '<!DOCTYPE html><html>Login</html>',
+          }) as unknown as Response,
+      ),
+    );
+    const data = await loadSection('services', servicesSchema);
+    expect(data.items.length).toBeGreaterThan(0);
   });
 
   test('falls back to disk when fetch rejects', async () => {
